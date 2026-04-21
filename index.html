@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -6,105 +6,120 @@
 <title>iN Editor</title>
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:'Malgun Gothic','맑은 고딕',sans-serif; background:#f2f2f2; color:#222; font-size:15px; }
+:root{
+  --bg-app:#FAF9F5;
+  --bg-canvas:#EDE7D5;
+  --bg-surface:#FFFFFF;
+  --bg-muted:#F5F2EA;
+  --border-soft:#E8E3D3;
+  --border-mid:#D9D3C1;
+  --text-main:#2E2A24;
+  --text-sub:#8E8A7E;
+  --text-soft:#B8B3A4;
+  --accent:#C86F43;
+  --accent-hover:#B45E35;
+  --accent-soft:#FBE8DC;
+}
+body { font-family:'Pretendard','Malgun Gothic','맑은 고딕',sans-serif; background:var(--bg-app); color:var(--text-main); font-size:14px; -webkit-font-smoothing:antialiased; }
 body.props-open { padding-bottom:62px; }
 
 /* ── 시작 모달 ── */
 #start-modal { display:flex; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:center; justify-content:center; }
 .start-box { background:#fff; border-radius:16px; box-shadow:0 16px 60px rgba(0,0,0,0.22); width:540px; max-width:96vw; padding:40px 36px 32px; }
-.start-logo { font-size:22px; font-weight:900; color:#C8174F; letter-spacing:-0.5px; margin-bottom:6px; }
-.start-sub { font-size:13px; color:#aaa; margin-bottom:30px; }
-.start-options { display:flex; gap:16px; }
-.start-opt { flex:1; border:2px solid #e8e8e8; border-radius:10px; padding:22px 16px 20px; text-align:center; cursor:pointer; transition:all 0.15s; user-select:none; }
-.start-opt:hover { border-color:#C8174F; background:#fff5f7; }
+.start-logo { font-size:22px; font-weight:800; color:var(--accent); letter-spacing:-0.5px; margin-bottom:6px; }
+.start-sub { font-size:13px; color:var(--text-sub); margin-bottom:30px; }
+.start-options { display:flex; gap:14px; }
+.start-opt { flex:1; border:1.5px solid var(--border-soft); border-radius:12px; padding:24px 18px 22px; text-align:center; cursor:pointer; transition:all 0.15s; user-select:none; background:var(--bg-surface); }
+.start-opt:hover { border-color:var(--accent); background:var(--accent-soft); }
 .start-opt-icon { font-size:30px; margin-bottom:10px; }
-.start-opt-title { font-size:16px; font-weight:800; color:#222; margin-bottom:6px; }
-.start-opt-desc { font-size:12px; color:#999; line-height:1.5; }
+.start-opt-title { font-size:15px; font-weight:700; color:var(--text-main); margin-bottom:6px; }
+.start-opt-desc { font-size:12px; color:var(--text-sub); line-height:1.5; }
 
 /* ── 헤더 ── */
-#header { background:#fff; border-bottom:1px solid #e0e0e0; padding:0 16px; height:54px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:200; box-shadow:0 1px 4px rgba(0,0,0,0.07); }
+#header { background:var(--bg-app); border-bottom:1px solid var(--border-soft); padding:0 18px; height:52px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:200; }
 .logo-wrap { display:flex; align-items:center; height:42px; flex-shrink:0; cursor:pointer; }
-.logo-wrap img { height:30px; width:auto; }
-.header-divider { width:1px; height:24px; background:#e0e0e0; flex-shrink:0; }
+.logo-wrap img { height:28px; width:auto; }
+.header-divider { width:1px; height:20px; background:var(--border-soft); flex-shrink:0; }
 .title-area { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
-#doc-title { border:none; outline:none; font-size:16px; font-family:inherit; color:#222; background:transparent; flex:1; min-width:0; font-weight:500; }
-#doc-title::placeholder { color:#bbb; font-weight:400; }
-#autosave-indicator { font-size:12px; color:#bbb; white-space:nowrap; flex-shrink:0; }
-#autosave-indicator.saved { color:#27ae60; }
-#autosave-indicator.editing { color:#e67e22; }
+#doc-title { border:none; outline:none; font-size:14px; font-family:inherit; color:var(--text-main); background:transparent; flex:1; min-width:0; font-weight:500; padding:6px 8px; border-radius:6px; transition:background 0.12s; }
+#doc-title:hover,#doc-title:focus { background:var(--bg-muted); }
+#doc-title::placeholder { color:var(--text-soft); font-weight:400; }
+#autosave-indicator { font-size:11px; color:var(--text-soft); white-space:nowrap; flex-shrink:0; }
+#autosave-indicator.saved { color:#7A9F6B; }
+#autosave-indicator.editing { color:var(--accent); }
 .header-right { display:flex; align-items:center; gap:6px; flex-shrink:0; }
-.hdr-btn { background:#fff; border:1px solid #ddd; border-radius:4px; padding:6px 12px; font-size:13px; font-family:inherit; color:#444; cursor:pointer; white-space:nowrap; transition:all 0.1s; }
-.hdr-btn:hover { background:#f5f5f5; border-color:#bbb; }
-.hdr-btn-save { background:#fff; border:1px solid #C8174F; color:#C8174F; border-radius:4px; padding:6px 12px; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; white-space:nowrap; }
-.hdr-btn-save:hover { background:#fff0f4; }
-.hdr-sep { width:1px; height:20px; background:#e0e0e0; margin:0 2px; }
+.hdr-btn { background:transparent; border:1px solid var(--border-soft); border-radius:999px; padding:6px 14px; font-size:12.5px; font-family:inherit; color:var(--text-main); cursor:pointer; white-space:nowrap; transition:all 0.12s; }
+.hdr-btn:hover { background:var(--bg-muted); border-color:var(--border-mid); }
+.hdr-btn-save { background:var(--accent); border:1px solid var(--accent); color:#fff; border-radius:999px; padding:6px 16px; font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; transition:background 0.12s; }
+.hdr-btn-save:hover { background:var(--accent-hover); }
+.hdr-sep { width:1px; height:18px; background:var(--border-soft); margin:0 4px; }
 
 /* 드롭다운 */
 .dropdown-wrap { position:relative; }
-.dropdown-menu { display:none; position:absolute; top:calc(100%+8px); right:0; background:#fff; border:1px solid #ddd; border-radius:8px; box-shadow:0 4px 20px rgba(0,0,0,0.12); width:290px; z-index:500; overflow:hidden; }
+.dropdown-menu { display:none; position:absolute; top:calc(100%+8px); right:0; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:12px; box-shadow:0 8px 28px rgba(46,42,36,0.12); width:300px; z-index:500; overflow:hidden; }
 .dropdown-menu.open { display:block; }
-.dropdown-header { padding:10px 14px; font-size:12px; font-weight:700; color:#333; background:#fafafa; border-bottom:1px solid #eee; display:flex; align-items:center; justify-content:space-between; }
+.dropdown-header { padding:12px 14px; font-size:11.5px; font-weight:700; color:var(--text-main); background:var(--bg-muted); border-bottom:1px solid var(--border-soft); display:flex; align-items:center; justify-content:space-between; letter-spacing:0.3px; text-transform:uppercase; }
 .doc-list { max-height:280px; overflow-y:auto; }
-.doc-item { padding:10px 14px; border-bottom:1px solid #f2f2f2; cursor:pointer; display:flex; align-items:center; gap:8px; transition:background 0.1s; }
-.doc-item:hover { background:#fafafa; }
-.doc-item.current { background:#fff5f7; }
+.doc-item { padding:11px 14px; border-bottom:1px solid var(--border-soft); cursor:pointer; display:flex; align-items:center; gap:8px; transition:background 0.1s; }
+.doc-item:hover { background:var(--bg-muted); }
+.doc-item.current { background:var(--accent-soft); }
 .doc-item-info { flex:1; min-width:0; }
-.doc-item-title { font-size:13px; font-weight:600; color:#222; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.doc-item-date { font-size:11px; color:#bbb; margin-top:2px; }
-.doc-item-del { background:none; border:none; color:#ccc; cursor:pointer; font-size:15px; padding:2px 6px; border-radius:3px; }
-.doc-item-del:hover { color:#C8174F; background:#fff0f3; }
-.doc-list-empty { padding:20px; text-align:center; color:#ccc; font-size:13px; }
-.dropdown-footer { padding:8px 10px; border-top:1px solid #eee; display:flex; gap:6px; flex-wrap:wrap; }
-.dropdown-footer button, .dropdown-footer label.df-btn { flex:1; background:#f5f5f5; border:1px solid #e5e5e5; border-radius:4px; padding:7px 4px; font-size:12px; font-weight:600; color:#555; cursor:pointer; font-family:inherit; white-space:nowrap; text-align:center; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; }
-.dropdown-footer button:hover, .dropdown-footer label.df-btn:hover { background:#eaeaea; }
+.doc-item-title { font-size:13px; font-weight:600; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.doc-item-date { font-size:11px; color:var(--text-soft); margin-top:2px; }
+.doc-item-del { background:none; border:none; color:var(--text-soft); cursor:pointer; font-size:15px; padding:2px 6px; border-radius:4px; }
+.doc-item-del:hover { color:var(--accent); background:var(--accent-soft); }
+.doc-list-empty { padding:20px; text-align:center; color:var(--text-soft); font-size:13px; }
+.dropdown-footer { padding:10px; border-top:1px solid var(--border-soft); display:flex; gap:6px; flex-wrap:wrap; }
+.dropdown-footer button, .dropdown-footer label.df-btn { flex:1; background:transparent; border:1px solid var(--border-soft); border-radius:999px; padding:7px 4px; font-size:12px; font-weight:500; color:var(--text-main); cursor:pointer; font-family:inherit; white-space:nowrap; text-align:center; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; transition:all 0.12s; }
+.dropdown-footer button:hover, .dropdown-footer label.df-btn:hover { background:var(--bg-muted); border-color:var(--border-mid); }
 
 /* ── 삽입 툴바 ── */
-#insert-bar { background:#fff; border-bottom:1px solid #e8e8e8; padding:0 12px; height:50px; display:flex; align-items:center; gap:2px; position:sticky; top:54px; z-index:199; }
-.ins-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:5px 9px; border:none; background:none; border-radius:4px; cursor:pointer; font-family:inherit; color:#333; min-width:46px; transition:background 0.1s; }
-.ins-btn:hover { background:#f5f5f5; }
-.ins-icon { font-size:17px; line-height:1; }
-.ins-label { font-size:11px; color:#888; white-space:nowrap; }
-.ins-divider { width:1px; height:26px; background:#e8e8e8; margin:0 2px; flex-shrink:0; }
+#insert-bar { background:var(--bg-app); border-bottom:1px solid var(--border-soft); padding:0 14px; height:48px; display:flex; align-items:center; gap:2px; position:sticky; top:52px; z-index:199; }
+.ins-btn { display:flex; flex-direction:row; align-items:center; justify-content:center; gap:5px; padding:6px 10px; border:none; background:none; border-radius:8px; cursor:pointer; font-family:inherit; color:var(--text-main); transition:background 0.1s; }
+.ins-btn:hover { background:var(--bg-muted); }
+.ins-icon { font-size:15px; line-height:1; }
+.ins-label { font-size:12px; color:var(--text-main); white-space:nowrap; }
+.ins-divider { width:1px; height:20px; background:var(--border-soft); margin:0 4px; flex-shrink:0; }
 .ins-right { margin-left:auto; display:flex; align-items:center; gap:6px; flex-shrink:0; }
-.ins-right-btn { background:#fff; border:1px solid #ddd; border-radius:4px; padding:5px 11px; font-size:13px; font-family:inherit; color:#444; cursor:pointer; white-space:nowrap; height:34px; transition:all 0.1s; }
-.ins-right-btn:hover { background:#f5f5f5; border-color:#bbb; }
-.ins-right-btn.primary { background:#C8174F; border-color:#C8174F; color:#fff; font-weight:700; }
-.ins-right-btn.primary:hover { background:#a8103e; }
+.ins-right-btn { background:transparent; border:1px solid var(--border-soft); border-radius:999px; padding:6px 14px; font-size:12.5px; font-family:inherit; color:var(--text-main); cursor:pointer; white-space:nowrap; height:32px; transition:all 0.12s; }
+.ins-right-btn:hover { background:var(--bg-muted); border-color:var(--border-mid); }
+.ins-right-btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+.ins-right-btn.primary:hover { background:var(--accent-hover); }
 .theme-dots { display:flex; align-items:center; gap:5px; }
-.theme-dot { width:18px; height:18px; border-radius:50%; border:2px solid rgba(0,0,0,0.12); cursor:pointer; transition:transform 0.12s, box-shadow 0.12s; flex-shrink:0; }
-.theme-dot:hover { transform:scale(1.2); box-shadow:0 2px 8px rgba(0,0,0,0.2); }
-.theme-dot.active { box-shadow:0 0 0 3px rgba(0,0,0,0.15); transform:scale(1.15); }
+.theme-dot { width:16px; height:16px; border-radius:50%; border:2px solid rgba(46,42,36,0.1); cursor:pointer; transition:transform 0.12s, box-shadow 0.12s; flex-shrink:0; }
+.theme-dot:hover { transform:scale(1.2); box-shadow:0 2px 8px rgba(46,42,36,0.18); }
+.theme-dot.active { box-shadow:0 0 0 2px var(--accent); transform:scale(1.12); }
 
 /* ── 서식 툴바 ── */
-#format-bar { background:#fafafa; border-bottom:2px solid #e0e0e0; padding:0 12px; height:42px; display:flex; align-items:center; gap:1px; position:sticky; top:104px; z-index:198; }
-.fmt-select { border:none; border-right:1px solid #e0e0e0; background:none; padding:4px 6px; font-size:13px; font-family:inherit; color:#333; cursor:pointer; outline:none; height:100%; }
-.fmt-sep { width:1px; height:20px; background:#e0e0e0; margin:0 2px; flex-shrink:0; }
-.fmt-btn { border:none; background:none; border-radius:3px; padding:4px 7px; cursor:pointer; font-size:13px; font-family:inherit; color:#333; white-space:nowrap; transition:background 0.1s; }
-.fmt-btn:hover { background:#ebebeb; }
-.color-btn { width:24px; height:24px; border-radius:3px; border:1px solid #ddd; cursor:pointer; flex-shrink:0; }
-.fmt-label { font-size:11px; color:#aaa; padding:0 2px; white-space:nowrap; }
-.color-palette { display:none; position:absolute; background:#fff; border:1px solid #ddd; border-radius:6px; padding:8px; box-shadow:0 4px 16px rgba(0,0,0,0.12); z-index:600; flex-wrap:wrap; width:192px; gap:3px; }
+#format-bar { background:var(--bg-app); border-bottom:1px solid var(--border-soft); padding:0 14px; height:40px; display:flex; align-items:center; gap:1px; position:sticky; top:100px; z-index:198; }
+.fmt-select { border:1px solid var(--border-soft); border-radius:6px; background:var(--bg-surface); padding:4px 8px; font-size:12.5px; font-family:inherit; color:var(--text-main); cursor:pointer; outline:none; margin-right:4px; }
+.fmt-select:hover { border-color:var(--border-mid); }
+.fmt-sep { width:1px; height:18px; background:var(--border-soft); margin:0 6px; flex-shrink:0; }
+.fmt-btn { border:none; background:none; border-radius:6px; padding:5px 8px; cursor:pointer; font-size:13px; font-family:inherit; color:var(--text-main); white-space:nowrap; transition:background 0.1s; }
+.fmt-btn:hover { background:var(--bg-muted); }
+.color-btn { width:22px; height:22px; border-radius:4px; border:1px solid var(--border-mid); cursor:pointer; flex-shrink:0; }
+.fmt-label { font-size:11px; color:var(--text-soft); padding:0 2px; white-space:nowrap; }
+.color-palette { display:none; position:absolute; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:10px; padding:10px; box-shadow:0 8px 24px rgba(46,42,36,0.12); z-index:600; flex-wrap:wrap; width:200px; gap:4px; }
 .color-palette.open { display:flex; }
-.color-swatch { width:24px; height:24px; border-radius:3px; border:1px solid rgba(0,0,0,0.08); cursor:pointer; transition:transform 0.1s; }
+.color-swatch { width:24px; height:24px; border-radius:4px; border:1px solid rgba(46,42,36,0.08); cursor:pointer; transition:transform 0.1s; }
 .color-swatch:hover { transform:scale(1.15); }
-.fs-wrap { display:flex; align-items:center; gap:1px; height:100%; border-right:1px solid #e0e0e0; padding-right:6px; margin-right:2px; }
-#fs-select { border:none; background:none; padding:3px 2px; font-size:13px; font-family:inherit; color:#333; cursor:pointer; outline:none; width:54px; }
-#fs-input { border:1px solid #ddd; border-radius:3px; background:#fff; padding:3px 4px; font-size:13px; font-family:inherit; color:#333; outline:none; width:44px; text-align:center; }
-#fs-input:focus { border-color:#C8174F; }
-.fs-btn { border:none; background:none; border-radius:3px; padding:2px 5px; cursor:pointer; font-size:14px; line-height:1; color:#555; font-weight:700; transition:background 0.1s; }
-.fs-btn:hover { background:#ebebeb; }
+.fs-wrap { display:flex; align-items:center; gap:2px; height:100%; padding-right:8px; margin-right:4px; }
+#fs-select { border:1px solid var(--border-soft); border-radius:6px; background:var(--bg-surface); padding:4px 6px; font-size:12.5px; font-family:inherit; color:var(--text-main); cursor:pointer; outline:none; width:60px; }
+#fs-input { border:1px solid var(--border-soft); border-radius:6px; background:var(--bg-surface); padding:4px 6px; font-size:12.5px; font-family:inherit; color:var(--text-main); outline:none; width:44px; text-align:center; }
+#fs-input:focus { border-color:var(--accent); }
+.fs-btn { border:1px solid var(--border-soft); background:var(--bg-surface); border-radius:6px; padding:3px 7px; cursor:pointer; font-size:13px; line-height:1; color:var(--text-main); font-weight:600; transition:background 0.1s; }
+.fs-btn:hover { background:var(--bg-muted); }
 
 /* ── 에디터 ── */
-#main { display:flex; min-height:calc(100vh - 146px); }
-#editor-panel { flex:1; padding:24px 16px; display:flex; flex-direction:column; align-items:center; }
-#editor-wrap { background:#fff; width:900px; max-width:900px; min-height:860px; border:1px solid #e4e4e4; border-radius:2px; box-shadow:0 1px 6px rgba(0,0,0,0.06); position:relative; margin-top:28px; }
-#editor-panel { flex:1; padding:24px 40px !important; display:flex; flex-direction:column; align-items:center; }
-#editor { min-height:860px; padding:44px 30px; outline:none; font-size:16px; line-height:1.9; color:#222; word-break:break-word; overflow-wrap:break-word; }
+#main { display:flex; min-height:calc(100vh - 140px); background:var(--bg-canvas); }
+#editor-panel { flex:1; padding:32px 40px !important; display:flex; flex-direction:column; align-items:center; overflow-x:auto; min-width:0; background:var(--bg-canvas); }
+#editor-wrap { background:var(--bg-surface); width:1120px; min-width:1120px; max-width:1120px; min-height:1100px; border:1px solid var(--border-soft); border-radius:12px; box-shadow:0 4px 24px rgba(46,42,36,0.07); position:relative; margin:0 auto; flex:0 0 auto; flex-shrink:0; padding:0 110px; box-sizing:border-box; height:auto; }
+#editor { min-height:1000px; height:auto; padding:56px 0; outline:none; font-size:16px; line-height:1.9; color:var(--text-main); word-break:break-word; overflow-wrap:break-word; width:900px !important; max-width:900px !important; box-sizing:border-box; margin:0 auto; }
 /* ── 눈금자(ruler) ── */
-.ruler { position:absolute; background:#fafafa; color:#999; font-size:9px; font-family:'Consolas','D2Coding',monospace; user-select:none; pointer-events:none; z-index:5; }
-.ruler-h { top:-22px; left:0; right:0; height:22px; border:1px solid #e4e4e4; border-bottom:none; }
-.ruler-v { top:0; left:-22px; bottom:0; width:22px; border:1px solid #e4e4e4; border-right:none; }
-#ruler-corner { position:absolute; top:-22px; left:-22px; width:22px; height:22px; background:#fafafa; border:1px solid #e4e4e4; border-right:none; border-bottom:none; z-index:6; }
+.ruler { position:absolute; background:var(--bg-muted); color:var(--text-soft); font-size:9px; font-family:'SF Mono','Consolas','D2Coding',monospace; user-select:none; pointer-events:none; z-index:5; }
+.ruler-h { top:-22px; left:0; right:0; height:22px; border:1px solid var(--border-soft); border-bottom:none; border-radius:6px 6px 0 0; }
+.ruler-v { top:0; left:-22px; bottom:0; width:22px; border:1px solid var(--border-soft); border-right:none; border-radius:6px 0 0 6px; }
+#ruler-corner { position:absolute; top:-22px; left:-22px; width:22px; height:22px; background:var(--bg-muted); border:1px solid var(--border-soft); border-right:none; border-bottom:none; border-radius:6px 0 0 0; z-index:6; }
 .ruler .tick { position:absolute; background:#bbb; }
 .ruler-h .tick { bottom:0; width:1px; }
 .ruler-h .tick.major { height:10px; }
@@ -122,10 +137,10 @@ body.props-open { padding-bottom:62px; }
 #editor table td, #editor table th { border:1px solid #ccc; padding:10px 14px; min-width:60px; font-size:15px; vertical-align:top; cursor:text; word-break:break-word; }
 #editor table th { background:#f5f5f5; font-weight:700; }
 #editor hr { border:none; border-top:1px solid #e0e0e0; margin:22px 0; }
-#editor blockquote { border-left:3px solid #C8174F; margin:14px 0; padding:10px 18px; background:#fff8f9; color:#555; cursor:pointer; }
+#editor blockquote { border-left:3px solid var(--accent); margin:14px 0; padding:10px 18px; background:var(--accent-soft); color:var(--text-main); cursor:pointer; border-radius:0 8px 8px 0; }
 #editor sup { font-size:0.75em; vertical-align:super; }
 #editor sub { font-size:0.75em; vertical-align:sub; }
-#editor a { color:#C8174F; }
+#editor a { color:var(--accent); }
 
 /* ── 도형 (div 기반 텍스트박스) ── */
 .in-shape {
@@ -150,10 +165,10 @@ body.props-open { padding-bottom:62px; }
 .in-shape:focus { outline: none; }
 
 /* ── 리사이즈 오버레이 ── */
-#resize-overlay { display:none; position:fixed; z-index:750; pointer-events:none; box-shadow:0 0 0 2px #C8174F; }
+#resize-overlay { display:none; position:fixed; z-index:750; pointer-events:none; box-shadow:0 0 0 2px var(--accent); }
 #resize-overlay.visible { display:block; }
 #ro-move { position:absolute; inset:0; cursor:move; pointer-events:all; background:transparent; }
-.rh { position:absolute; width:9px; height:9px; background:#fff; border:2px solid #C8174F; border-radius:2px; pointer-events:all; z-index:2; }
+.rh { position:absolute; width:9px; height:9px; background:#fff; border:2px solid var(--accent); border-radius:2px; pointer-events:all; z-index:2; }
 .rh.nw { top:-5px; left:-5px; cursor:nwse-resize; }
 .rh.n  { top:-5px; left:calc(50% - 4px); cursor:ns-resize; }
 .rh.ne { top:-5px; right:-5px; cursor:nesw-resize; }
@@ -166,29 +181,29 @@ body.props-open { padding-bottom:62px; }
 /* ── 속성 패널 (하단 고정) ── */
 #props-panel {
   position:fixed; bottom:-70px; left:0; right:0; height:60px;
-  background:#fff; border-top:2px solid #C8174F; z-index:900;
+  background:var(--bg-surface); border-top:1px solid var(--border-soft); z-index:900;
   transition:bottom 0.2s ease;
-  display:flex; align-items:center; gap:6px; padding:0 16px;
-  box-shadow:0 -3px 16px rgba(0,0,0,0.1); overflow-x:auto; overflow-y:hidden;
+  display:flex; align-items:center; gap:8px; padding:0 18px;
+  box-shadow:0 -4px 20px rgba(46,42,36,0.08); overflow-x:auto; overflow-y:hidden;
   white-space:nowrap;
 }
 #props-panel.visible { bottom:0; }
-.pp-group { display:none; align-items:center; gap:6px; }
+.pp-group { display:none; align-items:center; gap:8px; }
 .pp-group.active { display:flex; }
-.pp-label { font-size:11px; color:#888; white-space:nowrap; flex-shrink:0; }
-.pp-sep { width:1px; height:28px; background:#e8e8e8; flex-shrink:0; margin:0 2px; }
-.pp-color { width:26px; height:26px; border-radius:4px; border:1px solid #ddd; cursor:pointer; padding:0; flex-shrink:0; }
-.pp-num { border:1px solid #ddd; border-radius:3px; padding:3px 5px; font-size:12px; font-family:inherit; width:52px; outline:none; }
-.pp-num:focus { border-color:#C8174F; }
-.pp-num-sm { border:1px solid #ddd; border-radius:3px; padding:3px 4px; font-size:12px; font-family:inherit; width:40px; outline:none; }
-.pp-range { width:70px; }
-.pp-small { font-size:11px; color:#666; min-width:28px; }
-.pp-btn { background:#f0f0f0; border:1px solid #ddd; border-radius:4px; padding:4px 8px; font-size:12px; font-family:inherit; color:#333; cursor:pointer; white-space:nowrap; }
-.pp-btn:hover { background:#e4e4e4; }
-.pp-btn.danger { background:#fff0f0; color:#C8174F; border-color:#f5b8c5; }
-.pp-btn.danger:hover { background:#ffe0e6; }
-.pp-del-btn { background:#C8174F; border:none; border-radius:4px; padding:4px 10px; font-size:12px; font-family:inherit; color:#fff; cursor:pointer; }
-.pp-del-btn:hover { background:#a8103e; }
+.pp-label { font-size:11px; color:var(--text-sub); white-space:nowrap; flex-shrink:0; }
+.pp-sep { width:1px; height:24px; background:var(--border-soft); flex-shrink:0; margin:0 4px; }
+.pp-color { width:26px; height:26px; border-radius:6px; border:1px solid var(--border-mid); cursor:pointer; padding:0; flex-shrink:0; }
+.pp-num { border:1px solid var(--border-soft); border-radius:6px; padding:5px 7px; font-size:12px; font-family:inherit; width:54px; outline:none; background:var(--bg-surface); color:var(--text-main); }
+.pp-num:focus { border-color:var(--accent); }
+.pp-num-sm { border:1px solid var(--border-soft); border-radius:6px; padding:5px 6px; font-size:12px; font-family:inherit; width:42px; outline:none; background:var(--bg-surface); color:var(--text-main); }
+.pp-range { width:80px; }
+.pp-small { font-size:11px; color:var(--text-sub); min-width:28px; }
+.pp-btn { background:transparent; border:1px solid var(--border-soft); border-radius:999px; padding:5px 11px; font-size:12px; font-family:inherit; color:var(--text-main); cursor:pointer; white-space:nowrap; transition:all 0.12s; }
+.pp-btn:hover { background:var(--bg-muted); border-color:var(--border-mid); }
+.pp-btn.danger { background:var(--accent-soft); color:var(--accent); border-color:transparent; }
+.pp-btn.danger:hover { background:#F6D6C3; }
+.pp-del-btn { background:var(--accent); border:none; border-radius:999px; padding:5px 14px; font-size:12px; font-family:inherit; color:#fff; cursor:pointer; font-weight:500; }
+.pp-del-btn:hover { background:var(--accent-hover); }
 .pp-btn.active { background:#4a90d9; color:#fff; border-color:#3a7bc8; }
 .pp-side-btn { min-width:30px; padding:4px 4px; text-align:center; }
 .rc-swatch { width:18px; height:18px; border-radius:3px; border:1px solid rgba(0,0,0,0.15); cursor:pointer; display:inline-block; flex-shrink:0; transition:transform 0.1s; }
@@ -198,7 +213,7 @@ body.props-open { padding-bottom:62px; }
 .cp-swatch { width:18px;height:18px;border-radius:3px;border:1px solid rgba(0,0,0,0.15);cursor:pointer;display:inline-block;flex-shrink:0;transition:transform .1s; }
 .cp-swatch:hover { transform:scale(1.25);outline:2px solid #4a90d9; }
 #cp-overlay * { box-sizing:border-box; }
-.pp-section-title { font-size:11px; font-weight:700; color:#C8174F; padding-right:4px; flex-shrink:0; }
+.pp-section-title { font-size:11px; font-weight:700; color:var(--accent); padding-right:4px; flex-shrink:0; letter-spacing:0.02em; }
 select.pp-select { border:1px solid #ddd; border-radius:3px; padding:3px 4px; font-size:12px; font-family:inherit; outline:none; }
 input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-shrink:0; }
 .cell-selected { outline:2px solid #4a90d9 !important; outline-offset:-2px; background-color:rgba(74,144,217,0.06) !important; }
@@ -217,50 +232,54 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
 #html-panel-footer button { flex:1; padding:8px; border-radius:4px; border:none; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; }
 
 /* ── 도형 패널 ── */
-#shape-panel { display:none; position:fixed; top:150px; right:20px; background:#fff; border:1px solid #ddd; border-radius:10px; padding:16px; box-shadow:0 4px 20px rgba(0,0,0,0.13); z-index:400; width:230px; }
+#shape-panel { display:none; position:fixed; top:150px; right:20px; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:14px; padding:18px; box-shadow:0 8px 28px rgba(46,42,36,0.1); z-index:400; width:240px; }
 #shape-panel.open { display:block; }
-#shape-panel h4 { font-size:13px; font-weight:700; color:#333; margin-bottom:12px; }
+#shape-panel h4 { font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:12px; }
 .sh-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:13px; }
-.sh-row label { width:60px; color:#666; flex-shrink:0; font-size:12px; }
-.sh-row input[type=color] { width:36px; height:24px; border:1px solid #ddd; border-radius:3px; cursor:pointer; padding:0; }
-.sh-row input[type=range] { flex:1; }
-.sh-row input[type=number] { flex:1; border:1px solid #ddd; border-radius:4px; padding:4px 6px; font-size:13px; font-family:inherit; outline:none; }
-.sh-row select { flex:1; border:1px solid #ddd; border-radius:4px; padding:4px; font-size:13px; font-family:inherit; outline:none; }
-.sh-row span.sh-val { font-size:11px; color:#888; min-width:28px; }
-.sh-btns { display:flex; gap:8px; margin-top:4px; }
-.sh-btns button { flex:1; background:#f5f5f5; border:1px solid #ddd; border-radius:4px; padding:7px 4px; font-size:12px; font-weight:600; color:#444; cursor:pointer; font-family:inherit; }
-.sh-btns button.primary { background:#C8174F; color:#fff; border-color:#C8174F; }
+.sh-row label { width:60px; color:var(--text-sub); flex-shrink:0; font-size:12px; }
+.sh-row input[type=color] { width:36px; height:26px; border:1px solid var(--border-soft); border-radius:6px; cursor:pointer; padding:0; background:var(--bg-surface); }
+.sh-row input[type=range] { flex:1; accent-color:var(--accent); }
+.sh-row input[type=number] { flex:1; border:1px solid var(--border-soft); border-radius:8px; padding:6px 8px; font-size:13px; font-family:inherit; outline:none; background:var(--bg-surface); color:var(--text-main); }
+.sh-row input[type=number]:focus { border-color:var(--accent); }
+.sh-row select { flex:1; border:1px solid var(--border-soft); border-radius:8px; padding:6px 8px; font-size:13px; font-family:inherit; outline:none; background:var(--bg-surface); color:var(--text-main); }
+.sh-row span.sh-val { font-size:11px; color:var(--text-soft); min-width:28px; }
+.sh-btns { display:flex; gap:8px; margin-top:6px; }
+.sh-btns button { flex:1; background:var(--bg-muted); border:1px solid var(--border-soft); border-radius:999px; padding:8px 6px; font-size:12px; font-weight:600; color:var(--text-main); cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.sh-btns button:hover { background:var(--bg-surface); border-color:var(--border-mid); }
+.sh-btns button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+.sh-btns button.primary:hover { background:var(--accent-hover); border-color:var(--accent-hover); }
 
 /* ── 모달 ── */
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; align-items:center; justify-content:center; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(46,42,36,0.35); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(2px); }
 .modal-overlay.open { display:flex; }
-.modal { background:#fff; border-radius:10px; padding:24px; width:420px; box-shadow:0 8px 32px rgba(0,0,0,0.18); max-height:90vh; overflow-y:auto; }
-.modal h3 { font-size:15px; margin-bottom:14px; color:#222; font-weight:700; }
-.modal input[type=text],.modal input[type=url],.modal input[type=number] { width:100%; border:1px solid #ddd; border-radius:5px; padding:9px 11px; font-size:14px; font-family:inherit; margin-bottom:10px; outline:none; }
-.modal input:focus { border-color:#C8174F; }
-.modal .modal-btns { display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
-.modal .modal-btns button { padding:8px 18px; border-radius:5px; border:none; cursor:pointer; font-size:14px; font-family:inherit; font-weight:700; }
-.modal .btn-ok { background:#C8174F; color:#fff; }
-.modal .btn-ok:hover { background:#a8103e; }
-.modal .btn-cancel { background:#f0f0f0; color:#555; }
-.modal .row { display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:14px; }
+.modal { background:var(--bg-surface); border-radius:16px; padding:26px; width:420px; box-shadow:0 16px 48px rgba(46,42,36,0.18); max-height:90vh; overflow-y:auto; border:1px solid var(--border-soft); }
+.modal h3 { font-size:15px; margin-bottom:16px; color:var(--text-main); font-weight:700; }
+.modal input[type=text],.modal input[type=url],.modal input[type=number] { width:100%; border:1px solid var(--border-soft); border-radius:10px; padding:10px 12px; font-size:14px; font-family:inherit; margin-bottom:10px; outline:none; background:var(--bg-surface); color:var(--text-main); transition:border-color 0.15s; }
+.modal input:focus { border-color:var(--accent); }
+.modal .modal-btns { display:flex; gap:8px; justify-content:flex-end; margin-top:10px; }
+.modal .modal-btns button { padding:9px 20px; border-radius:999px; border:none; cursor:pointer; font-size:14px; font-family:inherit; font-weight:600; transition:all 0.15s; }
+.modal .btn-ok { background:var(--accent); color:#fff; }
+.modal .btn-ok:hover { background:var(--accent-hover); }
+.modal .btn-cancel { background:var(--bg-muted); color:var(--text-main); border:1px solid var(--border-soft) !important; }
+.modal .btn-cancel:hover { background:var(--bg-app); }
+.modal .row { display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:14px; color:var(--text-main); }
 .modal .row input[type=number] { width:76px; margin-bottom:0; display:inline-block; }
-#img-drop-zone { border:2px dashed #ddd; border-radius:7px; padding:28px; text-align:center; color:#aaa; font-size:14px; cursor:pointer; margin-bottom:12px; transition:border-color 0.15s; }
-#img-drop-zone:hover { border-color:#C8174F; color:#C8174F; }
+#img-drop-zone { border:2px dashed var(--border-mid); border-radius:12px; padding:32px; text-align:center; color:var(--text-soft); font-size:14px; cursor:pointer; margin-bottom:12px; transition:all 0.15s; background:var(--bg-muted); }
+#img-drop-zone:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
 
 /* ── 토스트 ── */
-#toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:#222; color:#fff; padding:10px 22px; border-radius:20px; font-size:14px; opacity:0; transition:all 0.22s; pointer-events:none; z-index:9999; }
+#toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--text-main); color:#fff; padding:11px 24px; border-radius:999px; font-size:14px; opacity:0; transition:all 0.22s; pointer-events:none; z-index:9999; box-shadow:0 8px 24px rgba(46,42,36,0.2); }
 #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-@media(max-width:900px) { #html-panel { display:none; } #editor-wrap { width:100%; max-width:100%; } #editor { padding:22px 16px; } }
-.sm-back { background:none; border:none; color:#aaa; cursor:pointer; font-size:13px; padding:0 0 14px; display:block; font-family:inherit; }
-.sm-back:hover { color:#C8174F; }
-.sm-ai-notice { background:#e8f5e9; color:#2e7d32; border-radius:8px; padding:12px 16px; margin:12px 0 8px; font-size:14px; font-weight:700; }
-.sm-ai-guide { font-size:13px; color:#666; margin-bottom:12px; line-height:1.6; }
-#sm-paste-area { width:100%; height:150px; border:2px dashed #ddd; border-radius:8px; padding:12px; font-size:12px; font-family:'Consolas',monospace; resize:vertical; outline:none; box-sizing:border-box; }
-#sm-paste-area:focus { border-color:#C8174F; }
-.sm-ai-apply { background:#C8174F; color:#fff; border:none; border-radius:6px; padding:10px 22px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; }
-.sm-ai-apply:hover { background:#a8103e; }
+@media(max-width:1000px) { #html-panel { display:none; } }
+.sm-back { background:none; border:none; color:var(--text-soft); cursor:pointer; font-size:13px; padding:0 0 14px; display:block; font-family:inherit; }
+.sm-back:hover { color:var(--accent); }
+.sm-ai-notice { background:var(--accent-soft); color:var(--accent-hover); border-radius:10px; padding:12px 16px; margin:12px 0 8px; font-size:14px; font-weight:600; }
+.sm-ai-guide { font-size:13px; color:var(--text-sub); margin-bottom:12px; line-height:1.6; }
+#sm-paste-area { width:100%; height:150px; border:2px dashed var(--border-mid); border-radius:10px; padding:12px; font-size:12px; font-family:'Consolas',monospace; resize:vertical; outline:none; box-sizing:border-box; background:var(--bg-muted); color:var(--text-main); }
+#sm-paste-area:focus { border-color:var(--accent); background:var(--bg-surface); }
+.sm-ai-apply { background:var(--accent); color:#fff; border:none; border-radius:999px; padding:10px 24px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; transition:background 0.15s; }
+.sm-ai-apply:hover { background:var(--accent-hover); }
 </style>
 </head>
 <body>
@@ -474,8 +493,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </div>
     <textarea id="html-editor" spellcheck="false" placeholder="HTML을 직접 입력하거나 편집하세요..."></textarea>
     <div id="html-panel-footer">
-      <button onclick="applyHtml()" style="background:#C8174F;color:#fff;">↩ 에디터에 적용</button>
-      <button onclick="copyHtml()" style="background:#555;color:#fff;">📋 HTML 복사</button>
+      <button onclick="applyHtml()" style="background:var(--accent);color:#fff;border-radius:999px;">↩ 에디터에 적용</button>
+      <button onclick="copyHtml()" style="background:var(--text-main);color:#fff;border-radius:999px;">📋 HTML 복사</button>
     </div>
   </div>
 </div>
@@ -785,11 +804,11 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </select>
   </div>
   <div class="sh-row"><label>채우기</label>
-    <input type="color" id="sh-fill" value="#C8174F">
+    <input type="color" id="sh-fill" value="#C86F43">
     <label style="width:auto;margin-left:4px;font-size:11px;"><input type="checkbox" id="sh-no-fill"> 없음</label>
   </div>
   <div class="sh-row"><label>텍스트색</label><input type="color" id="sh-text-color" value="#ffffff"></div>
-  <div class="sh-row"><label>테두리색</label><input type="color" id="sh-border-color" value="#C8174F"></div>
+  <div class="sh-row"><label>테두리색</label><input type="color" id="sh-border-color" value="#C86F43"></div>
   <div class="sh-row"><label>테두리</label><input type="number" id="sh-border-width" value="0" min="0" max="20"><span style="font-size:11px;color:#aaa;">px</span></div>
   <div class="sh-row" id="sh-radius-row"><label>모서리</label><input type="range" id="sh-radius" min="0" max="200" value="0"><span class="sh-val" id="sh-radius-v">0px</span></div>
   <div class="sh-row"><label>투명도</label><input type="range" id="sh-opacity" min="0" max="100" value="100"><span class="sh-val" id="sh-opacity-val">100%</span></div>
@@ -957,25 +976,89 @@ function importFile(input){const file=input.files[0];if(!file)return;const reade
 // ══════════════════════════════════
 // 소식 템플릿
 // ══════════════════════════════════
-const SOGSIK_TEXT=`<div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"> <!-- 페이지 제목 --> <div style="margin-bottom:12px;padding-bottom:12px;"> <h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">제목을 입력하세요</h1> <div style="font-size:16px;color:#888;margin-top:4px;">부제목 또는 날짜 · 주최 정보를 입력하세요</div> <div style="font-size:16px;color:#888;margin-top:4px;">추가 부제목 (선택)</div> </div> <div style="height:2px;background:#222;margin-bottom:20px;"></div> <!-- 강조 문구 --> <div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#fff0f4;border-radius:10px;border:1px solid #f5c0cb;"> <div style="font-size:22px;font-weight:700;color:#C8174F;letter-spacing:-.5px;line-height:1.4;">핵심 메시지를 한 줄로 입력하세요</div> </div> <!-- 섹션 1 --> <div style="margin-bottom:36px;"> <div style="font-size:18px;font-weight:700;color:#C8174F;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#fff0f4;border:1px solid #f5c0cb;border-radius:8px;line-height:1.4;">소제목을 입력하세요</div> <div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"> <p style="margin-bottom:10px;">본문 내용을 입력하세요. 여기에 주요 내용을 작성합니다. 문단은 자유롭게 추가하거나 삭제할 수 있습니다.</p> <p style="margin-bottom:0;">두 번째 문단을 입력하세요. 추가로 전달하고 싶은 내용을 작성합니다.</p> </div> <!-- 수치 카드 (3열) --> <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;"> <div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"> <div style="font-size:22px;font-weight:700;color:#C8174F;line-height:1.2;margin-bottom:4px;letter-spacing:-.5px;">수치<span style="font-size:14px;font-weight:400;color:#888;">단위</span></div> <div style="font-size:15px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px;">항목명</div> <div style="font-size:13px;color:#888;line-height:1.5;">설명을 입력하세요</div> </div> <div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"> <div style="font-size:22px;font-weight:700;color:#C8174F;line-height:1.2;margin-bottom:4px;letter-spacing:-.5px;">수치<span style="font-size:14px;font-weight:400;color:#888;">단위</span></div> <div style="font-size:15px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px;">항목명</div> <div style="font-size:13px;color:#888;line-height:1.5;">설명을 입력하세요</div> </div> <div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"> <div style="font-size:22px;font-weight:700;color:#C8174F;line-height:1.2;margin-bottom:4px;letter-spacing:-.5px;">수치<span style="font-size:14px;font-weight:400;color:#888;">단위</span></div> <div style="font-size:15px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px;">항목명</div> <div style="font-size:13px;color:#888;line-height:1.5;">설명을 입력하세요</div> </div> </div> </div> <hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"> <!-- 섹션 2 --> <div style="margin-bottom:36px;"> <div style="font-size:18px;font-weight:700;color:#C8174F;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#fff0f4;border:1px solid #f5c0cb;border-radius:8px;line-height:1.4;">두 번째 소제목</div> <div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"> <p style="margin-bottom:10px;">본문 내용을 입력하세요.</p> </div> <!-- 세부 항목 제목 --> <div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;margin-top:16px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">세부 항목 제목</div> <!-- 정보 테이블 --> <table style="width:100%;border-collapse:collapse;margin:0 0 20px;"> <tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"> <th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">항목</th> <td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">내용을 입력하세요</td> </tr> <tr style="border-bottom:1px solid #e0e0e0;"> <th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">항목</th> <td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">내용을 입력하세요</td> </tr> <tr style="border-bottom:1px solid #e0e0e0;"> <th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">항목</th> <td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">내용을 입력하세요</td> </tr> </table> </div> <hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"> <!-- 마무리 인용 --> <blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;"> 기타 내용 </blockquote> <!-- 유의사항 --> <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"> <p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· 유의사항 첫 번째 항목을 입력하세요.</p> <p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· 유의사항 두 번째 항목을 입력하세요.</p> </div> </div> `;
+function _sogsikTpl(t){
+  const card=(n,u,nm,d)=>`<div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;line-height:1.2;margin-bottom:4px;letter-spacing:-.5px;">${n}<span style="font-size:14px;font-weight:400;color:#888;">${u}</span></div><div style="font-size:15px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px;">${nm}</div><div style="font-size:13px;color:#888;line-height:1.5;">${d}</div></div>`;
+  const row=(k,v)=>`<tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">${k}</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">${v}</td></tr>`;
+  return `<div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:12px;padding-bottom:12px;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">${t.title}</h1><div style="font-size:16px;color:#888;margin-top:4px;">${t.sub1}</div><div style="font-size:16px;color:#888;margin-top:4px;">${t.sub2}</div></div><div style="height:2px;background:#222;margin-bottom:20px;"></div><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#FBE8DC;border-radius:10px;border:1px solid #F2D5BE;"><div style="font-size:22px;font-weight:700;color:#C86F43;letter-spacing:-.5px;line-height:1.4;">${t.hero}</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;line-height:1.4;">${t.s1}</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">${t.s1p1}</p><p style="margin-bottom:0;">${t.s1p2}</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;">${card(t.c1n,t.c1u,t.c1nm,t.c1d)}${card(t.c2n,t.c2u,t.c2nm,t.c2d)}${card(t.c3n,t.c3u,t.c3nm,t.c3d)}</div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;line-height:1.4;">${t.s2}</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">${t.s2p}</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;margin-top:16px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">${t.side}</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">${t.r1k}</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">${t.r1v}</td></tr>${row(t.r2k,t.r2v)}${row(t.r3k,t.r3v)}${row(t.r4k,t.r4v)}</table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">${t.quote}</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· ${t.n1}</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· ${t.n2}</p></div></div>`;
+}
 
-const SOGSIK_EVENT=`<div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"> <!-- 페이지 제목 --> <div style="margin-bottom:12px;padding-bottom:12px;"> <h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">이벤트 제목을 입력하세요</h1> <div style="font-size:16px;color:#888;margin-top:4px;">날짜 · 장소 · 주최 기관</div> <div style="font-size:16px;color:#888;margin-top:4px;">추가 정보 (선택)</div> </div> <div style="height:2px;background:#222;margin-bottom:20px;"></div> <!-- 강조 문구 --> <div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#fff0f4;border-radius:10px;border:1px solid #f5c0cb;"> <div style="font-size:22px;font-weight:700;color:#C8174F;letter-spacing:-.5px;line-height:1.4;">이벤트 핵심 메시지를 입력하세요</div> </div> <!-- 행사 안내 --> <div style="margin-bottom:36px;"> <div style="font-size:18px;font-weight:700;color:#C8174F;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#fff0f4;border:1px solid #f5c0cb;border-radius:8px;line-height:1.4;">행사 안내</div> <table style="width:100%;border-collapse:collapse;margin:0 0 20px;"> <tr style="border-top:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;"><th style="width:120px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">📅 일시</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">0000년 00월 00일 (요일) 오전/오후 00:00</td></tr> <tr style="border-bottom:1px solid #e0e0e0;"><th style="width:120px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">📍 장소</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">장소를 입력하세요</td></tr> <tr style="border-bottom:1px solid #e0e0e0;"><th style="width:120px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">👥 대상</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">참가 대상을 입력하세요</td></tr> <tr style="border-bottom:1px solid #e0e0e0;"><th style="width:120px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">💰 참가비</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">무료 / 00,000원</td></tr> <tr style="border-bottom:1px solid #e0e0e0;"><th style="width:120px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">📝 신청</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">신청 방법을 입력하세요</td></tr> </table> </div> <hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"> <!-- 프로그램 안내 --> <div style="margin-bottom:36px;"> <div style="font-size:18px;font-weight:700;color:#C8174F;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#fff0f4;border:1px solid #f5c0cb;border-radius:8px;line-height:1.4;">프로그램 안내</div> <div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:16px;"><p style="margin-bottom:10px;">행사 프로그램 및 주요 순서를 입력하세요.</p></div> <table style="width:100%;border-collapse:collapse;margin:0 0 20px;"> <tr style="background:#fff0f4;border-top:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;"><th style="padding:10px 14px;font-size:14px;font-weight:700;color:#C8174F;text-align:center;border-right:1px solid #e0e0e0;width:90px;">시간</th><th style="padding:10px 14px;font-size:14px;font-weight:700;color:#C8174F;text-align:left;border-right:1px solid #e0e0e0;">프로그램</th><th style="padding:10px 14px;font-size:14px;font-weight:700;color:#C8174F;text-align:left;width:110px;">비고</th></tr> <tr style="border-bottom:1px solid #e0e0e0;"><td style="padding:10px 14px;font-size:14px;color:#555;text-align:center;border-right:1px solid #e0e0e0;">00:00</td><td style="padding:10px 14px;font-size:14px;color:#555;border-right:1px solid #e0e0e0;">프로그램 내용을 입력하세요</td><td style="padding:10px 14px;font-size:13px;color:#888;"></td></tr> <tr style="border-bottom:1px solid #e0e0e0;"><td style="padding:10px 14px;font-size:14px;color:#555;text-align:center;border-right:1px solid #e0e0e0;">00:00</td><td style="padding:10px 14px;font-size:14px;color:#555;border-right:1px solid #e0e0e0;">프로그램 내용을 입력하세요</td><td style="padding:10px 14px;font-size:13px;color:#888;"></td></tr> <tr style="border-bottom:1px solid #e0e0e0;"><td style="padding:10px 14px;font-size:14px;color:#555;text-align:center;border-right:1px solid #e0e0e0;">00:00</td><td style="padding:10px 14px;font-size:14px;color:#555;border-right:1px solid #e0e0e0;">프로그램 내용을 입력하세요</td><td style="padding:10px 14px;font-size:13px;color:#888;"></td></tr> </table> </div> <hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"> <!-- 유의사항 --> <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"> <p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· 유의사항 첫 번째 항목을 입력하세요.</p> <p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· 문의: 담당자명 (연락처)</p> </div> </div> `;
+const SOGSIK_EVENT=_sogsikTpl({
+  title:'이벤트 제목을 입력하세요',sub1:'일시 · 장소 · 주최 기관',sub2:'참가 대상 또는 추가 정보 (선택)',
+  hero:'이벤트 핵심 메시지를 입력하세요',
+  s1:'행사 개요',s1p1:'이벤트의 배경과 목적, 주요 내용을 소개하세요. 참가자에게 전달하고 싶은 메시지를 작성합니다.',s1p2:'행사 진행 방식과 주요 볼거리, 기대 효과를 설명하세요.',
+  c1n:'00',c1u:'명',c1nm:'참가 인원',c1d:'선착순 또는 정원',
+  c2n:'00',c2u:'시간',c2nm:'진행 시간',c2d:'행사 총 소요 시간',
+  c3n:'00',c3u:'원',c3nm:'참가비',c3d:'무료 또는 참가 비용',
+  s2:'프로그램 안내',s2p:'프로그램 구성과 주요 세션, 특별 순서 등을 소개하세요.',
+  side:'세부 일정',
+  r1k:'📅 일시',r1v:'0000년 00월 00일 (요일) 오전/오후 00:00',
+  r2k:'📍 장소',r2v:'행사 장소를 입력하세요',
+  r3k:'👥 대상',r3v:'참가 대상을 입력하세요',
+  r4k:'📝 신청',r4v:'신청 방법 및 접수처를 입력하세요',
+  quote:'문의 및 신청 안내 — 담당자명 / 연락처 / 이메일을 입력하세요.',
+  n1:'사전 신청이 필요한 경우 마감일을 확인해 주세요.',
+  n2:'우천·천재지변 등 불가피한 사유로 일정이 변경될 수 있습니다.'
+});
 
-const SOGSIK_PHOTO=`<div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"> <!-- 페이지 제목 --> <div style="margin-bottom:12px;padding-bottom:12px;"> <h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">제목을 입력하세요</h1> <div style="font-size:16px;color:#888;margin-top:4px;">작성자 · 날짜 · 분류</div> <div style="font-size:16px;color:#888;margin-top:4px;">추가 정보 (선택)</div> </div> <div style="height:2px;background:#222;margin-bottom:20px;"></div> <!-- 메인 이미지 --> <div style="background:#f5f5f5;border:2px dashed #ccc;height:340px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;border-radius:8px;margin-bottom:10px;"> <div style="font-size:44px;">🖼</div> <div style="font-size:14px;color:#bbb;text-align:center;">메인 이미지를 여기에 삽입하세요<br><span style="font-size:12px;">(상단 도구바 → 이미지 버튼 사용)</span></div> </div> <div style="font-size:13px;color:#999;text-align:center;margin-bottom:32px;padding-bottom:12px;border-bottom:1px solid #eee;">이미지 설명 (캡션)을 입력하세요</div> <!-- 강조 문구 --> <div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#fff0f4;border-radius:10px;border:1px solid #f5c0cb;"> <div style="font-size:22px;font-weight:700;color:#C8174F;letter-spacing:-.5px;line-height:1.4;">핵심 내용이나 인용구를 입력하세요</div> </div> <!-- 본문 섹션 1 --> <div style="margin-bottom:36px;"> <div style="font-size:18px;font-weight:700;color:#C8174F;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#fff0f4;border:1px solid #f5c0cb;border-radius:8px;line-height:1.4;">소제목을 입력하세요</div> <div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">본문 내용을 입력하세요. 사진에 대한 설명이나 관련 기사 내용을 작성합니다.</p><p style="margin-bottom:0;">두 번째 문단을 입력하세요.</p></div> </div> <hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"> <!-- 추가 사진 섹션 --> <div style="margin-bottom:36px;"> <div style="font-size:18px;font-weight:700;color:#C8174F;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#fff0f4;border:1px solid #f5c0cb;border-radius:8px;line-height:1.4;">추가 사진</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;"> <div style="background:#f5f5f5;border:2px dashed #ccc;height:180px;display:flex;align-items:center;justify-content:center;border-radius:6px;"><div style="text-align:center;color:#bbb;font-size:13px;">📷 이미지 삽입</div></div> <div style="background:#f5f5f5;border:2px dashed #ccc;height:180px;display:flex;align-items:center;justify-content:center;border-radius:6px;"><div style="text-align:center;color:#bbb;font-size:13px;">📷 이미지 삽입</div></div> </div> <div style="font-size:15px;color:#555;line-height:1.8;"><p style="margin-bottom:10px;">추가 설명을 입력하세요.</p></div> </div> <hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"> <!-- 유의사항 --> <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"> <p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· 유의사항 또는 저작권 정보를 입력하세요.</p> <p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· 문의: 담당자명 (연락처)</p> </div> </div> `;
+const SOGSIK_PRODUCT=_sogsikTpl({
+  title:'상품명을 입력하세요',sub1:'브랜드 · 출시일 · 카테고리',sub2:'상품 라인 또는 컬렉션명 (선택)',
+  hero:'상품의 핵심 가치 / 슬로건을 입력하세요',
+  s1:'상품 소개',s1p1:'상품의 특징과 강점을 소개하세요. 고객이 얻을 수 있는 핵심 가치를 작성합니다.',s1p2:'타겟 고객과 사용 시나리오, 차별점을 설명하세요.',
+  c1n:'00,000',c1u:'원',c1nm:'판매가',c1d:'정가 또는 할인가',
+  c2n:'00',c2u:'%',c2nm:'할인율',c2d:'프로모션 할인 혜택',
+  c3n:'0.0',c3u:'★',c3nm:'평점',c3d:'고객 리뷰 평균',
+  s2:'상품 상세 정보',s2p:'상품의 구성, 사용 방법, 관리 방법 등 상세 정보를 입력하세요.',
+  side:'주요 스펙',
+  r1k:'📦 구성',r1v:'본품 / 구성품 / 사은품을 입력하세요',
+  r2k:'📏 규격',r2v:'크기 / 무게 / 용량을 입력하세요',
+  r3k:'🏷 소재',r3v:'주요 소재 및 원료를 입력하세요',
+  r4k:'🏭 제조사',r4v:'제조사 / 원산지 / 제조일을 입력하세요',
+  quote:'구매 안내 — 주문 방법, 배송 정책, 문의처를 입력하세요.',
+  n1:'상품 이미지는 촬영 환경에 따라 실물과 차이가 있을 수 있습니다.',
+  n2:'교환 · 환불은 수령 후 7일 이내 가능하며 상세 정책을 확인해 주세요.'
+});
+
+const SOGSIK_INFO=_sogsikTpl({
+  title:'공지 / 정보 제목을 입력하세요',sub1:'작성자 · 발행일 · 분류',sub2:'관련 부서 또는 담당 기관 (선택)',
+  hero:'핵심 공지사항 / 주요 메시지를 입력하세요',
+  s1:'주요 내용',s1p1:'공지의 배경과 목적, 전달하고자 하는 주요 내용을 작성하세요.',s1p2:'관련 대상자와 시행 범위, 영향 등을 설명하세요.',
+  c1n:'0000',c1u:'.00.00',c1nm:'시행일',c1d:'적용 시작 일자',
+  c2n:'00',c2u:'건',c2nm:'적용 범위',c2d:'대상 인원 또는 건수',
+  c3n:'00',c3u:'일',c3nm:'기간',c3d:'공지 유효 기간',
+  s2:'세부 안내',s2p:'세부 사항과 절차, 준수 방법 등을 안내하세요.',
+  side:'참고 사항',
+  r1k:'📌 대상',r1v:'적용 대상 / 수혜자 / 관련자를 입력하세요',
+  r2k:'📅 기간',r2v:'시행 / 접수 / 종료 일자를 입력하세요',
+  r3k:'🏢 문의처',r3v:'담당 부서 / 전화 / 이메일을 입력하세요',
+  r4k:'🔗 관련 자료',r4v:'관련 링크 / 첨부 문서 / 참고 안내를 입력하세요',
+  quote:'추가 안내 사항 — 자주 묻는 질문이나 보충 설명을 입력하세요.',
+  n1:'본 공지는 사정에 따라 변경될 수 있으며 최신 내용은 공식 채널을 확인해 주세요.',
+  n2:'문의사항은 담당 부서로 연락해 주시기 바랍니다.'
+});
 
 // ══════════════════════════════════
 // 기안 템플릿
 // ══════════════════════════════════
-const GIAN_BASIC=`<div style="max-width:900px;margin:0 auto;padding:40px 52px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:13pt;line-height:1.8;color:#222;"><div style="display:flex;justify-content:flex-end;margin-bottom:20px;"><table style="border-collapse:collapse;font-size:11pt;"><tr><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">기안</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">팀장</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">본부장</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">대표</th></tr><tr><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td></tr></table></div><h2 style="text-align:center;font-size:20pt;font-weight:bold;border-bottom:2px solid #333;padding-bottom:12px;margin-bottom:20px;">기 안 서</h2><table style="border-collapse:collapse;width:100%;margin-bottom:24px;font-size:12pt;"><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;width:80px;">기안일</th><td style="border:1px solid #888;padding:8px 14px;">0000년 00월 00일</td><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;width:60px;">부서</th><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td></tr><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">기안자</th><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">직위</th><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td></tr><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">제목</th><td style="border:1px solid #888;padding:8px 14px;" colspan="3"><b>기안 제목을 입력하세요</b></td></tr></table><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">1. 목적</h3><p style="margin:0 0 20px;padding-left:14px;">기안의 목적을 작성하세요.</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">2. 내용</h3><p style="margin:0 0 20px;padding-left:14px;">기안의 상세 내용을 작성하세요.</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">3. 소요 예산</h3><p style="margin:0 0 20px;padding-left:14px;">예산 내역을 작성하세요. (예: 000원)</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">4. 기대 효과</h3><p style="margin:0 0 40px;padding-left:14px;">기대되는 효과를 작성하세요.</p><p style="text-align:right;font-size:12pt;">위와 같이 기안합니다.</p></div>`;
-
-const GIAN_PURCHASE=`<div style="max-width:900px;margin:0 auto;padding:40px 52px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:13pt;line-height:1.8;color:#222;"><div style="display:flex;justify-content:flex-end;margin-bottom:20px;"><table style="border-collapse:collapse;font-size:11pt;"><tr><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">기안</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">팀장</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">본부장</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">대표</th></tr><tr><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td></tr></table></div><h2 style="text-align:center;font-size:20pt;font-weight:bold;border-bottom:2px solid #333;padding-bottom:12px;margin-bottom:20px;">품 의 서</h2><table style="border-collapse:collapse;width:100%;margin-bottom:24px;font-size:12pt;"><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;width:80px;">품의일</th><td style="border:1px solid #888;padding:8px 14px;">0000년 00월 00일</td><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;width:60px;">부서</th><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td></tr><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">기안자</th><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">제목</th><td style="border:1px solid #888;padding:8px 14px;"><b>품의 제목을 입력하세요</b></td></tr></table><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">1. 품의 사유</h3><p style="margin:0 0 20px;padding-left:14px;">구매 또는 지출 사유를 작성하세요.</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 14px;">2. 품의 내역</h3><table style="border-collapse:collapse;width:100%;margin:0 0 20px;font-size:12pt;text-align:center;"><tr style="background:#f5f5f5;"><th style="border:1px solid #888;padding:8px;">No</th><th style="border:1px solid #888;padding:8px;">품목명</th><th style="border:1px solid #888;padding:8px;">규격</th><th style="border:1px solid #888;padding:8px;">수량</th><th style="border:1px solid #888;padding:8px;">단가</th><th style="border:1px solid #888;padding:8px;">금액</th><th style="border:1px solid #888;padding:8px;">용도</th></tr><tr><td style="border:1px solid #888;padding:8px;">1</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td></tr><tr><td style="border:1px solid #888;padding:8px;">2</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td></tr><tr><td style="border:1px solid #888;padding:8px;">3</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td><td style="border:1px solid #888;padding:8px;">&nbsp;</td></tr><tr style="background:#fafafa;"><th colspan="5" style="border:1px solid #888;padding:8px;text-align:right;font-weight:700;">합계</th><td style="border:1px solid #888;padding:8px;font-weight:700;">0원</td><td style="border:1px solid #888;padding:8px;"></td></tr></table><p style="text-align:right;font-size:12pt;">위와 같이 품의하오니 결재 부탁드립니다.</p></div>`;
-
-const GIAN_REPORT=`<div style="max-width:900px;margin:0 auto;padding:40px 52px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:13pt;line-height:1.8;color:#222;"><div style="display:flex;justify-content:flex-end;margin-bottom:20px;"><table style="border-collapse:collapse;font-size:11pt;"><tr><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">담당</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">팀장</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">본부장</th></tr><tr><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td></tr></table></div><h2 style="text-align:center;font-size:20pt;font-weight:bold;border-bottom:2px solid #333;padding-bottom:12px;margin-bottom:20px;">업 무 보 고 서</h2><table style="border-collapse:collapse;width:100%;margin-bottom:28px;font-size:12pt;"><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;width:80px;">보고일</th><td style="border:1px solid #888;padding:8px 14px;">0000년 00월 00일</td><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;width:60px;">부서</th><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td></tr><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">보고자</th><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">제목</th><td style="border:1px solid #888;padding:8px 14px;"><b>보고 제목을 입력하세요</b></td></tr></table><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;padding:8px 14px;background:#f5f5f5;border-left:4px solid #333;">1. 보고 개요</h3><p style="margin:0 0 20px;padding-left:14px;">보고의 배경과 목적을 간략히 작성하세요.</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;padding:8px 14px;background:#f5f5f5;border-left:4px solid #333;">2. 추진 현황</h3><table style="border-collapse:collapse;width:100%;margin:0 0 20px;font-size:12pt;"><tr style="background:#f5f5f5;"><th style="border:1px solid #888;padding:8px 14px;width:160px;">추진 항목</th><th style="border:1px solid #888;padding:8px 14px;">내용</th><th style="border:1px solid #888;padding:8px 14px;width:80px;">상태</th></tr><tr><td style="border:1px solid #888;padding:8px 14px;">항목 1</td><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td><td style="border:1px solid #888;padding:8px 14px;text-align:center;">완료</td></tr><tr><td style="border:1px solid #888;padding:8px 14px;">항목 2</td><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td><td style="border:1px solid #888;padding:8px 14px;text-align:center;">진행 중</td></tr><tr><td style="border:1px solid #888;padding:8px 14px;">항목 3</td><td style="border:1px solid #888;padding:8px 14px;">&nbsp;</td><td style="border:1px solid #888;padding:8px 14px;text-align:center;">예정</td></tr></table><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;padding:8px 14px;background:#f5f5f5;border-left:4px solid #333;">3. 향후 계획</h3><p style="margin:0 0 20px;padding-left:14px;">앞으로의 추진 계획을 작성하세요.</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;padding:8px 14px;background:#f5f5f5;border-left:4px solid #333;">4. 특이 사항</h3><p style="margin:0 0 40px;padding-left:14px;">특이 사항이나 이슈 사항을 작성하세요.</p><p style="text-align:right;font-size:12pt;">위와 같이 보고드립니다.</p></div>`;
+const GIAN_BASIC=`<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#2E2A24;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> 0000년 00월 00일(요일)</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> 기안 제목을 입력하세요</p></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">1. 목적</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① 배경 / 현황에 대한 설명을 작성하세요.</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② 이에 본 기안의 <b>목적</b>을 아래와 같이 정리하였습니다. 필요한 경우 관련 안내를 함께 작성해 주세요.</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">세부 항목별 내용을 아래 표에 정리해 주세요. 구분 · 담당에 따라 처리 경로가 달라질 수 있습니다.</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #D9D3C1;table-layout:fixed;"><thead><tr style="background:#FBE8DC;"><th style="width:45%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">항목</th><th style="width:25%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">구분</th><th style="width:30%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 1</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#FBE8DC;color:#B45E35;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 A</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 2</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#F5F2EA;color:#6B5E48;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 B</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 3</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#EDE7D5;color:#8B7A4F;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 C</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#6B5E48;font-weight:500;background:#F5F2EA;">담당부서 2</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ 표 하단 유의사항 또는 안내 문구를 작성해 주세요.</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#B45E35;">요청은 <span style="color:#2E2A24;font-weight:bold;background:#FBE8DC;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">①</div><div>필요 항목 및 담당 부서 확인</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">②</div><div>하단 댓글란에 <span style="font-weight:600;text-decoration:underline;">[4. 작성 양식]</span>에 맞춰 내용 작성</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">③</div><div>관련 파일 / 첨부 자료 댓글에 업로드</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">④</div><div>담당팀에서 확인 후 영업일 기준 N일 내 처리</div></div><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">아래 항목을 빠짐없이 작성해 주시면 보다 신속하게 처리해 드릴 수 있습니다.</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#2E2A24;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #D9D3C1;background:#FAF9F5;table-layout:fixed;"><thead><tr style="background:#F5F2EA;"><th style="padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#2E2A24;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #D9D3C1;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#2E2A24;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
+1. 요청 기간 : 0000.00.00 ~ 0000.00.00
+2. 요청 항목 :
+3. 첨부 파일 : 첨부파일
+4. 참고 URL :
+5. 비고 <span style="color:#C86F43;">(선택 시 작성)</span>
+-
+- </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#B45E35;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 관련 작업이 완료된 이후 요청을 진행해 주세요.</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 수정 / 종료 요청도 동일하게 <span style="font-weight:600;">본 문서 댓글</span>을 통해 접수 바랍니다.</div></div>`;
 
 // AI용 빈 템플릿 (내용 채울 구조만 제공)
-const SOGSIK_AI_TPL=`<!-- 아래 HTML 구조에서 [대괄호] 안의 내용을 실제 내용으로 교체해 주세요. 스타일은 절대 수정하지 마세요. --><div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid #222;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">[소식 제목을 여기에 입력]</h1><div style="font-size:16px;color:#888;margin-top:4px;">[부제목 또는 날짜 · 주최 정보]</div></div><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#fff0f4;border-radius:10px;border:1px solid #f5c0cb;"><div style="font-size:22px;font-weight:700;color:#C8174F;letter-spacing:-.5px;line-height:1.4;">[핵심 메시지 한 줄]</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C8174F;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#fff0f4;border:1px solid #f5c0cb;border-radius:8px;">[첫 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">[첫 번째 본문 내용]</p><p style="margin-bottom:0;">[두 번째 문단]</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;"><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C8174F;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C8174F;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C8174F;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div></div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C8174F;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#fff0f4;border:1px solid #f5c0cb;border-radius:8px;">[두 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p>[본문 내용]</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">[세부 항목 제목]</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr></table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">[마무리 인용 또는 강조 문장]</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· [유의사항 1]</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· [유의사항 2]</p></div></div>`;
+const SOGSIK_AI_TPL=`<!-- 아래 HTML 구조에서 [대괄호] 안의 내용을 실제 내용으로 교체해 주세요. 스타일은 절대 수정하지 마세요. --><div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid #222;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">[소식 제목을 여기에 입력]</h1><div style="font-size:16px;color:#888;margin-top:4px;">[부제목 또는 날짜 · 주최 정보]</div></div><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#FBE8DC;border-radius:10px;border:1px solid #F2D5BE;"><div style="font-size:22px;font-weight:700;color:#C86F43;letter-spacing:-.5px;line-height:1.4;">[핵심 메시지 한 줄]</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;">[첫 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">[첫 번째 본문 내용]</p><p style="margin-bottom:0;">[두 번째 문단]</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;"><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div></div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;">[두 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p>[본문 내용]</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">[세부 항목 제목]</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr></table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">[마무리 인용 또는 강조 문장]</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· [유의사항 1]</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· [유의사항 2]</p></div></div>`;
 
-const GIAN_AI_TPL=`<!-- 아래 기안서 양식에 실제 내용을 채워주세요. [] 안의 텍스트를 실제 내용으로 교체하세요. -->\n<div style="max-width:900px;margin:0 auto;padding:40px 52px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:13pt;line-height:1.8;color:#222;"><div style="display:flex;justify-content:flex-end;margin-bottom:20px;"><table style="border-collapse:collapse;font-size:11pt;"><tr><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">기안</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">팀장</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">본부장</th><th style="border:1px solid #333;padding:6px 20px;background:#f5f5f5;font-weight:700;">대표</th></tr><tr><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td><td style="border:1px solid #333;padding:32px 20px;"></td></tr></table></div><h2 style="text-align:center;font-size:20pt;font-weight:bold;border-bottom:2px solid #333;padding-bottom:12px;margin-bottom:20px;">[기안서 / 품의서 / 보고서 중 선택]</h2><table style="border-collapse:collapse;width:100%;margin-bottom:24px;font-size:12pt;"><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;width:80px;">기안일</th><td style="border:1px solid #888;padding:8px 14px;">[날짜]</td><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;width:60px;">부서</th><td style="border:1px solid #888;padding:8px 14px;">[부서명]</td></tr><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">기안자</th><td style="border:1px solid #888;padding:8px 14px;">[이름]</td><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">직위</th><td style="border:1px solid #888;padding:8px 14px;">[직위]</td></tr><tr><th style="border:1px solid #888;padding:8px 14px;background:#f5f5f5;font-weight:700;">제목</th><td style="border:1px solid #888;padding:8px 14px;" colspan="3"><b>[기안 제목]</b></td></tr></table><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">1. 목적</h3><p style="margin:0 0 20px;padding-left:14px;">[목적]</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">2. 내용</h3><p style="margin:0 0 20px;padding-left:14px;">[내용]</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">3. 소요 예산</h3><p style="margin:0 0 20px;padding-left:14px;">[예산]</p><h3 style="font-size:13pt;font-weight:bold;margin:0 0 10px;">4. 기대 효과</h3><p style="margin:0 0 40px;padding-left:14px;">[기대 효과]</p><p style="text-align:right;font-size:12pt;">위와 같이 기안합니다.</p></div>`;
+const GIAN_AI_TPL=`<!-- 아래 기안문 양식에 실제 내용을 채워주세요. [대괄호] 안의 텍스트만 실제 내용으로 교체하고, 스타일/색상은 절대 수정하지 마세요. -->
+<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#2E2A24;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> [0000년 00월 00일(요일)]</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> [기안 제목]</p></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">1. 목적</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① [배경 / 현황]</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② [본 기안의 목적]</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">[세부 내역에 대한 간략한 설명]</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #D9D3C1;table-layout:fixed;"><thead><tr style="background:#FBE8DC;"><th style="width:45%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">항목</th><th style="width:25%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">구분</th><th style="width:30%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">[항목 1]</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#FBE8DC;color:#B45E35;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">[담당부서]</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">[항목 2]</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#F5F2EA;color:#6B5E48;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#6B5E48;font-weight:500;background:#F5F2EA;">[담당부서]</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ [표 하단 안내]</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#B45E35;">요청은 <span style="color:#2E2A24;font-weight:bold;background:#FBE8DC;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">①</div><div>[1단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">②</div><div>[2단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">③</div><div>[3단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">④</div><div>[4단계]</div></div><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">[양식 안내 문구]</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#2E2A24;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #D9D3C1;background:#FAF9F5;table-layout:fixed;"><thead><tr style="background:#F5F2EA;"><th style="padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#2E2A24;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #D9D3C1;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#2E2A24;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
+1. 요청 기간 : [날짜]
+2. 요청 항목 : [항목]
+3. 첨부 파일 : [파일명]
+4. 참고 URL : [URL]
+5. 비고 <span style="color:#C86F43;">(선택 시 작성)</span>
+- [추가 정보] </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#B45E35;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 1]</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 2]</div></div>`;
 
 // 템플릿 데이터 맵
 const TPLS={
@@ -983,18 +1066,16 @@ const TPLS={
     name:'소식',desc:'소식 콘텐츠 제작',
     ai:SOGSIK_AI_TPL,
     list:[
-      {icon:'📝',title:'텍스트형',desc:'텍스트 중심의 기사 레이아웃',html:SOGSIK_TEXT},
-      {icon:'📅',title:'이벤트형',desc:'행사·이벤트 안내에 최적화',html:SOGSIK_EVENT},
-      {icon:'🖼',title:'사진형',desc:'사진과 함께하는 스토리 레이아웃',html:SOGSIK_PHOTO},
+      {icon:'📅',title:'이벤트',desc:'행사·이벤트 안내 레이아웃',html:SOGSIK_EVENT},
+      {icon:'🛍',title:'상품',desc:'상품 소개 및 프로모션 레이아웃',html:SOGSIK_PRODUCT},
+      {icon:'ℹ️',title:'정보',desc:'공지·정보 전달 레이아웃',html:SOGSIK_INFO},
     ]
   },
   gian:{
     name:'기안',desc:'인트라넷 업무 기안문',
     ai:GIAN_AI_TPL,
     list:[
-      {icon:'📄',title:'기안서',desc:'일반 업무 기안 양식',html:GIAN_BASIC},
-      {icon:'🛒',title:'품의서',desc:'물품 구매·비용 품의 양식',html:GIAN_PURCHASE},
-      {icon:'📊',title:'업무보고서',desc:'업무 추진 현황 보고 양식',html:GIAN_REPORT},
+      {icon:'📋',title:'기안문',desc:'인트라넷 기안문 양식',html:GIAN_BASIC},
     ]
   }
 };
@@ -1006,8 +1087,11 @@ let currentType='sogsik';
 function hideAllScreens(){['sm-main','sm-sub','sm-tpl','sm-ai'].forEach(id=>document.getElementById(id).style.display='none');}
 function goMain(){hideAllScreens();document.getElementById('sm-main').style.display='';}let currentTplIdx=0;
 function goSub(type){
-  currentType=type;hideAllScreens();
+  currentType=type;
   const t=TPLS[type];
+  // 단일 템플릿이면 서브타입 선택 화면을 건너뛰고 바로 상세 화면으로
+  if(t.list.length===1){selectTpl(type,0);return;}
+  hideAllScreens();
   document.getElementById('sm-tpl-opts').innerHTML=t.list.map((item,i)=>'<div class="start-opt" onclick="selectTpl(\''+type+'\','+i+')"><div class="start-opt-icon">'+item.icon+'</div><div class="start-opt-title">'+item.title+'</div><div class="start-opt-desc">'+item.desc+'</div></div>').join('');
   document.getElementById('sm-tpl').style.display='';
 }
@@ -1161,7 +1245,7 @@ function selectElem(el, type){
   clearMultiSelect();
   if(selectedElem&&selectedElem!==el)selectedElem.style.outline='';
   selectedElem=el;selectedType=type;
-  if(type!=='table')el.style.outline='2px solid #C8174F';
+  if(type!=='table')el.style.outline='2px solid #C86F43';
   positionOverlay();
   resizeOverlay.classList.add('visible');
   // 속성 패널 열기
@@ -1299,8 +1383,8 @@ function showPropsPanel(el, type){
     const imgBnEl=document.getElementById('pp-img-border-none');if(imgBnEl)imgBnEl.checked=!el.style.borderStyle||el.style.borderStyle==='none'||parseInt(el.style.borderWidth)===0;
   } else if(type==='block'){
     const g=document.getElementById('pp-block');g.classList.add('active');
-    document.getElementById('pp-block-bg').value=rgbToHex(el.style.backgroundColor)||'#fff8f9';
-    document.getElementById('pp-block-line').value=rgbToHex(el.style.borderLeftColor)||'#C8174F';
+    document.getElementById('pp-block-bg').value=rgbToHex(el.style.backgroundColor)||'#FBE8DC';
+    document.getElementById('pp-block-line').value=rgbToHex(el.style.borderLeftColor)||'#C86F43';
     document.getElementById('pp-block-color').value=rgbToHex(el.style.color)||'#555555';
     const bgNone=!el.style.backgroundColor||el.style.backgroundColor==='transparent';
     const lineNone=!el.style.borderLeft||el.style.borderLeft==='none'||(!el.style.borderLeftStyle||el.style.borderLeftStyle==='none');
@@ -1361,7 +1445,7 @@ function toggleImgBorderNone(isNone){
 }
 function toggleBlockNone(prop, isNone){
   if(!selectedElem)return;
-  if(prop==='bg'){selectedElem.style.backgroundColor=isNone?'transparent':(document.getElementById('pp-block-bg').value||'#fff8f9');}
+  if(prop==='bg'){selectedElem.style.backgroundColor=isNone?'transparent':(document.getElementById('pp-block-bg').value||'#FBE8DC');}
   else if(prop==='line'){
     if(isNone){selectedElem.style.borderLeftStyle='none';}
     else{selectedElem.style.borderLeft='';}
@@ -1675,7 +1759,7 @@ function splitCell(){
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button onmousedown="event.preventDefault()" onclick="this.closest('div[style*=z-index]').remove()" style="background:#f0f0f0;border:1px solid #ddd;border-radius:7px;padding:7px 18px;font-size:13px;cursor:pointer;font-family:inherit;">취소</button>
-      <button onmousedown="event.preventDefault()" onclick="doSplitCell(parseInt(document.getElementById('sp-cols').value)||1,parseInt(document.getElementById('sp-rows').value)||1);this.closest('div[style*=z-index]').remove();" style="background:#C8174F;color:#fff;border:none;border-radius:7px;padding:7px 18px;font-size:13px;cursor:pointer;font-family:inherit;">나누기</button>
+      <button onmousedown="event.preventDefault()" onclick="doSplitCell(parseInt(document.getElementById('sp-cols').value)||1,parseInt(document.getElementById('sp-rows').value)||1);this.closest('div[style*=z-index]').remove();" style="background:var(--accent);color:#fff;border:none;border-radius:999px;padding:7px 20px;font-size:13px;cursor:pointer;font-family:inherit;">나누기</button>
     </div>`;
   document.body.appendChild(dlg);
   document.getElementById('sp-cols').focus();
@@ -1770,11 +1854,21 @@ function distributeRows(){
 function alignElem(align){
   const elems=selectedElems.length>0?selectedElems:(selectedElem?[selectedElem]:[]);
   if(!elems.length)return;
+  const parentCW=(el)=>{
+    const p=el.parentElement||editor;
+    const pcs=getComputedStyle(p);
+    return p.clientWidth-(parseFloat(pcs.paddingLeft)||0)-(parseFloat(pcs.paddingRight)||0);
+  };
   elems.forEach(el=>{
-    el.style.display='block';
-    el.style.float='none';
-    el.style.clear='both';
-    el.style.marginTop='8px';el.style.marginBottom='8px';
+    const cs=getComputedStyle(el);
+    if(cs.display==='inline'||cs.display==='inline-block'||el.tagName==='IMG')el.style.display='block';
+    if(cs.float&&cs.float!=='none')el.style.float='none';
+    const cw=parentCW(el);
+    const rw=el.getBoundingClientRect().width;
+    // full-width(≥95%)이면 margin:auto 효과가 없으므로 width를 살짝 줄여 정렬이 보이도록
+    if(cw>0&&rw>=cw*0.95&&!el.style.width){
+      el.style.width=Math.round(cw*0.9)+'px';
+    }
     if(align==='center'){el.style.marginLeft='auto';el.style.marginRight='auto';}
     else if(align==='right'){el.style.marginLeft='auto';el.style.marginRight='0';}
     else{el.style.marginLeft='0';el.style.marginRight='auto';}
@@ -1888,6 +1982,8 @@ resizeOverlay.querySelectorAll('.rh').forEach(handle=>{
     resizeStartX=e.clientX;resizeStartY=e.clientY;
     const rect=selectedElem.getBoundingClientRect();
     resizeStartW=rect.width;resizeStartH=rect.height;
+    const _cs=getComputedStyle(selectedElem);
+    window._resizeStartMarginTop=parseFloat(selectedElem.style.marginTop)||parseFloat(_cs.marginTop)||0;
     document.addEventListener('mousemove',onResizeMove);
     document.addEventListener('mouseup',onResizeEnd);
   });
@@ -1909,8 +2005,14 @@ function onResizeMove(e){
     else nw=Math.round(nh/ratio);
   }
   selectedElem.style.minWidth='';selectedElem.style.width=nw+'px';
-  if((resizeDir.includes('n')||resizeDir.includes('s'))&&selectedType!=='table'){selectedElem.style.minHeight='';selectedElem.style.height=nh+'px';}
+  const applyH=(resizeDir.includes('n')||resizeDir.includes('s')||locked)&&selectedType!=='table';
+  if(applyH){selectedElem.style.minHeight='';selectedElem.style.height=nh+'px';}
   if(selectedType==='table')selectedElem.style.width=nw+'px';
+  // 북쪽(위) 핸들: 아래 변은 고정하고 위로 늘어나도록 margin-top 보정
+  if(resizeDir.includes('n')&&selectedType!=='table'){
+    const startMT=window._resizeStartMarginTop||0;
+    selectedElem.style.marginTop=(startMT-(nh-resizeStartH))+'px';
+  }
   positionOverlay();
   // 패널 w/h 동기화
   const r2=selectedElem.getBoundingClientRect();
@@ -2521,9 +2623,100 @@ function insertImageHtml(src){
   syncHtmlPanel();
 }
 const dropZone=document.getElementById('img-drop-zone');
-dropZone.addEventListener('dragover',(e)=>{e.preventDefault();dropZone.style.borderColor='#C8174F';});
+dropZone.addEventListener('dragover',(e)=>{e.preventDefault();dropZone.style.borderColor='#C86F43';});
 dropZone.addEventListener('dragleave',()=>{dropZone.style.borderColor='#ddd';});
 dropZone.addEventListener('drop',(e)=>{e.preventDefault();dropZone.style.borderColor='#ddd';const file=e.dataTransfer.files[0];if(file&&file.type.startsWith('image/')){const r=new FileReader();r.onload=(ev)=>{insertImageHtml(ev.target.result);closeModal('img-modal');};r.readAsDataURL(file);}});
+
+// ── 이미지 플레이스홀더: 더블클릭 → 파일선택, 드래그-드롭 → 즉시 삽입 ──
+(function(){
+  // 플레이스홀더 판별: 점선 테두리 + "이미지"/"사진"/"🖼"/"📷" 텍스트
+  const isImgPlaceholder=(el)=>{
+    if(!el||el.nodeType!==1)return false;
+    const cs=getComputedStyle(el);
+    const dashed=/dashed/.test(cs.borderTopStyle)||/dashed/.test(cs.borderLeftStyle)||/dashed/.test(cs.borderBottomStyle)||/dashed/.test(cs.borderRightStyle);
+    if(!dashed)return false;
+    const t=el.textContent||'';
+    return /이미지|사진|🖼|📷/.test(t);
+  };
+  // 요소를 img로 교체 (플레이스홀더 크기 유지)
+  const replaceWithImg=(el,src)=>{
+    const r=el.getBoundingClientRect();
+    saveUndo();
+    const img=document.createElement('img');
+    img.src=src;
+    img.style.maxWidth='100%';
+    img.style.width=Math.round(r.width)+'px';
+    img.style.display='block';
+    img.style.objectFit='cover';
+    const mt=el.style.marginTop||'';if(mt)img.style.marginTop=mt;
+    const mb=el.style.marginBottom||'';if(mb)img.style.marginBottom=mb;
+    const br=el.style.borderRadius||'';if(br)img.style.borderRadius=br;
+    el.parentNode.replaceChild(img,el);
+    syncHtmlPanel();scheduleAutoSave();
+  };
+  // 히든 파일 input 준비
+  let _imgPicker=null;
+  const ensurePicker=()=>{
+    if(_imgPicker)return _imgPicker;
+    _imgPicker=document.createElement('input');
+    _imgPicker.type='file';_imgPicker.accept='image/*';
+    _imgPicker.style.display='none';
+    document.body.appendChild(_imgPicker);
+    return _imgPicker;
+  };
+  // ① 더블클릭 → 파일 선택
+  editor.addEventListener('dblclick',(e)=>{
+    const ph=e.target.closest('div');
+    if(!ph||!isImgPlaceholder(ph))return;
+    e.preventDefault();e.stopPropagation();
+    const pk=ensurePicker();
+    pk.value='';
+    pk.onchange=()=>{
+      const f=pk.files&&pk.files[0];if(!f||!f.type.startsWith('image/'))return;
+      const rd=new FileReader();
+      rd.onload=(ev)=>replaceWithImg(ph,ev.target.result);
+      rd.readAsDataURL(f);
+    };
+    pk.click();
+  },true);
+  // ② 드래그 오버 — 플레이스홀더 또는 개체 위면 허용 + 하이라이트
+  let _dragTarget=null;
+  const clearHL=()=>{if(_dragTarget){_dragTarget.style.outline='';_dragTarget=null;}};
+  editor.addEventListener('dragover',(e)=>{
+    if(!e.dataTransfer||!Array.from(e.dataTransfer.types||[]).includes('Files'))return;
+    const ph=e.target.closest('div,img,.in-shape');
+    if(!ph||ph===editor)return;
+    e.preventDefault();
+    if(_dragTarget!==ph){clearHL();_dragTarget=ph;ph.style.outline='2px dashed #C86F43';}
+  });
+  editor.addEventListener('dragleave',(e)=>{
+    if(e.target===_dragTarget)clearHL();
+  });
+  // ③ 드롭 → 이미지면 해당 개체 내부/위치에 즉시 삽입
+  editor.addEventListener('drop',(e)=>{
+    clearHL();
+    if(!e.dataTransfer||!e.dataTransfer.files||!e.dataTransfer.files.length)return;
+    const f=e.dataTransfer.files[0];
+    if(!f.type.startsWith('image/'))return;
+    e.preventDefault();e.stopPropagation();
+    const tgt=e.target.closest('div,img,.in-shape,p,section,article,header,footer,td,th');
+    const rd=new FileReader();
+    rd.onload=(ev)=>{
+      const src=ev.target.result;
+      if(tgt&&tgt!==editor&&isImgPlaceholder(tgt)){replaceWithImg(tgt,src);return;}
+      if(tgt&&tgt!==editor&&tgt.tagName==='IMG'){saveUndo();tgt.src=src;syncHtmlPanel();scheduleAutoSave();return;}
+      saveUndo();
+      const img=document.createElement('img');img.src=src;img.style.maxWidth='900px';img.style.width='100%';img.style.display='block';
+      if(tgt&&tgt!==editor){
+        // 개체 안쪽에 자식으로 추가 (컨테이너성 요소) 또는 뒤에 삽입
+        const isContainer=['DIV','SECTION','ARTICLE','HEADER','FOOTER','TD','TH'].includes(tgt.tagName);
+        if(isContainer)tgt.appendChild(img);else tgt.parentNode.insertBefore(img,tgt.nextSibling);
+      } else editor.appendChild(img);
+      syncHtmlPanel();scheduleAutoSave();
+    };
+    rd.readAsDataURL(f);
+  });
+})();
 
 // ══════════════════════════════════
 // 동영상
@@ -2545,7 +2738,7 @@ function insertVideoEmbed(){
     `allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" `+
     `referrerpolicy="strict-origin-when-cross-origin" `+
     `allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe></div>`+
-    `<p style="font-size:12px;color:#999;margin:4px 0 14px;">▶ <a href="${watchUrl}" target="_blank" style="color:#C8174F;">YouTube에서 직접 보기</a> (임베드 오류 시)</p>`
+    `<p style="font-size:12px;color:#999;margin:4px 0 14px;">▶ <a href="${watchUrl}" target="_blank" style="color:#C86F43;">YouTube에서 직접 보기</a> (임베드 오류 시)</p>`
   );
   closeModal('video-modal');syncHtmlPanel();
 }
@@ -2554,7 +2747,7 @@ function insertVideoEmbed(){
 // 파일
 // ══════════════════════════════════
 function openFileModal(){saveRange();openModal('file-modal');}
-function handleAttachFile(input){const file=input.files[0];if(!file)return;editor.focus();restoreRange();document.execCommand('insertHTML',false,`<p>📎 <a href="#" style="color:#C8174F;">${file.name}</a> (${(file.size/1024).toFixed(1)}KB)</p>`);closeModal('file-modal');syncHtmlPanel();input.value='';}
+function handleAttachFile(input){const file=input.files[0];if(!file)return;editor.focus();restoreRange();document.execCommand('insertHTML',false,`<p>📎 <a href="#" style="color:#C86F43;">${file.name}</a> (${(file.size/1024).toFixed(1)}KB)</p>`);closeModal('file-modal');syncHtmlPanel();input.value='';}
 
 // ══════════════════════════════════
 // 표 삽입
@@ -2618,7 +2811,7 @@ function exitShapeEditMode(){
   resizeOverlay.style.pointerEvents='';
   resizeOverlay.querySelectorAll('.rh').forEach(h=>h.style.display='');
   document.getElementById('ro-move').style.display='';
-  resizeOverlay.style.boxShadow='0 0 0 2px #C8174F';
+  resizeOverlay.style.boxShadow='0 0 0 2px #C86F43';
   resizeOverlay.style.background='transparent';
   if(selectedElem)positionOverlay();
 }
@@ -2670,7 +2863,7 @@ function insertShape(){
 // ══════════════════════════════════
 // 색상 팔레트
 // ══════════════════════════════════
-const COLORS=['#000000','#333333','#555555','#777777','#999999','#bbbbbb','#dddddd','#ffffff','#C8174F','#e74c3c','#e67e22','#f39c12','#f1c40f','#2ecc71','#27ae60','#1abc9c','#3498db','#2980b9','#9b59b6','#8e44ad','#2c3e50','#34495e','#795548','#607d8b','transparent'];
+const COLORS=['#000000','#333333','#555555','#777777','#999999','#bbbbbb','#dddddd','#ffffff','#C86F43','#B45E35','#e67e22','#f39c12','#f1c40f','#2ecc71','#27ae60','#1abc9c','#3498db','#2980b9','#9b59b6','#8e44ad','#2c3e50','#34495e','#795548','#607d8b','transparent'];
 function buildPalette(pid,cmd){
   const el=document.getElementById(pid);
   if(!el)return;
@@ -2696,9 +2889,9 @@ function closePalettes(){document.querySelectorAll('.color-palette').forEach(p=>
 // 색상 테마
 // ══════════════════════════════════
 // 기본 브랜드 컬러 (템플릿 기준색)
-const DEFAULT_PRIMARY='#C8174F';
-const DEFAULT_LIGHT='#fff0f4';
-const DEFAULT_BORDER='#f5c0cb';
+const DEFAULT_PRIMARY='#C86F43';
+const DEFAULT_LIGHT='#FBE8DC';
+const DEFAULT_BORDER='#F2D5BE';
 function reEsc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
 function applyTheme(idx){
   saveUndo();
