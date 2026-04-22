@@ -178,20 +178,25 @@ body.props-open { padding-bottom:62px; }
 .rh.sw { bottom:-5px; left:-5px; cursor:nesw-resize; }
 .rh.w  { top:calc(50% - 4px); left:-5px; cursor:ew-resize; }
 
-/* ── 속성 패널 (하단 고정) ── */
+/* ── 속성 패널 (우측 고정) ── */
 #props-panel {
-  position:fixed; bottom:-70px; left:0; right:0; height:60px;
-  background:var(--bg-surface); border-top:1px solid var(--border-soft); z-index:900;
-  transition:bottom 0.2s ease;
-  display:flex; align-items:center; gap:8px; padding:0 18px;
-  box-shadow:0 -4px 20px rgba(46,42,36,0.08); overflow-x:auto; overflow-y:hidden;
-  white-space:nowrap;
+  position:fixed; top:168px; bottom:20px; right:-380px; width:320px;
+  background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:14px; z-index:900;
+  transition:right 0.22s ease;
+  display:flex; flex-direction:column; gap:10px; padding:16px 16px 18px;
+  box-shadow:0 10px 32px rgba(46,42,36,0.12); overflow-y:auto; overflow-x:hidden;
 }
-#props-panel.visible { bottom:0; }
-.pp-group { display:none; align-items:center; gap:8px; }
+#props-panel.visible { right:20px; }
+.pp-group { display:none; flex-direction:column; align-items:stretch; gap:6px; }
 .pp-group.active { display:flex; }
 .pp-label { font-size:11px; color:var(--text-sub); white-space:nowrap; flex-shrink:0; }
-.pp-sep { width:1px; height:24px; background:var(--border-soft); flex-shrink:0; margin:0 4px; }
+/* 섹션 구분선 — 가로 전체 차지 */
+.pp-sep { height:1px; width:100%; background:var(--border-soft); margin:6px 0 2px; }
+/* 섹션 타이틀 — 단독 행 */
+.pp-group > .pp-section-title { width:100%; margin-top:2px; display:block; }
+/* 컨트롤 행 — 한 행에 관련 컨트롤 묶음 */
+.pp-row { display:flex; flex-wrap:wrap; align-items:center; gap:6px 8px; width:100%; }
+.pp-row > .pp-label:first-child { min-width:54px; }
 .pp-color { width:26px; height:26px; border-radius:6px; border:1px solid var(--border-mid); cursor:pointer; padding:0; flex-shrink:0; }
 .pp-num { border:1px solid var(--border-soft); border-radius:6px; padding:5px 7px; font-size:12px; font-family:inherit; width:54px; outline:none; background:var(--bg-surface); color:var(--text-main); }
 .pp-num:focus { border-color:var(--accent); }
@@ -389,11 +394,11 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   <span style="font-size:11px;color:#aaa;padding:0 4px;white-space:nowrap;">색상 테마</span>
   <div style="width:6px;flex-shrink:0;"></div>
   <div class="theme-dots" id="theme-dots">
-    <div class="theme-dot active" data-idx="0" style="background:#e8500a;" title="오렌지" onmousedown="event.preventDefault()" onclick="applyTheme(0)"></div>
-    <div class="theme-dot" data-idx="1" style="background:#1a6fbb;" title="로얄블루" onmousedown="event.preventDefault()" onclick="applyTheme(1)"></div>
-    <div class="theme-dot" data-idx="2" style="background:#2a7a50;" title="포레스트" onmousedown="event.preventDefault()" onclick="applyTheme(2)"></div>
-    <div class="theme-dot" data-idx="3" style="background:#8b1a4a;" title="버건디" onmousedown="event.preventDefault()" onclick="applyTheme(3)"></div>
-    <div class="theme-dot" data-idx="4" style="background:#404040;" title="차콜" onmousedown="event.preventDefault()" onclick="applyTheme(4)"></div>
+    <div class="theme-dot active" data-idx="0" style="background:#C86F43;" title="테라코타" onmousedown="event.preventDefault()" onclick="applyTheme(0)"></div>
+    <div class="theme-dot" data-idx="1" style="background:#5B7A96;" title="더스티블루" onmousedown="event.preventDefault()" onclick="applyTheme(1)"></div>
+    <div class="theme-dot" data-idx="2" style="background:#6B8759;" title="세이지" onmousedown="event.preventDefault()" onclick="applyTheme(2)"></div>
+    <div class="theme-dot" data-idx="3" style="background:#9C5068;" title="플럼" onmousedown="event.preventDefault()" onclick="applyTheme(3)"></div>
+    <div class="theme-dot" data-idx="4" style="background:#4A3F33;" title="웜차콜" onmousedown="event.preventDefault()" onclick="applyTheme(4)"></div>
     <div class="theme-dot" id="custom-color-dot" title="커스텀 색상" style="background:conic-gradient(red,orange,yellow,lime,cyan,blue,violet,red);position:relative;overflow:hidden;" onmousedown="event.preventDefault();openCpCustomTheme(this)">
       <input type="color" id="custom-color-input" style="position:absolute;inset:0;opacity:0;width:0;height:0;pointer-events:none;border:none;padding:0;" oninput="applyCustomTheme(this.value)">
     </div>
@@ -455,12 +460,20 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <div style="width:14px;height:3px;margin-top:2px;"></div>
     </div>
     <input type="color" id="bg-color-cp-input" value="#ffff00" style="display:none;">
+    <div id="gradColorBtn" title="그라데이션" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:3px 5px;border-radius:3px;" onmousedown="event.preventDefault()" onclick="openGradModal()">
+      <span style="font-size:14px;font-weight:700;line-height:1;background:linear-gradient(135deg,#C86F43,#FBE8DC);-webkit-background-clip:text;background-clip:text;color:transparent;">가</span>
+      <div style="width:14px;height:3px;margin-top:2px;background:linear-gradient(to right,#C86F43,#FBE8DC);border-radius:1px;"></div>
+    </div>
   </div>
   <div class="fmt-sep"></div>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft')" title="왼쪽 정렬">&#x2261;&#x25C2;</button>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter')" title="가운데 정렬">&#x2261;</button>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('justifyRight')" title="오른쪽 정렬">&#x25B8;&#x2261;</button>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('justifyFull')" title="양쪽 정렬">&#x2261;&#x2261;</button>
+  <div class="fmt-sep"></div>
+  <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="applyVertAlign('top')" title="개체 내부 텍스트 위쪽 정렬">⤒</button>
+  <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="applyVertAlign('middle')" title="개체 내부 텍스트 가운데 정렬">⇅</button>
+  <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="applyVertAlign('bottom')" title="개체 내부 텍스트 아래쪽 정렬">⤓</button>
   <div class="fmt-sep"></div>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList')">• 목록</button>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList')">1. 목록</button>
@@ -518,277 +531,404 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   <!-- 도형/이미지/블록 공통 -->
   <div id="pp-shape" class="pp-group">
     <span class="pp-section-title">채우기</span>
-    <input type="color" id="pp-fill" class="pp-color" onmousedown="event.preventDefault()" oninput="applyProp('fill',this.value)" onchange="applyProp('fill',this.value)"><label class="pp-none-lbl"><input type="checkbox" id="pp-fill-none" onchange="toggleColorNone('fill',this.checked)"> 없음</label>
-    <span class="pp-label">텍스트색</span>
-    <input type="color" id="pp-text-color" class="pp-color" value="#ffffff" onmousedown="event.preventDefault()" oninput="applyProp('textColor',this.value)" onchange="applyProp('textColor',this.value)">
+    <div class="pp-row">
+      <input type="color" id="pp-fill" class="pp-color" onmousedown="event.preventDefault()" oninput="applyProp('fill',this.value)" onchange="applyProp('fill',this.value)">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-fill-none" onchange="toggleColorNone('fill',this.checked)"> 없음</label>
+    </div>
+    <div class="pp-row">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-fill-grad-on" onchange="applyProp('fillGrad',this.checked)"> 그라데이션</label>
+      <input type="color" id="pp-fill-bg2" class="pp-color" value="#FBE8DC" style="display:none;" onmousedown="event.preventDefault()" onchange="applyProp('fill',document.getElementById('pp-fill').value)">
+      <select class="pp-select" id="pp-fill-grad-dir" style="display:none;" onchange="applyProp('fill',document.getElementById('pp-fill').value)">
+        <option value="to bottom">↓</option><option value="to top">↑</option>
+        <option value="to right">→</option><option value="to left">←</option>
+        <option value="to bottom right">↘</option><option value="to bottom left">↙</option>
+        <option value="to top right">↗</option><option value="to top left">↖</option>
+      </select>
+    </div>
+    <div class="pp-row">
+      <span class="pp-label">텍스트색</span>
+      <input type="color" id="pp-text-color" class="pp-color" value="#ffffff" onmousedown="event.preventDefault()" oninput="applyProp('textColor',this.value)" onchange="applyProp('textColor',this.value)">
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">테두리</span>
-    <input type="color" id="pp-border-color" class="pp-color" onmousedown="event.preventDefault()" oninput="applyProp('borderColor',this.value)" onchange="applyProp('borderColor',this.value)"><label class="pp-none-lbl"><input type="checkbox" id="pp-border-none" onchange="toggleColorNone('borderColor',this.checked)"> 없음</label>
-    <input type="number" id="pp-border-w" class="pp-num" min="0" max="20" value="0" placeholder="굵기" onchange="applyProp('borderWidth',this.value)">
-    <select class="pp-select" id="pp-border-style" onchange="applyProp('borderStyle',this.value)">
-      <option value="solid">실선</option>
-      <option value="dashed">파선</option>
-      <option value="dotted">점선</option>
-      <option value="double">이중선</option>
-    </select>
+    <div class="pp-row">
+      <input type="color" id="pp-border-color" class="pp-color" onmousedown="event.preventDefault()" oninput="applyProp('borderColor',this.value)" onchange="applyProp('borderColor',this.value)">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-border-none" onchange="toggleColorNone('borderColor',this.checked)"> 없음</label>
+    </div>
+    <div class="pp-row">
+      <input type="number" id="pp-border-w" class="pp-num" min="0" max="20" value="0" placeholder="굵기" onchange="applyProp('borderWidth',this.value)">
+      <select class="pp-select" id="pp-border-style" onchange="applyProp('borderStyle',this.value)">
+        <option value="solid">실선</option><option value="dashed">파선</option>
+        <option value="dotted">점선</option><option value="double">이중선</option>
+      </select>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">모서리</span>
-    <input type="range" id="pp-radius" class="pp-range" min="0" max="200" value="0" oninput="applyProp('radius',this.value);document.getElementById('pp-radius-v').textContent=this.value+'px'">
-    <span id="pp-radius-v" class="pp-small">0px</span>
+    <div class="pp-row">
+      <input type="range" id="pp-radius" class="pp-range" min="0" max="200" value="0" oninput="applyProp('radius',this.value);document.getElementById('pp-radius-v').textContent=this.value+'px'">
+      <span id="pp-radius-v" class="pp-small">0px</span>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">그림자</span>
-    <select class="pp-select" id="pp-shadow" onchange="applyProp('shadow',this.value)">
-      <option value="none">없음</option>
-      <option value="soft">부드럽게</option>
-      <option value="medium">보통</option>
-      <option value="hard">진하게</option>
-      <option value="glow">빛남</option>
-    </select>
-    <select class="pp-select" id="pp-shadow-dir" title="빛 방향" onchange="applyProp('shadowDir',this.value)">
-      <option value="center">중앙</option>
-      <option value="se">우하단 ↘</option>
-      <option value="s">아래 ↓</option>
-      <option value="sw">좌하단 ↙</option>
-      <option value="e">오른쪽 →</option>
-      <option value="w">왼쪽 ←</option>
-    </select>
-    <input type="color" id="pp-sh-color" class="pp-color" value="#000000" onmousedown="event.preventDefault()" onchange="applyProp('shadowColor',this.value)">
+    <div class="pp-row">
+      <select class="pp-select" id="pp-shadow" onchange="applyProp('shadow',this.value)">
+        <option value="none">없음</option><option value="soft">부드럽게</option>
+        <option value="medium">보통</option><option value="hard">진하게</option>
+        <option value="glow">빛남</option>
+      </select>
+    </div>
+    <div class="pp-row">
+      <span class="pp-label">방향</span>
+      <select class="pp-select" id="pp-shadow-dir" title="빛 방향" onchange="applyProp('shadowDir',this.value)">
+        <option value="center">중앙</option><option value="se">우하단 ↘</option>
+        <option value="s">아래 ↓</option><option value="sw">좌하단 ↙</option>
+        <option value="e">오른쪽 →</option><option value="w">왼쪽 ←</option>
+      </select>
+      <input type="color" id="pp-sh-color" class="pp-color" value="#000000" onmousedown="event.preventDefault()" onchange="applyProp('shadowColor',this.value)">
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기</span>
-    <span class="pp-label">W</span>
-    <input type="number" id="pp-shape-w" class="pp-num" min="1" max="9999" onchange="resizeElemPanel('w',this.value)">
-    <span class="pp-label">H</span>
-    <input type="number" id="pp-shape-h" class="pp-num" min="1" max="9999" onchange="resizeElemPanel('h',this.value)">
-    <label style="display:flex;align-items:center;gap:3px;font-size:11px;color:#888;cursor:pointer;flex-shrink:0;">
-      <input type="checkbox" id="pp-lock-ratio" class="pp-check pp-lock-chk"> 비율고정
-    </label>
+    <div class="pp-row">
+      <span class="pp-label">W</span>
+      <input type="number" id="pp-shape-w" class="pp-num" min="1" max="9999" onchange="resizeElemPanel('w',this.value)">
+      <span class="pp-label">H</span>
+      <input type="number" id="pp-shape-h" class="pp-num" min="1" max="9999" onchange="resizeElemPanel('h',this.value)">
+    </div>
+    <div class="pp-row">
+      <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#888;cursor:pointer;">
+        <input type="checkbox" id="pp-lock-ratio" class="pp-check pp-lock-chk"> 비율고정
+      </label>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">투명도</span>
-    <input type="range" id="pp-opacity" class="pp-range" min="0" max="100" value="100" oninput="applyProp('opacity',this.value);document.getElementById('pp-opacity-v').textContent=this.value+'%'">
-    <span id="pp-opacity-v" class="pp-small">100%</span>
+    <div class="pp-row">
+      <input type="range" id="pp-opacity" class="pp-range" min="0" max="100" value="100" oninput="applyProp('opacity',this.value);document.getElementById('pp-opacity-v').textContent=this.value+'%'">
+      <span id="pp-opacity-v" class="pp-small">100%</span>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">정렬</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    </div>
     <div class="pp-sep"></div>
-    <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
+    <div class="pp-row">
+      <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
+    </div>
   </div>
 
   <!-- 표 전용 -->
   <div id="pp-table" class="pp-group">
     <span class="pp-section-title">행</span>
-    <button class="pp-btn" onclick="tableOp('addRowAbove')">↑ 위에 추가</button>
-    <button class="pp-btn" onclick="tableOp('addRowBelow')">↓ 아래 추가</button>
-    <button class="pp-btn danger" onclick="tableOp('delRow')">행 삭제</button>
+    <div class="pp-row">
+      <button class="pp-btn" onclick="tableOp('addRowAbove')">↑ 위에 추가</button>
+      <button class="pp-btn" onclick="tableOp('addRowBelow')">↓ 아래 추가</button>
+      <button class="pp-btn danger" onclick="tableOp('delRow')">행 삭제</button>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">열</span>
-    <button class="pp-btn" onclick="tableOp('addColLeft')">← 왼쪽 추가</button>
-    <button class="pp-btn" onclick="tableOp('addColRight')">오른쪽 추가 →</button>
-    <button class="pp-btn danger" onclick="tableOp('delCol')">열 삭제</button>
+    <div class="pp-row">
+      <button class="pp-btn" onclick="tableOp('addColLeft')">← 왼쪽 추가</button>
+      <button class="pp-btn" onclick="tableOp('addColRight')">오른쪽 추가 →</button>
+      <button class="pp-btn danger" onclick="tableOp('delCol')">열 삭제</button>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">셀 배경</span>
-    <input type="color" id="pp-cell-bg" class="pp-color" value="#ffffff" onmousedown="event.preventDefault()" onchange="applyTableProp('cellBg',this.value)"><label class="pp-none-lbl"><input type="checkbox" id="pp-cell-bg-none" onchange="applyTableProp('cellBgNone',this.checked)"> 없음</label>
-    <span class="pp-label">테두리색</span>
-    <input type="color" id="pp-tbl-border" class="pp-color" value="#cccccc" onmousedown="event.preventDefault()" onchange="applyTableProp('borderColor',this.value)">
-    <input type="number" id="pp-tbl-border-w" class="pp-num" min="0" max="10" value="1" onchange="applyTableProp('borderWidth',this.value)">
-    <select class="pp-select" id="pp-tbl-border-style" onchange="applyTableProp('borderStyle',this.value)">
-      <option value="solid">실선</option>
-      <option value="dashed">파선</option>
-      <option value="dotted">점선</option>
-      <option value="double">이중선</option>
-    </select>
+    <div class="pp-row">
+      <input type="color" id="pp-cell-bg" class="pp-color" value="#ffffff" onmousedown="event.preventDefault()" onchange="applyTableProp('cellBg',this.value)">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-cell-bg-none" onchange="applyTableProp('cellBgNone',this.checked)"> 없음</label>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">테두리</span>
+    <div class="pp-row">
+      <input type="color" id="pp-tbl-border" class="pp-color" value="#cccccc" onmousedown="event.preventDefault()" onchange="applyTableProp('borderColor',this.value)">
+      <input type="number" id="pp-tbl-border-w" class="pp-num" min="0" max="10" value="1" onchange="applyTableProp('borderWidth',this.value)">
+      <select class="pp-select" id="pp-tbl-border-style" onchange="applyTableProp('borderStyle',this.value)">
+        <option value="solid">실선</option><option value="dashed">파선</option>
+        <option value="dotted">점선</option><option value="double">이중선</option>
+      </select>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">균등 분배</span>
-    <button class="pp-btn" onclick="distributeCols()">열 균등</button>
-    <button class="pp-btn" onclick="distributeRows()">행 균등</button>
+    <div class="pp-row">
+      <button class="pp-btn" onclick="distributeCols()">열 균등</button>
+      <button class="pp-btn" onclick="distributeRows()">행 균등</button>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">그림자</span>
-    <select class="pp-select" id="pp-tbl-shadow" onchange="applyTableProp('shadow',this.value)">
-      <option value="none">없음</option>
-      <option value="soft">부드럽게</option>
-      <option value="medium">보통</option>
-      <option value="hard">진하게</option>
-    </select>
+    <div class="pp-row">
+      <select class="pp-select" id="pp-tbl-shadow" onchange="applyTableProp('shadow',this.value)">
+        <option value="none">없음</option><option value="soft">부드럽게</option>
+        <option value="medium">보통</option><option value="hard">진하게</option>
+      </select>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기</span>
-    <span class="pp-label">W</span>
-    <input type="number" id="pp-tbl-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
-    <span class="pp-label">H</span>
-    <input type="number" id="pp-tbl-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
-    <label style="display:flex;align-items:center;gap:3px;font-size:11px;color:#888;cursor:pointer;flex-shrink:0;">
-      <input type="checkbox" id="pp-tbl-lock" class="pp-check pp-lock-chk"> 비율고정
-    </label>
+    <div class="pp-row">
+      <span class="pp-label">W</span>
+      <input type="number" id="pp-tbl-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
+      <span class="pp-label">H</span>
+      <input type="number" id="pp-tbl-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
+    </div>
+    <div class="pp-row">
+      <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#888;cursor:pointer;">
+        <input type="checkbox" id="pp-tbl-lock" class="pp-check pp-lock-chk"> 비율고정
+      </label>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">정렬</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    </div>
     <div class="pp-sep"></div>
-    <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
+    <div class="pp-row">
+      <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
+    </div>
   </div>
 
   <!-- 셀 전용 -->
   <div id="pp-cell" class="pp-group">
     <span class="pp-section-title">셀 작업</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="mergeCells()">셀 합치기</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="splitCell()">셀 나누기</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="equalCellWidth()">너비 같게</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="equalCellHeight()">높이 같게</button>
-    <span id="pp-cell-count" style="font-size:11px;color:#888;flex-shrink:0;white-space:nowrap;"></span>
-    <div class="pp-sep"></div>
-    <span class="pp-section-title">배경</span>
-    <input type="color" id="pp-cell-bg2" class="pp-color" value="#ffffff" onmousedown="event.preventDefault()" oninput="applyCellBg(this.value)" onchange="applyCellBg(this.value)"><label class="pp-none-lbl"><input type="checkbox" id="pp-cell-bg2-none" onchange="toggleCellBgNone(this.checked)"> 없음</label>
-    <span class="pp-label">글자색</span>
-    <input type="color" id="pp-cell-text-c" class="pp-color" value="#222222" onmousedown="event.preventDefault()" oninput="applyCellText(this.value)" onchange="applyCellText(this.value)">
-    <div class="pp-sep"></div>
-    <span class="pp-section-title">텍스트 정렬</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellTextAlign('left')" title="왼쪽">◄</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellTextAlign('center')" title="가운데">가운데</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellTextAlign('right')" title="오른쪽">►</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellVertAlign('top')" title="상단">▲상</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellVertAlign('middle')" title="중간">중간</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellVertAlign('bottom')" title="하단">▼하</button>
-    <div class="pp-sep"></div>
-    <span class="pp-section-title">테두리 일괄</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyBorderPreset('all')">전체</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyBorderPreset('outer')">바깥</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyBorderPreset('inner')">안쪽만</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyBorderPreset('none')">없음</button>
-    <div class="pp-sep"></div>
-    <div style="width:100%;display:flex;flex-direction:column;gap:4px;padding:0 2px 2px;">
-      <div style="display:flex;gap:3px;">
-        <button id="pp-cb-t" class="pp-btn pp-side-btn active" onmousedown="event.preventDefault()" onclick="toggleCellBorderSide('t')">상▲</button>
-        <button id="pp-cb-b" class="pp-btn pp-side-btn active" onmousedown="event.preventDefault()" onclick="toggleCellBorderSide('b')">하▼</button>
-        <button id="pp-cb-l" class="pp-btn pp-side-btn active" onmousedown="event.preventDefault()" onclick="toggleCellBorderSide('l')">좌◄</button>
-        <button id="pp-cb-r" class="pp-btn pp-side-btn active" onmousedown="event.preventDefault()" onclick="toggleCellBorderSide('r')">우►</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:4px;">
-        <input type="color" id="pp-cell-border-c" class="pp-color" value="#cccccc" onmousedown="event.preventDefault()" oninput="applyCellBorderSides('c',this.value)">
-        <input type="number" id="pp-cell-border-w" class="pp-num" min="0" max="20" value="1" onchange="applyCellBorderSides('w',this.value)" style="width:44px;">
-        <select class="pp-select" id="pp-cell-border-s" onchange="applyCellBorderSides('s',this.value)"><option value="solid">실선</option><option value="dashed">파선</option><option value="dotted">점선</option><option value="double">이중</option><option value="none">없음</option></select>
-      </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="mergeCells()">셀 합치기</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="splitCell()">셀 나누기</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="equalCellWidth()">너비 같게</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="equalCellHeight()">높이 같게</button>
+    </div>
+    <div class="pp-row">
+      <span id="pp-cell-count" style="font-size:11px;color:#888;"></span>
     </div>
     <div class="pp-sep"></div>
-    <span class="pp-label">W</span>
-    <input type="number" id="pp-cell-w" class="pp-num" min="1" onchange="setCellWidth(this.value)">
-    <span class="pp-label">H</span>
-    <input type="number" id="pp-cell-h" class="pp-num" min="1" onchange="setCellHeight(this.value)">
+    <span class="pp-section-title">배경</span>
+    <div class="pp-row">
+      <input type="color" id="pp-cell-bg2" class="pp-color" value="#ffffff" onmousedown="event.preventDefault()" oninput="applyCellBg(this.value)" onchange="applyCellBg(this.value)">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-cell-bg2-none" onchange="toggleCellBgNone(this.checked)"> 없음</label>
+    </div>
     <div class="pp-sep"></div>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="switchToTablePanel()" style="flex-shrink:0;">📋 표 속성</button>
+    <span class="pp-section-title">글자색</span>
+    <div class="pp-row">
+      <input type="color" id="pp-cell-text-c" class="pp-color" value="#222222" onmousedown="event.preventDefault()" oninput="applyCellText(this.value)" onchange="applyCellText(this.value)">
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">텍스트 정렬</span>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellTextAlign('left')" title="왼쪽">◄</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellTextAlign('center')" title="가운데">가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellTextAlign('right')" title="오른쪽">►</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellVertAlign('top')" title="상단">▲상</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellVertAlign('middle')" title="중간">중간</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyCellVertAlign('bottom')" title="하단">▼하</button>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">테두리 일괄</span>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyBorderPreset('all')">전체</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyBorderPreset('outer')">바깥</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyBorderPreset('inner')">안쪽만</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyBorderPreset('none')">없음</button>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">테두리 세부</span>
+    <div class="pp-row">
+      <button id="pp-cb-t" class="pp-btn pp-side-btn active" onmousedown="event.preventDefault()" onclick="toggleCellBorderSide('t')">상▲</button>
+      <button id="pp-cb-b" class="pp-btn pp-side-btn active" onmousedown="event.preventDefault()" onclick="toggleCellBorderSide('b')">하▼</button>
+      <button id="pp-cb-l" class="pp-btn pp-side-btn active" onmousedown="event.preventDefault()" onclick="toggleCellBorderSide('l')">좌◄</button>
+      <button id="pp-cb-r" class="pp-btn pp-side-btn active" onmousedown="event.preventDefault()" onclick="toggleCellBorderSide('r')">우►</button>
+    </div>
+    <div class="pp-row">
+      <input type="color" id="pp-cell-border-c" class="pp-color" value="#cccccc" onmousedown="event.preventDefault()" oninput="applyCellBorderSides('c',this.value)">
+      <input type="number" id="pp-cell-border-w" class="pp-num" min="0" max="20" value="1" onchange="applyCellBorderSides('w',this.value)" style="width:44px;">
+      <select class="pp-select" id="pp-cell-border-s" onchange="applyCellBorderSides('s',this.value)"><option value="solid">실선</option><option value="dashed">파선</option><option value="dotted">점선</option><option value="double">이중</option><option value="none">없음</option></select>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">크기</span>
+    <div class="pp-row">
+      <span class="pp-label">W</span>
+      <input type="number" id="pp-cell-w" class="pp-num" min="1" onchange="setCellWidth(this.value)">
+      <span class="pp-label">H</span>
+      <input type="number" id="pp-cell-h" class="pp-num" min="1" onchange="setCellHeight(this.value)">
+    </div>
+    <div class="pp-sep"></div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="switchToTablePanel()">📋 표 속성</button>
+    </div>
   </div>
   <!-- 이미지 전용 -->
   <div id="pp-image" class="pp-group">
     <span class="pp-section-title">정렬</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">테두리</span>
-    <input type="color" id="pp-img-border-color" class="pp-color" value="#cccccc" onmousedown="event.preventDefault()" oninput="applyProp('imgBorderColor',this.value)" onchange="applyProp('imgBorderColor',this.value)"><label class="pp-none-lbl"><input type="checkbox" id="pp-img-border-none" onchange="toggleImgBorderNone(this.checked)"> 없음</label>
-    <input type="number" id="pp-img-border-w" class="pp-num" min="0" max="20" value="0" placeholder="굵기" onchange="applyProp('imgBorderWidth',this.value)">
-    <select class="pp-select" id="pp-img-border-style" onchange="applyProp('imgBorderStyle',this.value)">
-      <option value="solid">실선</option>
-      <option value="dashed">파선</option>
-      <option value="dotted">점선</option>
-      <option value="double">이중선</option>
-    </select>
+    <div class="pp-row">
+      <input type="color" id="pp-img-border-color" class="pp-color" value="#cccccc" onmousedown="event.preventDefault()" oninput="applyProp('imgBorderColor',this.value)" onchange="applyProp('imgBorderColor',this.value)">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-img-border-none" onchange="toggleImgBorderNone(this.checked)"> 없음</label>
+    </div>
+    <div class="pp-row">
+      <input type="number" id="pp-img-border-w" class="pp-num" min="0" max="20" value="0" placeholder="굵기" onchange="applyProp('imgBorderWidth',this.value)">
+      <select class="pp-select" id="pp-img-border-style" onchange="applyProp('imgBorderStyle',this.value)">
+        <option value="solid">실선</option><option value="dashed">파선</option>
+        <option value="dotted">점선</option><option value="double">이중선</option>
+      </select>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기</span>
-    <span class="pp-label">W</span>
-    <input type="number" id="pp-img-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
-    <span class="pp-label">H</span>
-    <input type="number" id="pp-img-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
-    <label style="display:flex;align-items:center;gap:3px;font-size:11px;color:#888;cursor:pointer;flex-shrink:0;">
-      <input type="checkbox" id="pp-img-lock-ratio" class="pp-check pp-lock-chk"> 비율고정
-    </label>
+    <div class="pp-row">
+      <span class="pp-label">W</span>
+      <input type="number" id="pp-img-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
+      <span class="pp-label">H</span>
+      <input type="number" id="pp-img-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
+    </div>
+    <div class="pp-row">
+      <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#888;cursor:pointer;">
+        <input type="checkbox" id="pp-img-lock-ratio" class="pp-check pp-lock-chk"> 비율고정
+      </label>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">모서리</span>
-    <input type="range" id="pp-img-radius" class="pp-range" min="0" max="200" value="0" oninput="applyProp('radius',this.value);document.getElementById('pp-img-r-v').textContent=this.value+'px'">
-    <span id="pp-img-r-v" class="pp-small">0px</span>
+    <div class="pp-row">
+      <input type="range" id="pp-img-radius" class="pp-range" min="0" max="200" value="0" oninput="applyProp('radius',this.value);document.getElementById('pp-img-r-v').textContent=this.value+'px'">
+      <span id="pp-img-r-v" class="pp-small">0px</span>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">그림자</span>
-    <select class="pp-select" id="pp-img-shadow" onchange="applyProp('shadow',this.value)">
-      <option value="none">없음</option>
-      <option value="soft">부드럽게</option>
-      <option value="medium">보통</option>
-      <option value="hard">진하게</option>
-    </select>
+    <div class="pp-row">
+      <select class="pp-select" id="pp-img-shadow" onchange="applyProp('shadow',this.value)">
+        <option value="none">없음</option><option value="soft">부드럽게</option>
+        <option value="medium">보통</option><option value="hard">진하게</option>
+      </select>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">투명도</span>
-    <input type="range" id="pp-img-opacity" class="pp-range" min="0" max="100" value="100" oninput="applyProp('opacity',this.value);document.getElementById('pp-img-op-v').textContent=this.value+'%'">
-    <span id="pp-img-op-v" class="pp-small">100%</span>
+    <div class="pp-row">
+      <input type="range" id="pp-img-opacity" class="pp-range" min="0" max="100" value="100" oninput="applyProp('opacity',this.value);document.getElementById('pp-img-op-v').textContent=this.value+'%'">
+      <span id="pp-img-op-v" class="pp-small">100%</span>
+    </div>
     <div class="pp-sep"></div>
-    <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
+    <div class="pp-row">
+      <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
+    </div>
   </div>
 
   <!-- 블록(blockquote 등) 전용 -->
   <div id="pp-block" class="pp-group">
     <span class="pp-section-title">배경색</span>
-    <input type="color" id="pp-block-bg" class="pp-color" onmousedown="event.preventDefault()" onchange="applyBlockProp('bg',this.value)"><label class="pp-none-lbl"><input type="checkbox" id="pp-block-bg-none" onchange="toggleBlockNone('bg',this.checked)"> 없음</label>
-    <span class="pp-label">선 색</span>
-    <input type="color" id="pp-block-line" class="pp-color" onmousedown="event.preventDefault()" oninput="applyBlockProp('line',this.value)" onchange="applyBlockProp('line',this.value)"><label class="pp-none-lbl"><input type="checkbox" id="pp-block-line-none" onchange="toggleBlockNone('line',this.checked)"> 없음</label>
-    <input type="number" id="pp-block-line-w" class="pp-num" min="0" max="20" value="4" placeholder="굵기" onchange="applyBlockProp('lineWidth',this.value)">
-    <select class="pp-select" id="pp-block-line-style" onchange="applyBlockProp('lineStyle',this.value)">
-      <option value="solid">실선</option>
-      <option value="dashed">파선</option>
-      <option value="dotted">점선</option>
-      <option value="double">이중선</option>
-    </select>
-    <span class="pp-label">글자색</span>
-    <input type="color" id="pp-block-color" class="pp-color" onmousedown="event.preventDefault()" onchange="applyBlockProp('color',this.value)">
+    <div class="pp-row">
+      <input type="color" id="pp-block-bg" class="pp-color" onmousedown="event.preventDefault()" onchange="applyBlockProp('bg',this.value)">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-block-bg-none" onchange="toggleBlockNone('bg',this.checked)"> 없음</label>
+    </div>
+    <div class="pp-row">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-block-grad-on" onchange="applyBlockProp('grad',this.checked)"> 그라데이션</label>
+      <input type="color" id="pp-block-bg2" class="pp-color" style="display:none;" onmousedown="event.preventDefault()" onchange="applyBlockProp('bg',document.getElementById('pp-block-bg').value)">
+      <select class="pp-select" id="pp-block-grad-dir" style="display:none;" onchange="applyBlockProp('bg',document.getElementById('pp-block-bg').value)">
+        <option value="to bottom">↓</option><option value="to top">↑</option>
+        <option value="to right">→</option><option value="to left">←</option>
+        <option value="135deg">↘</option><option value="45deg">↗</option>
+        <option value="225deg">↙</option><option value="315deg">↖</option>
+      </select>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">테두리 선</span>
+    <div class="pp-row">
+      <input type="color" id="pp-block-line" class="pp-color" onmousedown="event.preventDefault()" oninput="applyBlockProp('line',this.value)" onchange="applyBlockProp('line',this.value)">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-block-line-none" onchange="toggleBlockNone('line',this.checked)"> 없음</label>
+    </div>
+    <div class="pp-row">
+      <input type="number" id="pp-block-line-w" class="pp-num" min="0" max="20" value="4" placeholder="굵기" onchange="applyBlockProp('lineWidth',this.value)">
+      <select class="pp-select" id="pp-block-line-style" onchange="applyBlockProp('lineStyle',this.value)">
+        <option value="solid">실선</option><option value="dashed">파선</option>
+        <option value="dotted">점선</option><option value="double">이중선</option>
+      </select>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">글자색</span>
+    <div class="pp-row">
+      <input type="color" id="pp-block-color" class="pp-color" onmousedown="event.preventDefault()" onchange="applyBlockProp('color',this.value)">
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">그림자</span>
-    <select class="pp-select" id="pp-block-shadow" onchange="applyBlockProp('shadow',this.value)">
-      <option value="none">없음</option>
-      <option value="soft">부드럽게</option>
-      <option value="medium">보통</option>
-      <option value="hard">진하게</option>
-    </select>
+    <div class="pp-row">
+      <select class="pp-select" id="pp-block-shadow" onchange="applyBlockProp('shadow',this.value)">
+        <option value="none">없음</option><option value="soft">부드럽게</option>
+        <option value="medium">보통</option><option value="hard">진하게</option>
+      </select>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기</span>
-    <span class="pp-label">W</span>
-    <input type="number" id="pp-block-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
-    <span class="pp-label">H</span>
-    <input type="number" id="pp-block-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
-    <label style="display:flex;align-items:center;gap:3px;font-size:11px;color:#888;cursor:pointer;flex-shrink:0;">
-      <input type="checkbox" id="pp-block-lock" class="pp-check pp-lock-chk"> 비율고정
-    </label>
+    <div class="pp-row">
+      <span class="pp-label">W</span>
+      <input type="number" id="pp-block-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
+      <span class="pp-label">H</span>
+      <input type="number" id="pp-block-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
+    </div>
+    <div class="pp-row">
+      <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#888;cursor:pointer;">
+        <input type="checkbox" id="pp-block-lock" class="pp-check pp-lock-chk"> 비율고정
+      </label>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">정렬</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    </div>
     <div class="pp-sep"></div>
-    <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
+    <div class="pp-row">
+      <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
+    </div>
   </div>
 
   <!-- 다중 선택 전용 -->
   <div id="pp-multi" class="pp-group">
     <span class="pp-section-title">다중 선택</span>
-    <span id="pp-multi-count" style="font-size:11px;color:#888;flex-shrink:0;white-space:nowrap;"></span>
+    <div class="pp-row">
+      <span id="pp-multi-count" style="font-size:11px;color:#888;flex-shrink:0;white-space:nowrap;"></span>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">페이지 정렬</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">상대 정렬</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('left')">왼쪽 끝 맞춤</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('center')">가로 가운데</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('right')">오른쪽 끝 맞춤</button>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('left')">왼쪽 끝 맞춤</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('center')">가로 가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('right')">오른쪽 끝 맞춤</button>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기 통일</span>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="equalizeSize('w')">같은 너비</button>
-    <button class="pp-btn" onmousedown="event.preventDefault()" onclick="equalizeSize('h')">같은 높이</button>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="equalizeSize('w')">같은 너비</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="equalizeSize('h')">같은 높이</button>
+    </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기 직접 설정</span>
-    <span class="pp-label">W</span>
-    <input type="number" id="pp-multi-w" class="pp-num" min="1" max="900" placeholder="px" onchange="resizeMultiElems('w',this.value)">
-    <span class="pp-label">H</span>
-    <input type="number" id="pp-multi-h" class="pp-num" min="1" placeholder="px" onchange="resizeMultiElems('h',this.value)">
+    <div class="pp-row">
+      <span class="pp-label">W</span>
+      <input type="number" id="pp-multi-w" class="pp-num" min="1" max="900" placeholder="px" onchange="resizeMultiElems('w',this.value)">
+      <span class="pp-label">H</span>
+      <input type="number" id="pp-multi-h" class="pp-num" min="1" placeholder="px" onchange="resizeMultiElems('h',this.value)">
+    </div>
     <div class="pp-sep"></div>
-    <button class="pp-del-btn" onmousedown="event.preventDefault()" onclick="deleteMulti()">🗑 일괄 삭제</button>
+    <div class="pp-row">
+      <button class="pp-del-btn" onmousedown="event.preventDefault()" onclick="deleteMulti()">🗑 일괄 삭제</button>
+    </div>
   </div>
 
 </div>
@@ -807,6 +947,20 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <input type="color" id="sh-fill" value="#C86F43">
     <label style="width:auto;margin-left:4px;font-size:11px;"><input type="checkbox" id="sh-no-fill"> 없음</label>
   </div>
+  <div class="sh-row"><label>그라데이션</label>
+    <label style="width:auto;font-size:11px;"><input type="checkbox" id="sh-grad-on" onchange="toggleShGrad()"> 사용</label>
+    <input type="color" id="sh-fill2" value="#FBE8DC" style="display:none;">
+    <select id="sh-grad-dir" style="display:none;flex:0 0 auto;width:70px;">
+      <option value="to bottom">↓</option>
+      <option value="to top">↑</option>
+      <option value="to right">→</option>
+      <option value="to left">←</option>
+      <option value="135deg">↘</option>
+      <option value="45deg">↗</option>
+      <option value="225deg">↙</option>
+      <option value="315deg">↖</option>
+    </select>
+  </div>
   <div class="sh-row"><label>텍스트색</label><input type="color" id="sh-text-color" value="#ffffff"></div>
   <div class="sh-row"><label>테두리색</label><input type="color" id="sh-border-color" value="#C86F43"></div>
   <div class="sh-row"><label>테두리</label><input type="number" id="sh-border-width" value="0" min="0" max="20"><span style="font-size:11px;color:#aaa;">px</span></div>
@@ -820,6 +974,34 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   <div class="sh-btns">
     <button onclick="toggleShapePanel()">취소</button>
     <button class="primary" onclick="insertShape()">삽입</button>
+  </div>
+</div>
+
+<!-- ── 그라데이션 모달 ── -->
+<div class="modal-overlay" id="grad-modal">
+  <div class="modal"><h3>그라데이션</h3>
+    <div class="row"><label style="min-width:80px;">적용 대상</label>
+      <select id="grad-target" style="flex:1;padding:8px 10px;border:1px solid var(--border-soft);border-radius:8px;font-size:14px;font-family:inherit;">
+        <option value="bg">배경 (하이라이트)</option>
+        <option value="text">글자</option>
+      </select>
+    </div>
+    <div class="row"><label style="min-width:80px;">시작색</label><input type="color" id="grad-c1" value="#C86F43" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
+    <div class="row"><label style="min-width:80px;">끝색</label><input type="color" id="grad-c2" value="#FBE8DC" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
+    <div class="row"><label style="min-width:80px;">방향</label>
+      <select id="grad-dir" style="flex:1;padding:8px 10px;border:1px solid var(--border-soft);border-radius:8px;font-size:14px;font-family:inherit;">
+        <option value="to right">→ (왼쪽 → 오른쪽)</option>
+        <option value="to left">← (오른쪽 → 왼쪽)</option>
+        <option value="to bottom">↓ (위 → 아래)</option>
+        <option value="to top">↑ (아래 → 위)</option>
+        <option value="135deg">↘ 대각선</option>
+        <option value="45deg">↗ 대각선</option>
+        <option value="225deg">↙ 대각선</option>
+        <option value="315deg">↖ 대각선</option>
+      </select>
+    </div>
+    <div id="grad-preview" style="height:36px;border-radius:8px;margin:12px 0 4px;background:linear-gradient(to right,#C86F43,#FBE8DC);border:1px solid var(--border-soft);"></div>
+    <div class="modal-btns"><button class="btn-cancel" onclick="closeModal('grad-modal')">취소</button><button class="btn-ok" onclick="applyTextGradient()">적용</button></div>
   </div>
 </div>
 
@@ -906,11 +1088,11 @@ function getShadow(preset, color, dir){
 
 // 색상 테마
 const THEMES=[
-  {name:'오렌지',primary:'#e8500a',light:'#fff5f0',border:'#f9cbb5'},
-  {name:'로얄블루',primary:'#1a6fbb',light:'#f0f6ff',border:'#bad3ea'},
-  {name:'포레스트',primary:'#2a7a50',light:'#f0faf5',border:'#b0d8c0'},
-  {name:'버건디',primary:'#8b1a4a',light:'#fff0f5',border:'#e8b0c8'},
-  {name:'차콜',primary:'#404040',light:'#f4f4f4',border:'#c8c8c8'},
+  {name:'테라코타',primary:'#C86F43',light:'#FBE8DC',border:'#F2D5BE'},
+  {name:'더스티블루',primary:'#5B7A96',light:'#E8EEF3',border:'#C4D2DE'},
+  {name:'세이지',primary:'#6B8759',light:'#ECEFE3',border:'#CDD6BD'},
+  {name:'플럼',primary:'#9C5068',light:'#F4E4E8',border:'#E0BDC6'},
+  {name:'웜차콜',primary:'#4A3F33',light:'#EFEAE0',border:'#C9C0B0'},
 ];
 let currentThemeIdx=0;
 
@@ -979,7 +1161,7 @@ function importFile(input){const file=input.files[0];if(!file)return;const reade
 function _sogsikTpl(t){
   const card=(n,u,nm,d)=>`<div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;line-height:1.2;margin-bottom:4px;letter-spacing:-.5px;">${n}<span style="font-size:14px;font-weight:400;color:#888;">${u}</span></div><div style="font-size:15px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px;">${nm}</div><div style="font-size:13px;color:#888;line-height:1.5;">${d}</div></div>`;
   const row=(k,v)=>`<tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">${k}</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">${v}</td></tr>`;
-  return `<div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:12px;padding-bottom:12px;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">${t.title}</h1><div style="font-size:16px;color:#888;margin-top:4px;">${t.sub1}</div><div style="font-size:16px;color:#888;margin-top:4px;">${t.sub2}</div></div><div style="height:2px;background:#222;margin-bottom:20px;"></div><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#FBE8DC;border-radius:10px;border:1px solid #F2D5BE;"><div style="font-size:22px;font-weight:700;color:#C86F43;letter-spacing:-.5px;line-height:1.4;">${t.hero}</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;line-height:1.4;">${t.s1}</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">${t.s1p1}</p><p style="margin-bottom:0;">${t.s1p2}</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;">${card(t.c1n,t.c1u,t.c1nm,t.c1d)}${card(t.c2n,t.c2u,t.c2nm,t.c2d)}${card(t.c3n,t.c3u,t.c3nm,t.c3d)}</div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;line-height:1.4;">${t.s2}</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">${t.s2p}</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;margin-top:16px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">${t.side}</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">${t.r1k}</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">${t.r1v}</td></tr>${row(t.r2k,t.r2v)}${row(t.r3k,t.r3v)}${row(t.r4k,t.r4v)}</table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">${t.quote}</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· ${t.n1}</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· ${t.n2}</p></div></div>`;
+  return `<div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:12px;padding-bottom:12px;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">${t.title}</h1><div style="font-size:16px;color:#888;margin-top:4px;">${t.sub1}</div><div style="font-size:16px;color:#888;margin-top:4px;">${t.sub2}</div></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#FBE8DC;border-radius:10px;border:1px solid #F2D5BE;"><div style="font-size:22px;font-weight:700;color:#C86F43;letter-spacing:-.5px;line-height:1.4;">${t.hero}</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;line-height:1.4;">${t.s1}</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">${t.s1p1}</p><p style="margin-bottom:0;">${t.s1p2}</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;">${card(t.c1n,t.c1u,t.c1nm,t.c1d)}${card(t.c2n,t.c2u,t.c2nm,t.c2d)}${card(t.c3n,t.c3u,t.c3nm,t.c3d)}</div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;line-height:1.4;">${t.s2}</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">${t.s2p}</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;margin-top:16px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">${t.side}</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">${t.r1k}</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">${t.r1v}</td></tr>${row(t.r2k,t.r2v)}${row(t.r3k,t.r3v)}${row(t.r4k,t.r4v)}</table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">${t.quote}</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· ${t.n1}</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· ${t.n2}</p></div></div>`;
 }
 
 const SOGSIK_EVENT=_sogsikTpl({
@@ -1039,7 +1221,7 @@ const SOGSIK_INFO=_sogsikTpl({
 // ══════════════════════════════════
 // 기안 템플릿
 // ══════════════════════════════════
-const GIAN_BASIC=`<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#2E2A24;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> 0000년 00월 00일(요일)</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> 기안 제목을 입력하세요</p></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">1. 목적</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① 배경 / 현황에 대한 설명을 작성하세요.</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② 이에 본 기안의 <b>목적</b>을 아래와 같이 정리하였습니다. 필요한 경우 관련 안내를 함께 작성해 주세요.</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">세부 항목별 내용을 아래 표에 정리해 주세요. 구분 · 담당에 따라 처리 경로가 달라질 수 있습니다.</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #D9D3C1;table-layout:fixed;"><thead><tr style="background:#FBE8DC;"><th style="width:45%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">항목</th><th style="width:25%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">구분</th><th style="width:30%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 1</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#FBE8DC;color:#B45E35;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 A</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 2</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#F5F2EA;color:#6B5E48;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 B</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 3</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#EDE7D5;color:#8B7A4F;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 C</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#6B5E48;font-weight:500;background:#F5F2EA;">담당부서 2</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ 표 하단 유의사항 또는 안내 문구를 작성해 주세요.</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#B45E35;">요청은 <span style="color:#2E2A24;font-weight:bold;background:#FBE8DC;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">①</div><div>필요 항목 및 담당 부서 확인</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">②</div><div>하단 댓글란에 <span style="font-weight:600;text-decoration:underline;">[4. 작성 양식]</span>에 맞춰 내용 작성</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">③</div><div>관련 파일 / 첨부 자료 댓글에 업로드</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">④</div><div>담당팀에서 확인 후 영업일 기준 N일 내 처리</div></div><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">아래 항목을 빠짐없이 작성해 주시면 보다 신속하게 처리해 드릴 수 있습니다.</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#2E2A24;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #D9D3C1;background:#FAF9F5;table-layout:fixed;"><thead><tr style="background:#F5F2EA;"><th style="padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#2E2A24;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #D9D3C1;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#2E2A24;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
+const GIAN_BASIC=`<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#2E2A24;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> 0000년 00월 00일(요일)</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> 기안 제목을 입력하세요</p></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① 본 기안의 배경 및 현황을 간략히 설명해 주세요.</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② 기안의 <b>주요 내용</b>과 기대 효과를 아래와 같이 요약해 주세요. 필요한 경우 관련 안내를 함께 작성해 주세요.</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">세부 항목별 내용을 아래 표에 정리해 주세요. 구분 · 담당에 따라 처리 경로가 달라질 수 있습니다.</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #D9D3C1;table-layout:fixed;"><thead><tr style="background:#FBE8DC;"><th style="width:45%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">항목</th><th style="width:25%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">구분</th><th style="width:30%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 1</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#FBE8DC;color:#B45E35;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 A</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 2</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#F5F2EA;color:#6B5E48;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 B</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 3</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#EDE7D5;color:#8B7A4F;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 C</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#6B5E48;font-weight:500;background:#F5F2EA;">담당부서 2</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ 표 하단 유의사항 또는 안내 문구를 작성해 주세요.</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#B45E35;">요청은 <span style="color:#2E2A24;font-weight:bold;background:#FBE8DC;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">①</div><div>필요 항목 및 담당 부서 확인</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">②</div><div>하단 댓글란에 <span style="font-weight:600;text-decoration:underline;">[4. 작성 양식]</span>에 맞춰 내용 작성</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">③</div><div>관련 파일 / 첨부 자료 댓글에 업로드</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">④</div><div>담당팀에서 확인 후 영업일 기준 N일 내 처리</div></div><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">아래 항목을 빠짐없이 작성해 주시면 보다 신속하게 처리해 드릴 수 있습니다.</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#2E2A24;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #D9D3C1;background:#FAF9F5;table-layout:fixed;"><thead><tr style="background:#F5F2EA;"><th style="padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#2E2A24;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #D9D3C1;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#2E2A24;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
 1. 요청 기간 : 0000.00.00 ~ 0000.00.00
 2. 요청 항목 :
 3. 첨부 파일 : 첨부파일
@@ -1049,10 +1231,10 @@ const GIAN_BASIC=`<div style="max-width:900px;margin:0 auto;padding:32px 24px 60
 - </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#B45E35;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 관련 작업이 완료된 이후 요청을 진행해 주세요.</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 수정 / 종료 요청도 동일하게 <span style="font-weight:600;">본 문서 댓글</span>을 통해 접수 바랍니다.</div></div>`;
 
 // AI용 빈 템플릿 (내용 채울 구조만 제공)
-const SOGSIK_AI_TPL=`<!-- 아래 HTML 구조에서 [대괄호] 안의 내용을 실제 내용으로 교체해 주세요. 스타일은 절대 수정하지 마세요. --><div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid #222;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">[소식 제목을 여기에 입력]</h1><div style="font-size:16px;color:#888;margin-top:4px;">[부제목 또는 날짜 · 주최 정보]</div></div><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#FBE8DC;border-radius:10px;border:1px solid #F2D5BE;"><div style="font-size:22px;font-weight:700;color:#C86F43;letter-spacing:-.5px;line-height:1.4;">[핵심 메시지 한 줄]</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;">[첫 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">[첫 번째 본문 내용]</p><p style="margin-bottom:0;">[두 번째 문단]</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;"><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div></div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;">[두 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p>[본문 내용]</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">[세부 항목 제목]</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr></table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">[마무리 인용 또는 강조 문장]</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· [유의사항 1]</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· [유의사항 2]</p></div></div>`;
+const SOGSIK_AI_TPL=`<!-- 아래 HTML 구조에서 [대괄호] 안의 내용을 실제 내용으로 교체해 주세요. 스타일은 절대 수정하지 마세요. --><div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid #E8E3D3;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">[소식 제목을 여기에 입력]</h1><div style="font-size:16px;color:#888;margin-top:4px;">[부제목 또는 날짜 · 주최 정보]</div></div><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#FBE8DC;border-radius:10px;border:1px solid #F2D5BE;"><div style="font-size:22px;font-weight:700;color:#C86F43;letter-spacing:-.5px;line-height:1.4;">[핵심 메시지 한 줄]</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;">[첫 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">[첫 번째 본문 내용]</p><p style="margin-bottom:0;">[두 번째 문단]</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;"><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div></div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;">[두 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p>[본문 내용]</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">[세부 항목 제목]</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr></table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">[마무리 인용 또는 강조 문장]</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· [유의사항 1]</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· [유의사항 2]</p></div></div>`;
 
 const GIAN_AI_TPL=`<!-- 아래 기안문 양식에 실제 내용을 채워주세요. [대괄호] 안의 텍스트만 실제 내용으로 교체하고, 스타일/색상은 절대 수정하지 마세요. -->
-<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#2E2A24;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> [0000년 00월 00일(요일)]</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> [기안 제목]</p></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">1. 목적</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① [배경 / 현황]</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② [본 기안의 목적]</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">[세부 내역에 대한 간략한 설명]</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #D9D3C1;table-layout:fixed;"><thead><tr style="background:#FBE8DC;"><th style="width:45%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">항목</th><th style="width:25%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">구분</th><th style="width:30%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">[항목 1]</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#FBE8DC;color:#B45E35;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">[담당부서]</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">[항목 2]</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#F5F2EA;color:#6B5E48;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#6B5E48;font-weight:500;background:#F5F2EA;">[담당부서]</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ [표 하단 안내]</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#B45E35;">요청은 <span style="color:#2E2A24;font-weight:bold;background:#FBE8DC;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">①</div><div>[1단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">②</div><div>[2단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">③</div><div>[3단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">④</div><div>[4단계]</div></div><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">[양식 안내 문구]</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#2E2A24;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #D9D3C1;background:#FAF9F5;table-layout:fixed;"><thead><tr style="background:#F5F2EA;"><th style="padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#2E2A24;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #D9D3C1;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#2E2A24;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
+<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#2E2A24;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> [0000년 00월 00일(요일)]</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> [기안 제목]</p></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① [기안의 배경 및 현황]</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② [주요 내용 및 기대 효과]</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">[세부 내역에 대한 간략한 설명]</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #D9D3C1;table-layout:fixed;"><thead><tr style="background:#FBE8DC;"><th style="width:45%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">항목</th><th style="width:25%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">구분</th><th style="width:30%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">[항목 1]</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#FBE8DC;color:#B45E35;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">[담당부서]</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">[항목 2]</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#F5F2EA;color:#6B5E48;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#6B5E48;font-weight:500;background:#F5F2EA;">[담당부서]</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ [표 하단 안내]</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#B45E35;">요청은 <span style="color:#2E2A24;font-weight:bold;background:#FBE8DC;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">①</div><div>[1단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">②</div><div>[2단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">③</div><div>[3단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">④</div><div>[4단계]</div></div><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">[양식 안내 문구]</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#2E2A24;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #D9D3C1;background:#FAF9F5;table-layout:fixed;"><thead><tr style="background:#F5F2EA;"><th style="padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#2E2A24;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #D9D3C1;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#2E2A24;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
 1. 요청 기간 : [날짜]
 2. 요청 항목 : [항목]
 3. 첨부 파일 : [파일명]
@@ -1343,8 +1525,25 @@ function showPropsPanel(el, type){
 
   if(type==='shape'){
     const g=document.getElementById('pp-shape');g.classList.add('active');
-    // 현재값 읽기
-    document.getElementById('pp-fill').value=rgbToHex(el.style.backgroundColor)||'#c8174f';
+    // 현재값 읽기 — 그라데이션이면 분해
+    const _sBg=el.style.background||'';
+    const _sGrad=_parseLinearGradient(_sBg);
+    const _sGradOnEl=document.getElementById('pp-fill-grad-on');
+    const _sBg2El=document.getElementById('pp-fill-bg2');
+    const _sGradDirEl=document.getElementById('pp-fill-grad-dir');
+    if(_sGrad){
+      document.getElementById('pp-fill').value=rgbToHex(_sGrad.c1)||_sGrad.c1;
+      if(_sBg2El)_sBg2El.value=rgbToHex(_sGrad.c2)||_sGrad.c2;
+      if(_sGradDirEl)_sGradDirEl.value=_sGrad.dir;
+      if(_sGradOnEl)_sGradOnEl.checked=true;
+      if(_sBg2El)_sBg2El.style.display='';
+      if(_sGradDirEl)_sGradDirEl.style.display='';
+    } else {
+      document.getElementById('pp-fill').value=rgbToHex(el.style.backgroundColor)||'#c8174f';
+      if(_sGradOnEl)_sGradOnEl.checked=false;
+      if(_sBg2El)_sBg2El.style.display='none';
+      if(_sGradDirEl)_sGradDirEl.style.display='none';
+    }
     document.getElementById('pp-text-color').value=rgbToHex(el.style.color)||'#ffffff';
     document.getElementById('pp-border-color').value=rgbToHex(el.style.borderColor)||'#c8174f';
     document.getElementById('pp-border-w').value=parseInt(el.style.borderWidth)||0;
@@ -1383,7 +1582,25 @@ function showPropsPanel(el, type){
     const imgBnEl=document.getElementById('pp-img-border-none');if(imgBnEl)imgBnEl.checked=!el.style.borderStyle||el.style.borderStyle==='none'||parseInt(el.style.borderWidth)===0;
   } else if(type==='block'){
     const g=document.getElementById('pp-block');g.classList.add('active');
-    document.getElementById('pp-block-bg').value=rgbToHex(el.style.backgroundColor)||'#FBE8DC';
+    // 배경: 그라데이션이면 분해해 UI에 반영, 아니면 단색으로
+    const bgInline=el.style.background||'';
+    const grad=_parseLinearGradient(bgInline);
+    const gradOnEl=document.getElementById('pp-block-grad-on');
+    const bg2El=document.getElementById('pp-block-bg2');
+    const gradDirEl=document.getElementById('pp-block-grad-dir');
+    if(grad){
+      document.getElementById('pp-block-bg').value=rgbToHex(grad.c1)||grad.c1;
+      if(bg2El)bg2El.value=rgbToHex(grad.c2)||grad.c2;
+      if(gradDirEl)gradDirEl.value=grad.dir;
+      if(gradOnEl)gradOnEl.checked=true;
+      if(bg2El)bg2El.style.display='';
+      if(gradDirEl)gradDirEl.style.display='';
+    } else {
+      document.getElementById('pp-block-bg').value=rgbToHex(el.style.backgroundColor)||'#FBE8DC';
+      if(gradOnEl)gradOnEl.checked=false;
+      if(bg2El)bg2El.style.display='none';
+      if(gradDirEl)gradDirEl.style.display='none';
+    }
     document.getElementById('pp-block-line').value=rgbToHex(el.style.borderLeftColor)||'#C86F43';
     document.getElementById('pp-block-color').value=rgbToHex(el.style.color)||'#555555';
     const bgNone=!el.style.backgroundColor||el.style.backgroundColor==='transparent';
@@ -1445,7 +1662,10 @@ function toggleImgBorderNone(isNone){
 }
 function toggleBlockNone(prop, isNone){
   if(!selectedElem)return;
-  if(prop==='bg'){selectedElem.style.backgroundColor=isNone?'transparent':(document.getElementById('pp-block-bg').value||'#FBE8DC');}
+  if(prop==='bg'){
+    if(isNone){selectedElem.style.background='transparent';selectedElem.style.backgroundColor='transparent';}
+    else{applyBlockProp('bg',document.getElementById('pp-block-bg').value||'#FBE8DC');return;}
+  }
   else if(prop==='line'){
     if(isNone){selectedElem.style.borderLeftStyle='none';}
     else{selectedElem.style.borderLeft='';}
@@ -1456,7 +1676,23 @@ function applyProp(prop, value){
   if(!selectedElem)return;
   const el=selectedElem;
   switch(prop){
-    case 'fill':          el.style.backgroundColor=value;break;
+    case 'fill':{
+      const gradOn=document.getElementById('pp-fill-grad-on')?.checked;
+      const c2=document.getElementById('pp-fill-bg2')?.value||'#ffffff';
+      const dir=document.getElementById('pp-fill-grad-dir')?.value||'to bottom';
+      if(gradOn){el.style.backgroundColor='';el.style.background=_buildBg(value,true,c2,dir);}
+      else{el.style.background='';el.style.backgroundColor=value;}
+      break;}
+    case 'fillGrad':{
+      const on=!!value;
+      document.getElementById('pp-fill-bg2').style.display=on?'':'none';
+      document.getElementById('pp-fill-grad-dir').style.display=on?'':'none';
+      const c1=document.getElementById('pp-fill').value;
+      const c2=document.getElementById('pp-fill-bg2').value;
+      const dir=document.getElementById('pp-fill-grad-dir').value;
+      if(on){el.style.backgroundColor='';el.style.background=_buildBg(c1,true,c2,dir);}
+      else{el.style.background='';el.style.backgroundColor=c1;}
+      break;}
     case 'textColor':     el.style.color=value;break;
     case 'borderColor':   el.style.borderColor=value;break;
     case 'borderWidth':   el.style.borderWidth=(parseInt(value)||0)+'px';if(parseInt(value)>0&&(!el.style.borderStyle||el.style.borderStyle==='none'))el.style.borderStyle='solid';break;
@@ -1524,7 +1760,23 @@ function applyBlockProp(prop, value){
   if(!selectedElem)return;
   const el=selectedElem;
   switch(prop){
-    case 'bg':     el.style.backgroundColor=value;break;
+    case 'bg':{
+      const gradOn=document.getElementById('pp-block-grad-on')?.checked;
+      const c2=document.getElementById('pp-block-bg2')?.value||'#ffffff';
+      const dir=document.getElementById('pp-block-grad-dir')?.value||'to bottom';
+      if(gradOn){el.style.backgroundColor='';el.style.background=_buildBg(value,true,c2,dir);}
+      else{el.style.background='';el.style.backgroundColor=value;}
+      break;}
+    case 'grad':{
+      const on=!!value;
+      document.getElementById('pp-block-bg2').style.display=on?'':'none';
+      document.getElementById('pp-block-grad-dir').style.display=on?'':'none';
+      const c1=document.getElementById('pp-block-bg').value;
+      const c2=document.getElementById('pp-block-bg2').value;
+      const dir=document.getElementById('pp-block-grad-dir').value;
+      if(on){el.style.backgroundColor='';el.style.background=_buildBg(c1,true,c2,dir);}
+      else{el.style.background='';el.style.backgroundColor=c1;}
+      break;}
     case 'line':   el.style.borderLeftColor=value;if(!el.style.borderLeftWidth||el.style.borderLeftWidth==='0px'){el.style.borderLeftWidth='4px';}if(!el.style.borderLeftStyle||el.style.borderLeftStyle==='none')el.style.borderLeftStyle='solid';break;
     case 'lineWidth': el.style.borderLeftWidth=(parseInt(value)||0)+'px';break;
     case 'lineStyle': el.style.borderLeftStyle=value;break;
@@ -1877,6 +2129,31 @@ function alignElem(align){
   syncHtmlPanel();scheduleAutoSave();
 }
 
+// ── 개체 내부 텍스트 세로 정렬 (상/중/하) ──
+function applyVertAlign(pos){
+  const elems=selectedElems.length>0?selectedElems:(selectedElem?[selectedElem]:[]);
+  if(!elems.length){showToast&&showToast('개체를 먼저 선택해 주세요');return;}
+  saveUndo&&saveUndo();
+  const jc=pos==='top'?'flex-start':(pos==='bottom'?'flex-end':'center');
+  const va=pos==='top'?'top':(pos==='bottom'?'bottom':'middle');
+  elems.forEach(el=>{
+    if(el.tagName==='TABLE'){
+      // 표: 모든 셀에 vertical-align 적용
+      el.querySelectorAll('td,th').forEach(c=>{c.style.verticalAlign=va;});
+      return;
+    }
+    // 도형/블록/이미지래퍼 등: flex column 으로 자식 정렬
+    const cs=getComputedStyle(el);
+    if(cs.display!=='flex'){el.style.display='flex';}
+    el.style.flexDirection='column';
+    el.style.justifyContent=jc;
+    // 높이가 명시되어 있지 않으면 내용 기준이라 효과가 없을 수 있음 — 사용자가 리사이즈로 높이를 키우면 반영됨
+  });
+  if(selectedElem)positionOverlay&&positionOverlay();
+  syncHtmlPanel&&syncHtmlPanel();scheduleAutoSave&&scheduleAutoSave();
+  showToast&&showToast('세로 정렬: '+(pos==='top'?'상':pos==='middle'?'중':'하'));
+}
+
 // ── 다중 선택: 상대 정렬 ──
 function alignEdge(mode){
   if(selectedElems.length<2)return;
@@ -1984,6 +2261,11 @@ resizeOverlay.querySelectorAll('.rh').forEach(handle=>{
     resizeStartW=rect.width;resizeStartH=rect.height;
     const _cs=getComputedStyle(selectedElem);
     window._resizeStartMarginTop=parseFloat(selectedElem.style.marginTop)||parseFloat(_cs.marginTop)||0;
+    // N(북쪽) 핸들 상한용: 요소 하단과 에디터 상단 경계 저장
+    window._resizeStartBottomY=rect.bottom;
+    const _edRect=editor.getBoundingClientRect();
+    const _edPadTop=parseFloat(getComputedStyle(editor).paddingTop)||0;
+    window._resizeEditorTopY=_edRect.top+_edPadTop;
     document.addEventListener('mousemove',onResizeMove);
     document.addEventListener('mouseup',onResizeEnd);
   });
@@ -1995,7 +2277,14 @@ function onResizeMove(e){
   if(resizeDir.includes('e'))nw=Math.min(900,Math.max(4,resizeStartW+dx));
   if(resizeDir.includes('w'))nw=Math.min(900,Math.max(4,resizeStartW-dx));
   if(resizeDir.includes('s'))nh=Math.max(4,resizeStartH+dy);
-  if(resizeDir.includes('n'))nh=Math.max(4,resizeStartH-dy);
+  if(resizeDir.includes('n')){
+    nh=Math.max(4,resizeStartH-dy);
+    // 에디터 상단을 넘어가지 못하도록 상한 제한
+    const bottomY=window._resizeStartBottomY||0;
+    const edTopY=window._resizeEditorTopY||0;
+    const maxH=Math.max(4,bottomY-edTopY);
+    if(nh>maxH)nh=maxH;
+  }
   // Shift 또는 비율고정 체크박스 → 비율 유지
   const lockChk=document.querySelector('#props-panel .pp-group.active .pp-lock-chk');
   const locked=e.shiftKey||(lockChk&&lockChk.checked);
@@ -2003,15 +2292,26 @@ function onResizeMove(e){
     const ratio=resizeStartH/resizeStartW;
     if(resizeDir.includes('e')||resizeDir.includes('w'))nh=Math.round(nw*ratio);
     else nw=Math.round(nh/ratio);
+    // 비율고정 상태에서도 N방향 상한 재적용
+    if(resizeDir.includes('n')){
+      const bottomY=window._resizeStartBottomY||0;
+      const edTopY=window._resizeEditorTopY||0;
+      const maxH=Math.max(4,bottomY-edTopY);
+      if(nh>maxH){nh=maxH;nw=Math.round(nh/ratio);}
+    }
   }
   selectedElem.style.minWidth='';selectedElem.style.width=nw+'px';
   const applyH=(resizeDir.includes('n')||resizeDir.includes('s')||locked)&&selectedType!=='table';
   if(applyH){selectedElem.style.minHeight='';selectedElem.style.height=nh+'px';}
   if(selectedType==='table')selectedElem.style.width=nw+'px';
-  // 북쪽(위) 핸들: 아래 변은 고정하고 위로 늘어나도록 margin-top 보정
+  // 북쪽(위) 핸들: 아래 변 고정 — 높이 적용 후 실측 bottom 이 원래 bottom 과 맞도록 margin-top 자가보정
+  // (margin-collapsing · flex/grid 부모 등으로 기존 산술식이 어긋나는 경우까지 커버)
   if(resizeDir.includes('n')&&selectedType!=='table'){
-    const startMT=window._resizeStartMarginTop||0;
-    selectedElem.style.marginTop=(startMT-(nh-resizeStartH))+'px';
+    const bottomY=window._resizeStartBottomY||0;
+    const _rb=selectedElem.getBoundingClientRect();
+    const delta=bottomY-_rb.bottom;   // 양수면 아래로 더 내려야 함
+    const curMT=parseFloat(selectedElem.style.marginTop)||0;
+    selectedElem.style.marginTop=(curMT+delta)+'px';
   }
   positionOverlay();
   // 패널 w/h 동기화
@@ -2088,6 +2388,10 @@ new MutationObserver(()=>{clearTimeout(window._rulT);window._rulT=setTimeout(ren
   const findObj=(target)=>{
     let obj=target.closest('.in-shape, img, table, blockquote, hr, iframe');
     if(obj)return obj;
+    // 내부 텍스트(P/H/LI/SPAN/A/... 또는 텍스트 노드)를 직접 클릭한 경우엔
+    // 캐럿 배치·텍스트 선택이 우선되어야 하므로 드래그 시작을 허용하지 않음
+    const _textTag=/^(P|H1|H2|H3|H4|H5|H6|LI|UL|OL|SPAN|A|STRONG|EM|B|I|U|S|CODE|SMALL|SUB|SUP|MARK|LABEL|FONT|PRE|DT|DD|FIGCAPTION)$/;
+    if(target&&(target.nodeType===3||(target.nodeType===1&&_textTag.test(target.tagName))))return null;
     let n=target;const ew=editor.clientWidth;
     while(n&&n!==editor){
       if(n.nodeType===1){
@@ -2099,7 +2403,9 @@ new MutationObserver(()=>{clearTimeout(window._rulT);window._rulT=setTimeout(ren
         const hasShadow=cs.boxShadow&&cs.boxShadow!=='none';
         if((bgImg||bgCol||hasBdr||hasShadow)&&n.parentElement){
           const r=n.getBoundingClientRect();
-          if(ew>0&&r.width<ew*0.9)return n;
+          // 에디터 직계 자식이면서 페이지폭이면 래퍼로 간주하여 스킵, 그 외 중첩 블록은 개체로 허용
+          const isPageWrap=(n.parentElement===editor&&ew>0&&r.width>=ew*0.9);
+          if(!isPageWrap)return n;
         }
       }
       n=n.parentElement;
@@ -2113,9 +2419,19 @@ new MutationObserver(()=>{clearTimeout(window._rulT);window._rulT=setTimeout(ren
     const obj=findObj(e.target);
     if(!obj||!editor.contains(obj)||obj===editor)return;
     if(obj._textEditMode)return;
+    // 표 셀의 열/행 리사이즈 영역(오른쪽/아래 7px)에서는 표 이동을 시작하지 않음
+    const _tblCell=e.target.closest&&e.target.closest('td,th');
+    if(_tblCell){
+      const cr=_tblCell.getBoundingClientRect();
+      if(Math.abs(e.clientX-cr.right)<7||Math.abs(e.clientY-cr.bottom)<7)return;
+    }
     // 개체 테두리 상/하 6px 는 인접 단락 삽입용이므로 드래그 시작 제외
-    const r=obj.getBoundingClientRect();const E=6;
-    if(e.clientY<r.top+E||e.clientY>r.bottom-E)return;
+    // 단, HR 처럼 높이가 매우 작은 개체는 edge 판정에서 제외
+    const r=obj.getBoundingClientRect();
+    if(r.height>16){
+      const E=6;
+      if(e.clientY<r.top+E||e.clientY>r.bottom-E)return;
+    }
     md={obj,x:e.clientX,y:e.clientY,started:false};
   },true);
   document.addEventListener('mousemove',(e)=>{
@@ -2291,36 +2607,62 @@ function onTblDragEnd(e){
 }
 
 // ── 에디터 클릭 → 요소 선택 ──
-editor.addEventListener('dblclick',(e)=>{
-  const dbl=e.target.closest('.in-shape:not(.in-line)');
+document.addEventListener('dblclick',(e)=>{
+  // 리사이즈 오버레이(ro-move/핸들) 위에서 더블클릭되면, 오버레이를 잠시 비켜
+  // 실제 좌표 아래의 개체를 찾는다
+  let realTarget=e.target;
+  const onOverlay=realTarget.closest&&realTarget.closest('#resize-overlay');
+  if(onOverlay){
+    const prev=resizeOverlay.style.pointerEvents;
+    resizeOverlay.style.pointerEvents='none';
+    const under=document.elementFromPoint(e.clientX,e.clientY);
+    resizeOverlay.style.pointerEvents=prev;
+    if(under&&editor.contains(under))realTarget=under;
+    else if(selectedElem)realTarget=selectedElem;
+  }
+  if(!editor.contains(realTarget))return;
+  const dbl=realTarget.closest('.in-shape:not(.in-line)');
   if(dbl){
     if(selectedElem!==dbl)selectElem(dbl,'shape');
     enterShapeEditMode(dbl);
     e.preventDefault();return;
   }
   // 스타일 블록/blockquote 더블클릭 → 텍스트 편집 모드 진입(캐럿 배치 허용)
-  const bq=e.target.closest('blockquote');
+  const bq=realTarget.closest('blockquote');
   let sb=null;
   {
-    let n=e.target;
+    let n=realTarget;
     while(n&&n!==editor){
       if(n.nodeType===1){
-        const s=n.style;
-        const hasBg=s.background||s.backgroundColor;
-        const hasBdr=(s.border&&s.border!=='none')||(s.borderTop&&s.borderTop!=='none')||(s.outline&&s.outline!=='none');
-        const hasShadow=s.boxShadow&&s.boxShadow!=='none';
-        if((hasBg||hasBdr||hasShadow)&&n.parentElement){sb=n;break;}
+        const cs=getComputedStyle(n);
+        const bgImg=cs.backgroundImage&&cs.backgroundImage!=='none';
+        const bgCol=!(cs.backgroundColor==='transparent'||cs.backgroundColor==='rgba(0, 0, 0, 0)');
+        const bdrOn=(side)=>(parseFloat(cs['border'+side+'Width'])||0)>0&&cs['border'+side+'Style']&&cs['border'+side+'Style']!=='none';
+        const hasBdr=bdrOn('Top')||bdrOn('Right')||bdrOn('Bottom')||bdrOn('Left');
+        const hasShadow=cs.boxShadow&&cs.boxShadow!=='none';
+        if((bgImg||bgCol||hasBdr||hasShadow)&&n.parentElement){sb=n;break;}
       }
       n=n.parentElement;
     }
   }
-  const textTarget=bq||sb;
+  // sb 를 못 찾으면 일반 글 블록(P/H/UL/OL 등) 또는 현재 선택된 블록 개체를 대상으로 사용
+  const plainBlock=realTarget.closest?realTarget.closest('p,h1,h2,h3,h4,h5,h6,ul,ol,li,figure,pre,dl'):null;
+  const textTarget=bq||sb||plainBlock||(selectedElem&&(selectedType==='block')?selectedElem:null);
   if(textTarget&&editor.contains(textTarget)&&textTarget!==editor){
     textTarget._textEditMode=true;
     if(selectedElem===textTarget){selectedElem.style.outline='';selectedElem=null;selectedType=null;hidePropsPanel();resizeOverlay.classList.remove('visible');}
+    // 오버레이 아래의 좌표로 캐럿 위치 계산 (오버레이 일시 차단)
+    const prevPE=resizeOverlay.style.pointerEvents;
+    resizeOverlay.style.pointerEvents='none';
     const caret=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;
+    resizeOverlay.style.pointerEvents=prevPE;
     editor.focus();
-    if(caret){const s=window.getSelection();s.removeAllRanges();s.addRange(caret);}
+    if(caret&&editor.contains(caret.startContainer)){const s=window.getSelection();s.removeAllRanges();s.addRange(caret);}
+    else {
+      // 폴백: 편집 대상의 끝으로 캐럿
+      const rg=document.createRange();rg.selectNodeContents(textTarget);rg.collapse(false);
+      const s=window.getSelection();s.removeAllRanges();s.addRange(rg);
+    }
   }
 });
 // 텍스트 편집 모드는 포커스가 해당 블록 바깥으로 나가면 종료
@@ -2436,7 +2778,7 @@ editor.addEventListener('click',(e)=>{
     showCellPanel(selectedCell,[]);
     exitShapeEditMode();return;
   }
-  // ⑤ 인용(blockquote)
+  // ⑤ 인용(blockquote) — edge 자동삽입 제거(글 사이 클릭 시 엔터 삽입되던 버그 방지)
   const bq=target.closest('blockquote');
   if(bq){
     if(bq._textEditMode){/* 더블클릭으로 텍스트 편집 중이면 캐럿 배치 허용 */}
@@ -2458,7 +2800,12 @@ editor.addEventListener('click',(e)=>{
         if(e.clientX>=r.left-4&&e.clientX<=r.right+4&&e.clientY>=r.top-12&&e.clientY<=r.bottom+12){hr=h;break;}
       }
     }
-    if(hr){if(_edgeInsert(hr))return;if(e.shiftKey){e.preventDefault();addToMultiSelect(hr);return;}e.preventDefault();selectElem(hr,'shape');exitShapeEditMode();return;}
+    if(hr){
+      // HR 은 높이가 1~2px 밖에 안 되므로 _edgeInsert 의 6px 경계가 HR 전체를 덮어
+      // "클릭=엔터 삽입" 이 되어 버린다 → HR 은 edgeInsert 건너뛰고 바로 선택
+      if(e.shiftKey){e.preventDefault();addToMultiSelect(hr);return;}
+      e.preventDefault();selectElem(hr,'shape');exitShapeEditMode();return;
+    }
   }
   // ⑧ 스타일 블록 — el.style 직접 확인으로 실제 시각적 박스만 개체로 선택
   //   closest() 로 조상을 찾되, 배경색·테두리·그림자 중 하나 이상 있어야 함
@@ -2487,16 +2834,17 @@ editor.addEventListener('click',(e)=>{
         const hasOutline=(parseFloat(cs.outlineWidth)||0)>0&&cs.outlineStyle&&cs.outlineStyle!=='none';
         const hasShadow=cs.boxShadow&&cs.boxShadow!=='none';
         if((hasBg||hasBdr||hasOutline||hasShadow)&&sb.parentElement!==null){
-          // 페이지 래퍼 필터: 에디터 폭의 대부분을 차지하면 스킵
+          // 페이지 래퍼 필터: 에디터 직계 자식이면서 폭의 대부분을 차지할 때만 스킵
+          // (템플릿 내부의 중첩 블록은 부모가 에디터가 아니므로 개체로 인식)
           const r=sb.getBoundingClientRect();
-          const isPageWrap=(_editorW>0&&r.width>=_editorW*0.9);
+          const isPageWrap=(sb.parentElement===editor&&_editorW>0&&r.width>=_editorW*0.9);
           if(!isPageWrap){styleBlock=sb;break;}
         }
       }
       sb=sb.parentElement;
     }
     if(styleBlock&&styleBlock!==editor&&editor.contains(styleBlock)){
-      if(_edgeInsert(styleBlock))return;
+      // edge 자동 엔터 삽입 제거(글 사이 클릭 시 밀림 방지). 캐럿 배치는 기본 흐름으로 처리.
       if(e.shiftKey){e.preventDefault();addToMultiSelect(styleBlock);return;}
       // 텍스트 편집 모드로 진입한 블록이면 캐럿 배치 허용 (더블클릭으로만 진입)
       if(styleBlock._textEditMode){/* fall through: 기본 캐럿 배치 */}
@@ -2504,6 +2852,23 @@ editor.addEventListener('click',(e)=>{
         if(styleBlock!==selectedElem){e.preventDefault();selectElem(styleBlock,'block');exitShapeEditMode();}
         else showPropsPanel(styleBlock,'block');
         return;
+      }
+    }
+  }
+  // ⑧-b 일반 글 블록(문단/제목/목록/인용 등) — 배경·테두리 없어도 개체로 취급
+  //   단일 클릭 = 개체 선택만, 글 수정은 더블클릭으로만 진입 (_textEditMode)
+  {
+    const plain=target.closest('p,h1,h2,h3,h4,h5,h6,ul,ol,figure,pre,dl');
+    if(plain&&plain!==editor&&editor.contains(plain)){
+      // 이미 텍스트 편집 모드면 캐럿 배치 허용
+      if(plain._textEditMode){/* fall through → 기본 캐럿 배치 */}
+      else {
+        // edge 자동 엔터 삽입 제거: 글 사이 클릭이 새 문단을 만들어 아래를 밀어내던 버그 방지
+        if(e.shiftKey){e.preventDefault();addToMultiSelect(plain);return;}
+        e.preventDefault();
+        if(plain!==selectedElem)selectElem(plain,'block');
+        else showPropsPanel(plain,'block');
+        exitShapeEditMode();return;
       }
     }
   }
@@ -2830,9 +3195,44 @@ document.getElementById('sh-type').addEventListener('change',function(){
   document.getElementById('sh-radius-row').style.display=isLine?'none':'';
 });
 
+// ── 그라데이션 유틸 ──
+function _buildBg(c1,gradOn,c2,dir){
+  if(!gradOn)return c1;
+  return `linear-gradient(${dir||'to bottom'}, ${c1}, ${c2})`;
+}
+function _parseLinearGradient(bg){
+  if(!bg||!/linear-gradient/i.test(bg))return null;
+  // linear-gradient( ... ) 내부만 추출
+  const idx=bg.indexOf('linear-gradient(');if(idx<0)return null;
+  let depth=0,start=idx+'linear-gradient('.length,end=-1;
+  for(let i=start;i<bg.length;i++){const ch=bg[i];if(ch==='(')depth++;else if(ch===')'){if(depth===0){end=i;break;}depth--;}}
+  if(end<0)return null;
+  const inner=bg.slice(start,end);
+  // 최상위 콤마 기준으로 쪼개기 (괄호 내 콤마 무시)
+  const parts=[];let buf='',d=0;
+  for(const ch of inner){
+    if(ch==='(')d++;
+    else if(ch===')')d--;
+    if(ch===','&&d===0){parts.push(buf.trim());buf='';}
+    else buf+=ch;
+  }
+  if(buf)parts.push(buf.trim());
+  if(parts.length<3)return null;
+  return{dir:parts[0],c1:parts[1],c2:parts[parts.length-1]};
+}
+function toggleShGrad(){
+  const on=document.getElementById('sh-grad-on').checked;
+  document.getElementById('sh-fill2').style.display=on?'':'none';
+  document.getElementById('sh-grad-dir').style.display=on?'':'none';
+}
+
 function insertShape(){
   const type=document.getElementById('sh-type').value;
   const fill=document.getElementById('sh-fill').value;
+  const gradOn=document.getElementById('sh-grad-on').checked;
+  const fill2=document.getElementById('sh-fill2').value;
+  const gradDir=document.getElementById('sh-grad-dir').value;
+  const fillBg=_buildBg(fill,gradOn,fill2,gradDir);
   const noFill=document.getElementById('sh-no-fill').checked;
   const textColor=document.getElementById('sh-text-color').value;
   const bc=document.getElementById('sh-border-color').value;
@@ -2850,11 +3250,11 @@ function insertShape(){
   let html='';
   if(type==='line'){
     const lh=Math.max(bw,4);
-    html=`<div class="in-shape in-line" style="display:block;width:${w}px;height:${lh}px;background:${noFill?'transparent':fill};border:none;border-radius:${lh/2}px;${marginStyle}opacity:${opacity};" contenteditable="false">&ZeroWidthSpace;</div>`;
+    html=`<div class="in-shape in-line" style="display:block;width:${w}px;height:${lh}px;background:${noFill?'transparent':fillBg};border:none;border-radius:${lh/2}px;${marginStyle}opacity:${opacity};" contenteditable="false">&ZeroWidthSpace;</div>`;
   } else {
     const br=type==='circle'?'50%':radius+'px';
     const bs=bw>0?`${bw}px solid ${bc}`:'none';
-    html=`<div class="in-shape" data-shape="${type}" contenteditable="false" style="display:block;width:${w}px;min-height:${h}px;background:${noFill?'transparent':fill};border:${bs};border-radius:${br};color:${textColor};font-size:14pt;text-align:center;line-height:1.5;padding:12px 16px;${marginStyle}opacity:${opacity};box-shadow:none;">텍스트를 입력하세요</div>`;
+    html=`<div class="in-shape" data-shape="${type}" contenteditable="false" style="display:block;width:${w}px;min-height:${h}px;background:${noFill?'transparent':fillBg};border:${bs};border-radius:${br};color:${textColor};font-size:14pt;text-align:center;line-height:1.5;padding:12px 16px;${marginStyle}opacity:${opacity};box-shadow:none;">텍스트를 입력하세요</div>`;
   }
   editor.focus();restoreRange();document.execCommand('insertHTML',false,html);
   toggleShapePanel();syncHtmlPanel();
@@ -2962,7 +3362,24 @@ function renderRecentColors(){
 }
 document.addEventListener('input',ev=>{if(ev.target.type==='color'&&ev.target.classList.contains('pp-color')){lastColorInput=ev.target;}});
 // ── 커스텀 컬러 피커 ──
-let cpTarget=null,cpHue=0,cpSat=.7,cpVal=1,cpDragging=false,cpHueDragging=false;
+let cpTarget=null,cpHue=0,cpSat=.7,cpVal=1,cpDragging=false,cpHueDragging=false,cpAlpha=1;
+function cpBuildColor(hex,a){
+  if(a>=0.999)return hex;
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a.toFixed(2)})`;
+}
+function cpUpdateAlphaTrack(hex){
+  const tr=document.getElementById('cp-alpha-track');
+  if(!tr)return;
+  const h=hex||document.getElementById('cp-hex').value||'#cccccc';
+  tr.style.background=`linear-gradient(to right, rgba(0,0,0,0) 0%, ${h} 100%), repeating-linear-gradient(45deg,#ddd 0 4px,#fff 4px 8px)`;
+}
+function cpSetAlpha(v){
+  cpAlpha=Math.max(0,Math.min(1,v/100));
+  const lbl=document.getElementById('cp-alpha-val');if(lbl)lbl.textContent=Math.round(cpAlpha*100)+'%';
+  const hex=document.getElementById('cp-hex').value||hsvToHex(cpHue,cpSat,cpVal);
+  cpSyncAll(hex,true);
+}
 
 function hexToHsv(hex){
   hex=(hex||'#cccccc').replace('#','');
@@ -3012,27 +3429,30 @@ function cpUpdateHue(x){
 }
 function cpSyncAll(hex,skipRecent){
   document.getElementById('cp-hex').value=hex;
-  document.getElementById('cp-preview').style.background=hex;
+  const out=cpBuildColor(hex,cpAlpha);
+  document.getElementById('cp-preview').style.background=out;
+  cpUpdateAlphaTrack(hex);
   if(cpTarget){
-    if(cpTarget._cpBtn)cpTarget._cpBtn.style.background=hex;
+    if(cpTarget._cpBtn)cpTarget._cpBtn.style.background=out;
     cpTarget.value=hex;
     if(cpTarget._isTextColor){
       const btn=document.getElementById('textColorBtn');
       const line=document.getElementById('textColorLine');
-      if(line)line.style.background=hex;
-      if(btn){const sp=btn.querySelector('span');if(sp)sp.style.color=hex;}
+      if(line)line.style.background=out;
+      if(btn){const sp=btn.querySelector('span');if(sp)sp.style.color=out;}
       restoreRange();
-      document.execCommand('foreColor',false,hex);
+      document.execCommand('foreColor',false,out);
       saveRange();
       syncHtmlPanel();
     } else if(cpTarget._isBgColor){
       const ch=document.getElementById('bgColorChar');
-      if(ch)ch.style.background=hex;
+      if(ch)ch.style.background=out;
       restoreRange();
-      document.execCommand('hiliteColor',false,hex);
+      document.execCommand('hiliteColor',false,out);
       saveRange();
       syncHtmlPanel();
     } else {
+      cpTarget.dataset.alphaOut=out;
       cpTarget.dispatchEvent(new Event('input',{bubbles:true}));
       cpTarget.dispatchEvent(new Event('change',{bubbles:true}));
     }
@@ -3040,22 +3460,25 @@ function cpSyncAll(hex,skipRecent){
 }
 function cpHexInput(val){
   if(!/^#[0-9a-fA-F]{6}$/.test(val))return;
-  document.getElementById('cp-preview').style.background=val;
+  const out=cpBuildColor(val,cpAlpha);
+  document.getElementById('cp-preview').style.background=out;
+  cpUpdateAlphaTrack(val);
   const{h,s,v}=hexToHsv(val);cpHue=h;cpSat=s;cpVal=v;
   document.getElementById('cp-hue-thumb').style.left=(cpHue/360*100)+'%';
   drawCpCanvas();
   if(cpTarget){
-    if(cpTarget._cpBtn)cpTarget._cpBtn.style.background=val;
+    if(cpTarget._cpBtn)cpTarget._cpBtn.style.background=out;
     cpTarget.value=val;
     if(cpTarget._isTextColor){
       const line=document.getElementById('textColorLine');
-      if(line)line.style.background=val;
-      const sp=document.querySelector('#textColorBtn span');if(sp)sp.style.color=val;
-      restoreRange();document.execCommand('foreColor',false,val);saveRange();syncHtmlPanel();
+      if(line)line.style.background=out;
+      const sp=document.querySelector('#textColorBtn span');if(sp)sp.style.color=out;
+      restoreRange();document.execCommand('foreColor',false,out);saveRange();syncHtmlPanel();
     } else if(cpTarget._isBgColor){
-      const ch=document.getElementById('bgColorChar');if(ch)ch.style.background=val;
-      restoreRange();document.execCommand('hiliteColor',false,val);saveRange();syncHtmlPanel();
+      const ch=document.getElementById('bgColorChar');if(ch)ch.style.background=out;
+      restoreRange();document.execCommand('hiliteColor',false,out);saveRange();syncHtmlPanel();
     } else {
+      cpTarget.dataset.alphaOut=out;
       cpTarget.dispatchEvent(new Event('input',{bubbles:true}));
       cpTarget.dispatchEvent(new Event('change',{bubbles:true}));
     }
@@ -3073,7 +3496,11 @@ function openCp(input,btnEl){
   ov.style.left=Math.max(4,left)+'px';ov.style.top=Math.max(4,top)+'px';ov.style.display='block';
   document.getElementById('cp-hue-thumb').style.left=(cpHue/360*100)+'%';
   document.getElementById('cp-hex').value=hex;
+  cpAlpha=1;
+  const alphaInp=document.getElementById('cp-alpha');if(alphaInp)alphaInp.value=100;
+  const alphaLbl=document.getElementById('cp-alpha-val');if(alphaLbl)alphaLbl.textContent='100%';
   document.getElementById('cp-preview').style.background=hex;
+  cpUpdateAlphaTrack(hex);
   drawCpCanvas();renderCpRecent();
 }
 function closeCp(){
@@ -3112,6 +3539,84 @@ function openCpForText(btnEl){
   const cur=line?line.style.background:'#222222';
   try{const tmp=document.createElement('input');tmp.type='color';tmp.value=cur||'#222222';inp.value=tmp.value;}catch(e){inp.value='#222222';}
   openCp(inp, btnEl||document.getElementById('textColorBtn'));
+}
+// ── 텍스트/배경 그라데이션 ──
+function openGradModal(){
+  saveRange();
+  openModal('grad-modal');
+  const upd=()=>{
+    const c1=document.getElementById('grad-c1').value;
+    const c2=document.getElementById('grad-c2').value;
+    const dir=document.getElementById('grad-dir').value;
+    document.getElementById('grad-preview').style.background=`linear-gradient(${dir}, ${c1}, ${c2})`;
+  };
+  ['grad-c1','grad-c2','grad-dir'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&!el._gradBound){el._gradBound=true;el.addEventListener('input',upd);el.addEventListener('change',upd);}
+  });
+  upd();
+}
+function applyTextGradient(){
+  const c1=document.getElementById('grad-c1').value;
+  const c2=document.getElementById('grad-c2').value;
+  const dir=document.getElementById('grad-dir').value;
+  const target=document.getElementById('grad-target').value;
+  const grad=`linear-gradient(${dir}, ${c1}, ${c2})`;
+  // ① 선택된 개체가 있으면 그 개체의 배경(또는 텍스트)에 그라데이션 적용
+  if(selectedElem && (selectedType==='shape'||selectedType==='block'||selectedType==='image')){
+    saveUndo();
+    const el=selectedElem;
+    if(target==='text'){
+      el.style.background=grad;
+      el.style.webkitBackgroundClip='text';
+      el.style.backgroundClip='text';
+      el.style.color='transparent';
+    } else {
+      el.style.backgroundColor='';
+      el.style.background=grad;
+      // UI 싱크: pp-shape / pp-block 의 그라데이션 체크박스/색상 갱신
+      const gOnS=document.getElementById('pp-fill-grad-on');
+      if(gOnS&&selectedType==='shape'){
+        gOnS.checked=true;
+        document.getElementById('pp-fill').value=c1;
+        document.getElementById('pp-fill-bg2').value=c2;
+        document.getElementById('pp-fill-grad-dir').value=dir;
+        document.getElementById('pp-fill-bg2').style.display='';
+        document.getElementById('pp-fill-grad-dir').style.display='';
+      }
+      const gOnB=document.getElementById('pp-block-grad-on');
+      if(gOnB&&selectedType==='block'){
+        gOnB.checked=true;
+        document.getElementById('pp-block-bg').value=c1;
+        document.getElementById('pp-block-bg2').value=c2;
+        document.getElementById('pp-block-grad-dir').value=dir;
+        document.getElementById('pp-block-bg2').style.display='';
+        document.getElementById('pp-block-grad-dir').style.display='';
+      }
+    }
+    closeModal('grad-modal');
+    positionOverlay&&positionOverlay();
+    syncHtmlPanel();scheduleAutoSave();
+    showToast('그라데이션 적용됨');
+    return;
+  }
+  // ② 개체 미선택 — 선택된 텍스트 범위에 적용
+  editor.focus();restoreRange();
+  const sel=window.getSelection();
+  if(!sel||sel.rangeCount===0||sel.isCollapsed){showToast('텍스트 또는 개체를 먼저 선택해 주세요');return;}
+  saveUndo();
+  const style=target==='text'
+    ? `background:${grad};-webkit-background-clip:text;background-clip:text;color:transparent;`
+    : `background:${grad};`;
+  const range=sel.getRangeAt(0);
+  const span=document.createElement('span');
+  span.setAttribute('style',style);
+  try{span.appendChild(range.extractContents());range.insertNode(span);}
+  catch(e){document.execCommand('insertHTML',false,`<span style="${style}">${sel.toString()}</span>`);}
+  sel.removeAllRanges();
+  closeModal('grad-modal');
+  syncHtmlPanel();scheduleAutoSave();
+  showToast('그라데이션 적용됨');
 }
 function openCpForBg(btnEl){
   if(cpTarget&&cpTarget._isBgColor){closeCp();return;}
@@ -3430,10 +3935,16 @@ setAutoSave(false);renderDocList();
   <div id="cp-hue-bar" style="position:relative;height:14px;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);border-radius:7px;cursor:pointer;margin-bottom:10px;touch-action:none;">
     <div id="cp-hue-thumb" style="position:absolute;top:-3px;width:20px;height:20px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #aaa;transform:translateX(-50%);left:0%;pointer-events:none;"></div>
   </div>
-  <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
     <div id="cp-preview" style="width:30px;height:30px;border-radius:6px;border:1px solid #ddd;flex-shrink:0;background:#cccccc;"></div>
     <input id="cp-hex" type="text" maxlength="7" placeholder="#ffffff" style="flex:1;border:1px solid #ddd;border-radius:6px;padding:5px 8px;font-size:12px;font-family:monospace;outline:none;" oninput="cpHexInput(this.value)">
-    <button onmousedown="event.preventDefault();event.stopPropagation()" onclick="closeCp()" style="background:#f0f0f0;border:1px solid #ddd;border-radius:6px;padding:5px 10px;font-size:12px;cursor:pointer;color:#555;flex-shrink:0;">✕</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+    <span style="font-size:10px;color:#999;flex-shrink:0;letter-spacing:.3px;">투명도</span>
+    <div id="cp-alpha-track" style="flex:1;height:12px;border-radius:6px;border:1px solid #ddd;position:relative;background:repeating-linear-gradient(45deg,#ddd 0 4px,#fff 4px 8px);">
+      <input id="cp-alpha" type="range" min="0" max="100" value="100" oninput="cpSetAlpha(this.value)" style="position:absolute;inset:-4px -2px;width:calc(100% + 4px);margin:0;opacity:0;cursor:pointer;">
+    </div>
+    <span id="cp-alpha-val" style="font-size:11px;color:#555;min-width:34px;text-align:right;font-family:monospace;">100%</span>
   </div>
   <div id="cp-recent-area" style="border-top:1px solid #eee;padding-top:8px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
