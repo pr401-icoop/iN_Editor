@@ -7,20 +7,20 @@
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
 :root{
-  --bg-app:#FAF9F5;
-  --bg-canvas:#EDE7D5;
+  --bg-app:#f5f5f7;
+  --bg-canvas:#EAF0F8;
   --bg-surface:#FFFFFF;
-  --bg-muted:#F5F2EA;
-  --border-soft:#E8E3D3;
-  --border-mid:#D9D3C1;
-  --text-main:#2E2A24;
-  --text-sub:#8E8A7E;
-  --text-soft:#B8B3A4;
-  --accent:#C86F43;
-  --accent-hover:#B45E35;
-  --accent-soft:#FBE8DC;
+  --bg-muted:#f8fafc;
+  --border-soft:#e5e7eb;
+  --border-mid:#dfe4ec;
+  --text-main:#1f2937;
+  --text-sub:#6b7280;
+  --text-soft:#9ca3af;
+  --accent:#2E5AAC;
+  --accent-hover:#234887;
+  --accent-soft:#EAF0F8;
 }
-body { font-family:'Pretendard','Malgun Gothic','맑은 고딕',sans-serif; background:var(--bg-app); color:var(--text-main); font-size:14px; -webkit-font-smoothing:antialiased; }
+body { font-family:'Malgun Gothic','맑은 고딕',sans-serif; background:var(--bg-app); color:var(--text-main); font-size:14px; -webkit-font-smoothing:antialiased; }
 body.props-open { padding-bottom:62px; }
 
 /* ── 시작 모달 ── */
@@ -56,7 +56,7 @@ body.props-open { padding-bottom:62px; }
 
 /* 드롭다운 */
 .dropdown-wrap { position:relative; }
-.dropdown-menu { display:none; position:absolute; top:calc(100%+8px); right:0; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:12px; box-shadow:0 8px 28px rgba(46,42,36,0.12); width:300px; z-index:500; overflow:hidden; }
+.dropdown-menu { display:none; position:absolute; top:calc(100%+8px); right:0; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:12px; box-shadow:0 8px 28px rgba(0,0,0,0.12); width:300px; z-index:500; overflow:hidden; }
 .dropdown-menu.open { display:block; }
 .dropdown-header { padding:12px 14px; font-size:11.5px; font-weight:700; color:var(--text-main); background:var(--bg-muted); border-bottom:1px solid var(--border-soft); display:flex; align-items:center; justify-content:space-between; letter-spacing:0.3px; text-transform:uppercase; }
 .doc-list { max-height:280px; overflow-y:auto; }
@@ -86,8 +86,8 @@ body.props-open { padding-bottom:62px; }
 .ins-right-btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
 .ins-right-btn.primary:hover { background:var(--accent-hover); }
 .theme-dots { display:flex; align-items:center; gap:5px; }
-.theme-dot { width:16px; height:16px; border-radius:50%; border:2px solid rgba(46,42,36,0.1); cursor:pointer; transition:transform 0.12s, box-shadow 0.12s; flex-shrink:0; }
-.theme-dot:hover { transform:scale(1.2); box-shadow:0 2px 8px rgba(46,42,36,0.18); }
+.theme-dot { width:16px; height:16px; border-radius:50%; border:2px solid rgba(0,0,0,0.1); cursor:pointer; transition:transform 0.12s, box-shadow 0.12s; flex-shrink:0; }
+.theme-dot:hover { transform:scale(1.2); box-shadow:0 2px 8px rgba(0,0,0,0.18); }
 .theme-dot.active { box-shadow:0 0 0 2px var(--accent); transform:scale(1.12); }
 
 /* ── 서식 툴바 ── */
@@ -99,9 +99,9 @@ body.props-open { padding-bottom:62px; }
 .fmt-btn:hover { background:var(--bg-muted); }
 .color-btn { width:22px; height:22px; border-radius:4px; border:1px solid var(--border-mid); cursor:pointer; flex-shrink:0; }
 .fmt-label { font-size:11px; color:var(--text-soft); padding:0 2px; white-space:nowrap; }
-.color-palette { display:none; position:absolute; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:10px; padding:10px; box-shadow:0 8px 24px rgba(46,42,36,0.12); z-index:600; flex-wrap:wrap; width:200px; gap:4px; }
+.color-palette { display:none; position:absolute; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:10px; padding:10px; box-shadow:0 8px 24px rgba(0,0,0,0.12); z-index:600; flex-wrap:wrap; width:200px; gap:4px; }
 .color-palette.open { display:flex; }
-.color-swatch { width:24px; height:24px; border-radius:4px; border:1px solid rgba(46,42,36,0.08); cursor:pointer; transition:transform 0.1s; }
+.color-swatch { width:24px; height:24px; border-radius:4px; border:1px solid rgba(0,0,0,0.08); cursor:pointer; transition:transform 0.1s; }
 .color-swatch:hover { transform:scale(1.15); }
 .fs-wrap { display:flex; align-items:center; gap:2px; height:100%; padding-right:8px; margin-right:4px; }
 #fs-select { border:1px solid var(--border-soft); border-radius:6px; background:var(--bg-surface); padding:4px 6px; font-size:12.5px; font-family:inherit; color:var(--text-main); cursor:pointer; outline:none; width:60px; }
@@ -113,13 +113,14 @@ body.props-open { padding-bottom:62px; }
 /* ── 에디터 ── */
 #main { display:flex; min-height:calc(100vh - 140px); background:var(--bg-canvas); }
 #editor-panel { flex:1; padding:32px 40px !important; display:flex; flex-direction:column; align-items:center; overflow-x:auto; min-width:0; background:var(--bg-canvas); }
-#editor-wrap { background:var(--bg-surface); width:1120px; min-width:1120px; max-width:1120px; min-height:1100px; border:1px solid var(--border-soft); border-radius:12px; box-shadow:0 4px 24px rgba(46,42,36,0.07); position:relative; margin:0 auto; flex:0 0 auto; flex-shrink:0; padding:0 110px; box-sizing:border-box; height:auto; }
+#editor-wrap { background:var(--bg-surface); width:1120px; min-width:1120px; max-width:1120px; min-height:1100px; border:1px solid var(--border-soft); border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.07); position:relative; margin:0 auto; flex:0 0 auto; flex-shrink:0; padding:0 110px; box-sizing:border-box; height:auto; }
 #editor { min-height:1000px; height:auto; padding:56px 0; outline:none; font-size:16px; line-height:1.9; color:var(--text-main); word-break:break-word; overflow-wrap:break-word; width:900px !important; max-width:900px !important; box-sizing:border-box; margin:0 auto; }
 /* ── 눈금자(ruler) ── */
-.ruler { position:absolute; background:var(--bg-muted); color:var(--text-soft); font-size:9px; font-family:'SF Mono','Consolas','D2Coding',monospace; user-select:none; pointer-events:none; z-index:5; }
-.ruler-h { top:-22px; left:0; right:0; height:22px; border:1px solid var(--border-soft); border-bottom:none; border-radius:6px 6px 0 0; }
-.ruler-v { top:0; left:-22px; bottom:0; width:22px; border:1px solid var(--border-soft); border-right:none; border-radius:6px 0 0 6px; }
-#ruler-corner { position:absolute; top:-22px; left:-22px; width:22px; height:22px; background:var(--bg-muted); border:1px solid var(--border-soft); border-right:none; border-bottom:none; border-radius:6px 0 0 0; z-index:6; }
+.ruler { background:var(--bg-muted); color:var(--text-soft); font-size:9px; font-family:'SF Mono','Consolas','D2Coding',monospace; user-select:none; pointer-events:none; }
+/* ★ 가로 자: position:fixed 로 viewport 상단(포맷바 바로 아래 = 140px)에 항상 고정 */
+.ruler-h { position:fixed; top:140px; height:22px; border-bottom:1px solid var(--border-soft); z-index:150; }
+.ruler-v { display:none; }
+#ruler-corner { display:none; }
 .ruler .tick { position:absolute; background:#bbb; }
 .ruler-h .tick { bottom:0; width:1px; }
 .ruler-h .tick.major { height:10px; }
@@ -184,7 +185,7 @@ body.props-open { padding-bottom:62px; }
   background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:14px; z-index:900;
   transition:right 0.22s ease;
   display:flex; flex-direction:column; gap:10px; padding:16px 16px 18px;
-  box-shadow:0 10px 32px rgba(46,42,36,0.12); overflow-y:auto; overflow-x:hidden;
+  box-shadow:0 10px 32px rgba(0,0,0,0.12); overflow-y:auto; overflow-x:hidden;
 }
 #props-panel.visible { right:20px; }
 .pp-group { display:none; flex-direction:column; align-items:stretch; gap:6px; }
@@ -206,7 +207,7 @@ body.props-open { padding-bottom:62px; }
 .pp-btn { background:transparent; border:1px solid var(--border-soft); border-radius:999px; padding:5px 11px; font-size:12px; font-family:inherit; color:var(--text-main); cursor:pointer; white-space:nowrap; transition:all 0.12s; }
 .pp-btn:hover { background:var(--bg-muted); border-color:var(--border-mid); }
 .pp-btn.danger { background:var(--accent-soft); color:var(--accent); border-color:transparent; }
-.pp-btn.danger:hover { background:#F6D6C3; }
+.pp-btn.danger:hover { background:#D4E2F2; }
 .pp-del-btn { background:var(--accent); border:none; border-radius:999px; padding:5px 14px; font-size:12px; font-family:inherit; color:#fff; cursor:pointer; font-weight:500; }
 .pp-del-btn:hover { background:var(--accent-hover); }
 .pp-btn.active { background:#4a90d9; color:#fff; border-color:#3a7bc8; }
@@ -237,7 +238,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
 #html-panel-footer button { flex:1; padding:8px; border-radius:4px; border:none; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; }
 
 /* ── 도형 패널 ── */
-#shape-panel { display:none; position:fixed; top:150px; right:20px; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:14px; padding:18px; box-shadow:0 8px 28px rgba(46,42,36,0.1); z-index:400; width:240px; }
+#shape-panel { display:none; position:fixed; top:150px; right:20px; background:var(--bg-surface); border:1px solid var(--border-soft); border-radius:14px; padding:18px; box-shadow:0 8px 28px rgba(0,0,0,0.1); z-index:400; width:240px; }
 #shape-panel.open { display:block; }
 #shape-panel h4 { font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:12px; }
 .sh-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:13px; }
@@ -255,9 +256,9 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
 .sh-btns button.primary:hover { background:var(--accent-hover); border-color:var(--accent-hover); }
 
 /* ── 모달 ── */
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(46,42,36,0.35); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(2px); }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(2px); }
 .modal-overlay.open { display:flex; }
-.modal { background:var(--bg-surface); border-radius:16px; padding:26px; width:420px; box-shadow:0 16px 48px rgba(46,42,36,0.18); max-height:90vh; overflow-y:auto; border:1px solid var(--border-soft); }
+.modal { background:var(--bg-surface); border-radius:16px; padding:26px; width:420px; box-shadow:0 16px 48px rgba(0,0,0,0.18); max-height:90vh; overflow-y:auto; border:1px solid var(--border-soft); }
 .modal h3 { font-size:15px; margin-bottom:16px; color:var(--text-main); font-weight:700; }
 .modal input[type=text],.modal input[type=url],.modal input[type=number] { width:100%; border:1px solid var(--border-soft); border-radius:10px; padding:10px 12px; font-size:14px; font-family:inherit; margin-bottom:10px; outline:none; background:var(--bg-surface); color:var(--text-main); transition:border-color 0.15s; }
 .modal input:focus { border-color:var(--accent); }
@@ -273,7 +274,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
 #img-drop-zone:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
 
 /* ── 토스트 ── */
-#toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--text-main); color:#fff; padding:11px 24px; border-radius:999px; font-size:14px; opacity:0; transition:all 0.22s; pointer-events:none; z-index:9999; box-shadow:0 8px 24px rgba(46,42,36,0.2); }
+#toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--text-main); color:#fff; padding:11px 24px; border-radius:999px; font-size:14px; opacity:0; transition:all 0.22s; pointer-events:none; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,0.2); }
 #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
 @media(max-width:1000px) { #html-panel { display:none; } }
@@ -381,9 +382,9 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
 
 <!-- ── 삽입 툴바 ── -->
 <div id="insert-bar">
-  <button class="ins-btn" onclick="openImgModal()"><span class="ins-icon">🖼</span><span class="ins-label">사진</span></button>
+  <button class="ins-btn" onclick="openImgModal()"><span class="ins-icon" style="display:inline-flex;align-items:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M3 17l5-5 4 4 3-3 6 6"/></svg></span><span class="ins-label">사진</span></button>
   <button class="ins-btn" onclick="insertVideo()"><span class="ins-icon">▶</span><span class="ins-label">동영상</span></button>
-  <button class="ins-btn" onclick="openFileModal()"><span class="ins-icon">📎</span><span class="ins-label">파일</span></button>
+  <button class="ins-btn" onclick="openFileModal()"><span class="ins-icon" style="display:inline-flex;align-items:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg></span><span class="ins-label">파일</span></button>
   <div class="ins-divider"></div>
   <button class="ins-btn" onclick="openTableModal()"><span class="ins-icon">⊞</span><span class="ins-label">표</span></button>
   <button class="ins-btn" onclick="openLinkModal()"><span class="ins-icon">🔗</span><span class="ins-label">링크</span></button>
@@ -394,12 +395,12 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   <span style="font-size:11px;color:#aaa;padding:0 4px;white-space:nowrap;">색상 테마</span>
   <div style="width:6px;flex-shrink:0;"></div>
   <div class="theme-dots" id="theme-dots">
-    <div class="theme-dot active" data-idx="0" style="background:#C86F43;" title="테라코타" onmousedown="event.preventDefault()" onclick="applyTheme(0)"></div>
-    <div class="theme-dot" data-idx="1" style="background:#5B7A96;" title="더스티블루" onmousedown="event.preventDefault()" onclick="applyTheme(1)"></div>
-    <div class="theme-dot" data-idx="2" style="background:#6B8759;" title="세이지" onmousedown="event.preventDefault()" onclick="applyTheme(2)"></div>
+    <div class="theme-dot active" data-idx="0" style="background:#2E5AAC;" title="코퍼레이트블루" onmousedown="event.preventDefault()" onclick="applyTheme(0)"></div>
+    <div class="theme-dot" data-idx="1" style="background:#D4A017;" title="골드" onmousedown="event.preventDefault()" onclick="applyTheme(1)"></div>
+    <div class="theme-dot" data-idx="2" style="background:#4A6B3F;" title="세이지" onmousedown="event.preventDefault()" onclick="applyTheme(2)"></div>
     <div class="theme-dot" data-idx="3" style="background:#9C5068;" title="플럼" onmousedown="event.preventDefault()" onclick="applyTheme(3)"></div>
-    <div class="theme-dot" data-idx="4" style="background:#4A3F33;" title="웜차콜" onmousedown="event.preventDefault()" onclick="applyTheme(4)"></div>
-    <div class="theme-dot" id="custom-color-dot" title="커스텀 색상" style="background:conic-gradient(red,orange,yellow,lime,cyan,blue,violet,red);position:relative;overflow:hidden;" onmousedown="event.preventDefault();openCpCustomTheme(this)">
+    <div class="theme-dot" data-idx="4" style="background:#374151;" title="슬레이트" onmousedown="event.preventDefault()" onclick="applyTheme(4)"></div>
+    <div class="theme-dot" id="custom-color-dot" title="커스텀 색상" style="background:conic-gradient(red,orange,yellow,lime,cyan,blue,violet,red);position:relative;overflow:hidden;" onmousedown="event.preventDefault()" onclick="openCpCustomTheme(this)">
       <input type="color" id="custom-color-input" style="position:absolute;inset:0;opacity:0;width:0;height:0;pointer-events:none;border:none;padding:0;" oninput="applyCustomTheme(this.value)">
     </div>
   </div>
@@ -410,12 +411,14 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   <div class="ins-right">
     <button class="ins-right-btn" onclick="toggleHtmlPanel()">HTML 편집</button>
     <button class="ins-right-btn" onclick="copyHtml()">HTML 복사</button>
+    <button class="ins-right-btn" onclick="copyHtmlForSE2()" title="네이버 SmartEditor 2 호환 — 인트라넷 게시판의 HTML 탭에 붙여넣기" style="background:#2E5AAC;color:#fff;border-color:#2E5AAC;">SE2 복사</button>
   </div>
 </div>
 
 <!-- ── 서식 툴바 ── -->
 <div id="format-bar">
-  <select class="fmt-select" onchange="execCmd('fontName',this.value)" style="width:80px;">
+  <select class="fmt-select" onmousedown="saveRange()" onfocus="saveRange()" onchange="applyFontFamily(this.value);this.blur();" style="width:90px;">
+    <option value="'Malgun Gothic','맑은 고딕',sans-serif" selected>맑은 고딕</option>
     <option value="'Dotum','돋움',sans-serif">돋움</option>
     <option value="'DotumChe','돋움체',sans-serif">돋움체</option>
     <option value="'Gulim','굴림',sans-serif">굴림</option>
@@ -434,20 +437,35 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <option value="'Nanum Pen Script',cursive">나눔바른펜</option>
   </select>
   <div class="fs-wrap">
-    <select id="fs-select" title="폰트 크기(pt)" onchange="applyFontSizePt(this.value)">
+    <select id="fs-select" title="폰트 크기(pt)" onmousedown="saveRange()" onchange="applyFontSizePt(this.value)">
       <option value="7">7pt</option><option value="8">8pt</option><option value="9">9pt</option>
       <option value="10">10pt</option><option value="11">11pt</option><option value="12" selected>12pt</option>
       <option value="14">14pt</option><option value="18">18pt</option><option value="24">24pt</option><option value="36">36pt</option>
+      <option value="48">48pt</option><option value="72">72pt</option>
     </select>
-    <button class="fs-btn" onmousedown="event.preventDefault()" onclick="stepFontSize(-1)">−</button>
-    <input type="number" id="fs-input" min="1" max="200" value="12" onchange="applyFontSizePt(this.value)" onkeydown="if(event.key==='Enter')applyFontSizePt(this.value)">
-    <button class="fs-btn" onmousedown="event.preventDefault()" onclick="stepFontSize(1)">＋</button>
+    <button class="fs-btn" onmousedown="event.preventDefault();saveRange()" onclick="stepFontSize(-1)">−</button>
+    <input type="number" id="fs-input" min="1" max="200" value="12" onmousedown="saveRange()" onfocus="saveRange()" onchange="applyFontSizePt(this.value)" onkeydown="if(event.key==='Enter')applyFontSizePt(this.value)">
+    <button class="fs-btn" onmousedown="event.preventDefault();saveRange()" onclick="stepFontSize(1)">＋</button>
   </div>
   <div class="fmt-sep"></div>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('bold')" title="굵게(Ctrl+B)"><b style="font-size:14px;">가</b></button>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('italic')" title="기울임(Ctrl+I)"><i style="font-size:14px;font-style:italic;">가</i></button>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('underline')" title="밑줄(Ctrl+U)"><span style="font-size:14px;text-decoration:underline;">간</span></button>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough')" title="취소선"><span style="font-size:14px;text-decoration:line-through;">가</span></button>
+  <div class="fmt-sep"></div>
+  <select class="fmt-select" title="줄 간격" onmousedown="saveRange()" onfocus="saveRange()" onchange="applyLineHeight(this.value);this.value='';" style="width:78px;">
+    <option value="">줄간격</option>
+    <option value="1.0">1.0</option><option value="1.15">1.15</option><option value="1.3">1.3</option>
+    <option value="1.5">1.5</option><option value="1.7">1.7</option><option value="2.0">2.0</option>
+    <option value="2.5">2.5</option><option value="3.0">3.0</option>
+  </select>
+  <select class="fmt-select" title="자 간격" onmousedown="saveRange()" onfocus="saveRange()" onchange="applyLetterSpacing(this.value);this.value='';" style="width:72px;">
+    <option value="">자간</option>
+    <option value="-2px">-2</option><option value="-1px">-1</option>
+    <option value="-0.5px">-0.5</option><option value="0">0(기본)</option>
+    <option value="0.5px">+0.5</option><option value="1px">+1</option>
+    <option value="2px">+2</option><option value="3px">+3</option>
+  </select>
   <div class="fmt-sep"></div>
   <div style="position:relative;display:flex;align-items:center;gap:3px;">
     <div id="textColorBtn" title="글자색" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:3px 5px;border-radius:3px;" onmousedown="event.preventDefault()" onclick="openCpForText(this)">
@@ -461,8 +479,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </div>
     <input type="color" id="bg-color-cp-input" value="#ffff00" style="display:none;">
     <div id="gradColorBtn" title="그라데이션" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:3px 5px;border-radius:3px;" onmousedown="event.preventDefault()" onclick="openGradModal()">
-      <span style="font-size:14px;font-weight:700;line-height:1;background:linear-gradient(135deg,#C86F43,#FBE8DC);-webkit-background-clip:text;background-clip:text;color:transparent;">가</span>
-      <div style="width:14px;height:3px;margin-top:2px;background:linear-gradient(to right,#C86F43,#FBE8DC);border-radius:1px;"></div>
+      <span style="font-size:14px;font-weight:700;line-height:1;background:linear-gradient(135deg,#2E5AAC,#EAF0F8);-webkit-background-clip:text;background-clip:text;color:transparent;">가</span>
+      <div style="width:14px;height:3px;margin-top:2px;background:linear-gradient(to right,#2E5AAC,#EAF0F8);border-radius:1px;"></div>
     </div>
   </div>
   <div class="fmt-sep"></div>
@@ -485,6 +503,38 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   <div class="fmt-sep"></div>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('undo')">↩</button>
   <button class="fmt-btn" onmousedown="event.preventDefault()" onclick="execCmd('redo')">↪</button>
+</div>
+
+<!-- ── 모바일 미리보기 토글 버튼 (상단 패널 바로 아래 좌측) ── -->
+<button id="mobile-preview-btn" title="모바일 미리보기" onclick="toggleMobilePreview()"
+  style="position:fixed; top:150px; left:14px; z-index:800; width:44px; height:44px; border-radius:50%;
+         background:#fff; border:1px solid var(--border-soft); box-shadow:0 4px 14px rgba(0,0,0,0.18);
+         cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:20px;
+         transition:transform .15s, box-shadow .15s, background .15s;"
+  onmouseover="this.style.transform='scale(1.08)';this.style.boxShadow='0 6px 18px rgba(0,0,0,0.24)';"
+  onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(0,0,0,0.18)';">📱</button>
+
+<!-- ── 모바일 미리보기 패널 ── -->
+<div id="mobile-preview-panel"
+  style="position:fixed; top:140px; left:-420px; width:400px; height:calc(100vh - 160px); z-index:790;
+         background:#f5f2ec; border:1px solid var(--border-soft); border-radius:14px;
+         box-shadow:0 12px 40px rgba(0,0,0,0.22); transition:left .28s ease; padding:14px 14px 18px;
+         display:flex; flex-direction:column; gap:10px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <span style="font-size:13px;font-weight:600;color:#4A3F33;letter-spacing:-.2px;">📱 모바일 미리보기</span>
+    <div style="display:flex;gap:6px;">
+      <button onclick="refreshMobilePreview()" title="새로고침"
+        style="border:1px solid var(--border-soft);background:#fff;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">↻</button>
+      <button onclick="toggleMobilePreview()" title="닫기"
+        style="border:1px solid var(--border-soft);background:#fff;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">✕</button>
+    </div>
+  </div>
+  <div style="flex:1;min-height:0;display:flex;justify-content:center;align-items:flex-start;overflow:hidden;background:#222;border-radius:22px;padding:10px;">
+    <div style="width:375px;max-width:100%;height:100%;background:#fff;border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 1px #333;">
+      <iframe id="mobile-preview-frame" title="mobile preview"
+        style="width:100%;height:100%;border:0;display:block;background:#fff;"></iframe>
+    </div>
+  </div>
 </div>
 
 <!-- ── 본문 ── -->
@@ -530,6 +580,13 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
 
   <!-- 도형/이미지/블록 공통 -->
   <div id="pp-shape" class="pp-group">
+    <span class="pp-section-title">링크</span>
+    <div class="pp-row" style="gap:4px;">
+      <input type="url" id="pp-shape-link" placeholder="https://..." style="flex:1;min-width:120px;border:1px solid var(--border-soft);border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;background:var(--bg-surface);color:var(--text-main);" onchange="applyElemLink(this.value)">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyElemLink(document.getElementById('pp-shape-link').value)">적용</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="clearElemLink()" title="링크 제거">×</button>
+    </div>
+    <div class="pp-sep"></div>
     <span class="pp-section-title">채우기</span>
     <div class="pp-row">
       <input type="color" id="pp-fill" class="pp-color" onmousedown="event.preventDefault()" oninput="applyProp('fill',this.value)" onchange="applyProp('fill',this.value)">
@@ -537,7 +594,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </div>
     <div class="pp-row">
       <label class="pp-none-lbl"><input type="checkbox" id="pp-fill-grad-on" onchange="applyProp('fillGrad',this.checked)"> 그라데이션</label>
-      <input type="color" id="pp-fill-bg2" class="pp-color" value="#FBE8DC" style="display:none;" onmousedown="event.preventDefault()" onchange="applyProp('fill',document.getElementById('pp-fill').value)">
+      <input type="color" id="pp-fill-bg2" class="pp-color" value="#EAF0F8" style="display:none;" onmousedown="event.preventDefault()" onchange="applyProp('fill',document.getElementById('pp-fill').value)">
       <select class="pp-select" id="pp-fill-grad-dir" style="display:none;" onchange="applyProp('fill',document.getElementById('pp-fill').value)">
         <option value="to bottom">↓</option><option value="to top">↑</option>
         <option value="to right">→</option><option value="to left">←</option>
@@ -613,6 +670,13 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
     </div>
     <div class="pp-sep"></div>
+    <span class="pp-section-title">배치 (글과의 관계)</span>
+    <div class="pp-row">
+      <button class="pp-btn" id="pp-shape-layer-flow"  onmousedown="event.preventDefault()" onclick="applyLayer('flow')"  title="본문 흐름에 맞춰 자연스럽게 배치">글과 조화</button>
+      <button class="pp-btn" id="pp-shape-layer-front" onmousedown="event.preventDefault()" onclick="applyLayer('front')" title="글보다 위 레이어">글 앞으로</button>
+      <button class="pp-btn" id="pp-shape-layer-back"  onmousedown="event.preventDefault()" onclick="applyLayer('back')"  title="글보다 아래 레이어 (배경처럼)">글 뒤로</button>
+    </div>
+    <div class="pp-sep"></div>
     <div class="pp-row">
       <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
     </div>
@@ -620,6 +684,13 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
 
   <!-- 표 전용 -->
   <div id="pp-table" class="pp-group">
+    <span class="pp-section-title">링크</span>
+    <div class="pp-row" style="gap:4px;">
+      <input type="url" id="pp-table-link" placeholder="https://..." style="flex:1;min-width:120px;border:1px solid var(--border-soft);border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;background:var(--bg-surface);color:var(--text-main);" onchange="applyElemLink(this.value)">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyElemLink(document.getElementById('pp-table-link').value)">적용</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="clearElemLink()" title="링크 제거">×</button>
+    </div>
+    <div class="pp-sep"></div>
     <span class="pp-section-title">행</span>
     <div class="pp-row">
       <button class="pp-btn" onclick="tableOp('addRowAbove')">↑ 위에 추가</button>
@@ -764,6 +835,20 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   </div>
   <!-- 이미지 전용 -->
   <div id="pp-image" class="pp-group">
+    <span class="pp-section-title">링크</span>
+    <div class="pp-row" style="gap:4px;">
+      <input type="url" id="pp-image-link" placeholder="https://..." style="flex:1;min-width:120px;border:1px solid var(--border-soft);border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;background:var(--bg-surface);color:var(--text-main);" onchange="applyElemLink(this.value)">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyElemLink(document.getElementById('pp-image-link').value)">적용</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="clearElemLink()" title="링크 제거">×</button>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">이미지</span>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="document.getElementById('pp-img-replace-input').click()" title="현재 이미지를 새 파일로 교체">📷 변경</button>
+      <input type="file" id="pp-img-replace-input" accept="image/*" style="display:none;" onchange="replaceSelectedImage(this)">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="replaceSelectedImageByUrl()" title="URL로 이미지 교체">🔗 URL</button>
+    </div>
+    <div class="pp-sep"></div>
     <span class="pp-section-title">정렬</span>
     <div class="pp-row">
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
@@ -824,6 +909,13 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
 
   <!-- 블록(blockquote 등) 전용 -->
   <div id="pp-block" class="pp-group">
+    <span class="pp-section-title">링크</span>
+    <div class="pp-row" style="gap:4px;">
+      <input type="url" id="pp-block-link" placeholder="https://..." style="flex:1;min-width:120px;border:1px solid var(--border-soft);border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;background:var(--bg-surface);color:var(--text-main);" onchange="applyElemLink(this.value)">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="applyElemLink(document.getElementById('pp-block-link').value)">적용</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="clearElemLink()" title="링크 제거">×</button>
+    </div>
+    <div class="pp-sep"></div>
     <span class="pp-section-title">배경색</span>
     <div class="pp-row">
       <input type="color" id="pp-block-bg" class="pp-color" onmousedown="event.preventDefault()" onchange="applyBlockProp('bg',this.value)">
@@ -858,6 +950,12 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <input type="color" id="pp-block-color" class="pp-color" onmousedown="event.preventDefault()" onchange="applyBlockProp('color',this.value)">
     </div>
     <div class="pp-sep"></div>
+    <span class="pp-section-title">모서리</span>
+    <div class="pp-row">
+      <input type="range" id="pp-block-radius" class="pp-range" min="0" max="200" value="0" oninput="applyBlockProp('radius',this.value);document.getElementById('pp-block-r-v').textContent=this.value+'px'">
+      <span id="pp-block-r-v" class="pp-small">0px</span>
+    </div>
+    <div class="pp-sep"></div>
     <span class="pp-section-title">그림자</span>
     <div class="pp-row">
       <select class="pp-select" id="pp-block-shadow" onchange="applyBlockProp('shadow',this.value)">
@@ -884,6 +982,13 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">배치 (글과의 관계)</span>
+    <div class="pp-row">
+      <button class="pp-btn" id="pp-block-layer-flow"  onmousedown="event.preventDefault()" onclick="applyLayer('flow')"  title="본문 흐름에 맞춰 자연스럽게 배치">글과 조화</button>
+      <button class="pp-btn" id="pp-block-layer-front" onmousedown="event.preventDefault()" onclick="applyLayer('front')" title="글보다 위 레이어">글 앞으로</button>
+      <button class="pp-btn" id="pp-block-layer-back"  onmousedown="event.preventDefault()" onclick="applyLayer('back')"  title="글보다 아래 레이어 (배경처럼)">글 뒤로</button>
     </div>
     <div class="pp-sep"></div>
     <div class="pp-row">
@@ -944,12 +1049,12 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </select>
   </div>
   <div class="sh-row"><label>채우기</label>
-    <input type="color" id="sh-fill" value="#C86F43">
+    <input type="color" id="sh-fill" value="#2E5AAC">
     <label style="width:auto;margin-left:4px;font-size:11px;"><input type="checkbox" id="sh-no-fill"> 없음</label>
   </div>
   <div class="sh-row"><label>그라데이션</label>
     <label style="width:auto;font-size:11px;"><input type="checkbox" id="sh-grad-on" onchange="toggleShGrad()"> 사용</label>
-    <input type="color" id="sh-fill2" value="#FBE8DC" style="display:none;">
+    <input type="color" id="sh-fill2" value="#EAF0F8" style="display:none;">
     <select id="sh-grad-dir" style="display:none;flex:0 0 auto;width:70px;">
       <option value="to bottom">↓</option>
       <option value="to top">↑</option>
@@ -962,7 +1067,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </select>
   </div>
   <div class="sh-row"><label>텍스트색</label><input type="color" id="sh-text-color" value="#ffffff"></div>
-  <div class="sh-row"><label>테두리색</label><input type="color" id="sh-border-color" value="#C86F43"></div>
+  <div class="sh-row"><label>테두리색</label><input type="color" id="sh-border-color" value="#2E5AAC"></div>
   <div class="sh-row"><label>테두리</label><input type="number" id="sh-border-width" value="0" min="0" max="20"><span style="font-size:11px;color:#aaa;">px</span></div>
   <div class="sh-row" id="sh-radius-row"><label>모서리</label><input type="range" id="sh-radius" min="0" max="200" value="0"><span class="sh-val" id="sh-radius-v">0px</span></div>
   <div class="sh-row"><label>투명도</label><input type="range" id="sh-opacity" min="0" max="100" value="100"><span class="sh-val" id="sh-opacity-val">100%</span></div>
@@ -986,8 +1091,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
         <option value="text">글자</option>
       </select>
     </div>
-    <div class="row"><label style="min-width:80px;">시작색</label><input type="color" id="grad-c1" value="#C86F43" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
-    <div class="row"><label style="min-width:80px;">끝색</label><input type="color" id="grad-c2" value="#FBE8DC" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
+    <div class="row"><label style="min-width:80px;">시작색</label><input type="color" id="grad-c1" value="#2E5AAC" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
+    <div class="row"><label style="min-width:80px;">끝색</label><input type="color" id="grad-c2" value="#EAF0F8" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
     <div class="row"><label style="min-width:80px;">방향</label>
       <select id="grad-dir" style="flex:1;padding:8px 10px;border:1px solid var(--border-soft);border-radius:8px;font-size:14px;font-family:inherit;">
         <option value="to right">→ (왼쪽 → 오른쪽)</option>
@@ -1000,7 +1105,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
         <option value="315deg">↖ 대각선</option>
       </select>
     </div>
-    <div id="grad-preview" style="height:36px;border-radius:8px;margin:12px 0 4px;background:linear-gradient(to right,#C86F43,#FBE8DC);border:1px solid var(--border-soft);"></div>
+    <div id="grad-preview" style="height:36px;border-radius:8px;margin:12px 0 4px;background:linear-gradient(to right,#2E5AAC,#EAF0F8);border:1px solid var(--border-soft);"></div>
     <div class="modal-btns"><button class="btn-cancel" onclick="closeModal('grad-modal')">취소</button><button class="btn-ok" onclick="applyTextGradient()">적용</button></div>
   </div>
 </div>
@@ -1088,11 +1193,11 @@ function getShadow(preset, color, dir){
 
 // 색상 테마
 const THEMES=[
-  {name:'테라코타',primary:'#C86F43',light:'#FBE8DC',border:'#F2D5BE'},
-  {name:'더스티블루',primary:'#5B7A96',light:'#E8EEF3',border:'#C4D2DE'},
-  {name:'세이지',primary:'#6B8759',light:'#ECEFE3',border:'#CDD6BD'},
-  {name:'플럼',primary:'#9C5068',light:'#F4E4E8',border:'#E0BDC6'},
-  {name:'웜차콜',primary:'#4A3F33',light:'#EFEAE0',border:'#C9C0B0'},
+  {name:'코퍼레이트블루',primary:'#2E5AAC',mid:'#4A7BC9',light:'#EAF0F8',border:'#C7D5EA',dark:'#234887',line:'#dfe4ec'},
+  {name:'골드',         primary:'#D4A017',mid:'#E0B845',light:'#FFF9E6',border:'#F5CF5C',dark:'#8B6914',line:'#e5e7eb'},
+  {name:'세이지',       primary:'#4A6B3F',mid:'#6B8759',light:'#EAF0E4',border:'#C5D2BA',dark:'#3A5A30',line:'#e5e7eb'},
+  {name:'플럼',         primary:'#9C5068',mid:'#B96A82',light:'#F4E4E8',border:'#E0BDC6',dark:'#7C3F52',line:'#e5e7eb'},
+  {name:'슬레이트',     primary:'#374151',mid:'#6b7280',light:'#f3f4f6',border:'#d1d5db',dark:'#1f2937',line:'#e5e7eb'},
 ];
 let currentThemeIdx=0;
 
@@ -1108,7 +1213,45 @@ function saveToStorage(silent=false){
   setDocs(docs);setAutoSave(true);
   if(!silent)showToast('💾 저장됐습니다: '+title);renderDocList();
 }
-function scheduleAutoSave(){clearTimeout(autoSaveTimer);setAutoSave('editing');autoSaveTimer=setTimeout(()=>{if(editor.innerHTML.trim())saveToStorage(true);},30000);}
+function scheduleAutoSave(){clearTimeout(autoSaveTimer);setAutoSave('editing');autoSaveTimer=setTimeout(()=>{if(editor.innerHTML.trim())saveToStorage(true);},30000);scheduleMobilePreviewRefresh();}
+
+// ── 모바일 미리보기 ──
+let _mpTimer=null;
+function scheduleMobilePreviewRefresh(){
+  const p=document.getElementById('mobile-preview-panel');
+  if(!p||!p.classList.contains('open'))return;
+  clearTimeout(_mpTimer);
+  _mpTimer=setTimeout(refreshMobilePreview,350);
+}
+function refreshMobilePreview(){
+  const frame=document.getElementById('mobile-preview-frame');
+  if(!frame)return;
+  const bg=document.getElementById('editor')?getComputedStyle(document.getElementById('editor')).backgroundColor:'#fff';
+  const html=`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=375, initial-scale=1"><style>
+    html,body{margin:0;padding:0;background:${bg};color:#222;font-family:'Malgun Gothic','맑은 고딕',sans-serif;}
+    body{padding:14px 12px;line-height:1.7;font-size:15px;word-break:break-word;}
+    img,table,iframe,video{max-width:100% !important;height:auto;}
+    table{width:100% !important;border-collapse:collapse;}
+    div[style*="max-width:900px"]{max-width:100% !important;padding-left:14px !important;padding-right:14px !important;}
+    div[style*="grid-template-columns:repeat(3"]{grid-template-columns:1fr !important;}
+    *{box-sizing:border-box;}
+  </style></head><body>${document.getElementById('editor').innerHTML}</body></html>`;
+  frame.srcdoc=html;
+}
+function toggleMobilePreview(){
+  const p=document.getElementById('mobile-preview-panel');
+  const btn=document.getElementById('mobile-preview-btn');
+  if(!p)return;
+  const open=p.classList.toggle('open');
+  if(open){
+    p.style.left='14px';
+    if(btn)btn.style.display='none';
+    refreshMobilePreview();
+  } else {
+    p.style.left='-420px';
+    if(btn){btn.style.display='';btn.style.background='#fff';btn.style.borderColor='var(--border-soft)';}
+  }
+}
 function setAutoSave(s){const el=document.getElementById('autosave-indicator');if(s===true){el.textContent='● 저장됨';el.className='saved';}else if(s==='editing'){el.textContent='● 편집 중';el.className='editing';}else{el.textContent='● 미저장';el.className='';}}
 
 // ══════════════════════════════════
@@ -1128,7 +1271,7 @@ function renderDocList(){
 }
 function loadDoc(id){const docs=getDocs(),doc=docs[id];if(!doc)return;if(editor.innerHTML.trim()&&currentDocId!==id&&!confirm('현재 편집 내용이 사라집니다. 불러오시겠습니까?'))return;currentDocId=id;docTitleInput.value=doc.title;editor.innerHTML=doc.content;setAutoSave(true);toggleStorageMenu();showToast('📄 불러왔습니다: '+doc.title);syncHtmlPanel();}
 function deleteDoc(e,id){e.stopPropagation();const docs=getDocs(),title=docs[id]?docs[id].title:'문서';if(!confirm(`"${title}"을 삭제하시겠습니까?`))return;delete docs[id];setDocs(docs);if(currentDocId===id){currentDocId=null;editor.innerHTML='';docTitleInput.value='';setAutoSave(false);}renderDocList();showToast('🗑 삭제됐습니다.');}
-function newDocument(){if(editor.innerHTML.trim()&&!confirm('새 문서를 시작하시겠습니까?'))return;currentDocId=null;editor.innerHTML='';docTitleInput.value='';setAutoSave(false);toggleStorageMenu();editor.focus();}
+function newDocument(){if(editor.innerHTML.trim()&&!confirm('새 문서를 시작하시겠습니까?'))return;currentDocId=null;editor.innerHTML='';docTitleInput.value='';setAutoSave(false);toggleStorageMenu();try{editor.focus({preventScroll:true});}catch{editor.focus();}}
 function exportFile(){const title=docTitleInput.value.trim()||'제목없음',content=editor.innerHTML;if(!content.trim()){showToast('내용이 없습니다.');return;}
   const data={version:'4.0',title,content,exportedAt:new Date().toISOString()};
   const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -1156,63 +1299,217 @@ function importFile(input){const file=input.files[0];if(!file)return;const reade
 }catch(err){showToast('❌ 파일 형식 오류: '+err.message);}};reader.readAsText(file);input.value='';}
 
 // ══════════════════════════════════
-// 소식 템플릿
+// 소식 템플릿 — 매거진 리포트 레이아웃 (Header meta · Serif Title · Section-num · KPI · Pullquote · Divider ※ · Footer)
 // ══════════════════════════════════
 function _sogsikTpl(t){
-  const card=(n,u,nm,d)=>`<div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;line-height:1.2;margin-bottom:4px;letter-spacing:-.5px;">${n}<span style="font-size:14px;font-weight:400;color:#888;">${u}</span></div><div style="font-size:15px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px;">${nm}</div><div style="font-size:13px;color:#888;line-height:1.5;">${d}</div></div>`;
-  const row=(k,v)=>`<tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">${k}</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">${v}</td></tr>`;
-  return `<div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:12px;padding-bottom:12px;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">${t.title}</h1><div style="font-size:16px;color:#888;margin-top:4px;">${t.sub1}</div><div style="font-size:16px;color:#888;margin-top:4px;">${t.sub2}</div></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#FBE8DC;border-radius:10px;border:1px solid #F2D5BE;"><div style="font-size:22px;font-weight:700;color:#C86F43;letter-spacing:-.5px;line-height:1.4;">${t.hero}</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;line-height:1.4;">${t.s1}</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">${t.s1p1}</p><p style="margin-bottom:0;">${t.s1p2}</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;">${card(t.c1n,t.c1u,t.c1nm,t.c1d)}${card(t.c2n,t.c2u,t.c2nm,t.c2d)}${card(t.c3n,t.c3u,t.c3nm,t.c3d)}</div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;line-height:1.4;">${t.s2}</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">${t.s2p}</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;margin-top:16px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">${t.side}</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">${t.r1k}</th><td style="padding:12px 14px;font-size:14px;color:#555;vertical-align:top;">${t.r1v}</td></tr>${row(t.r2k,t.r2v)}${row(t.r3k,t.r3v)}${row(t.r4k,t.r4v)}</table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">${t.quote}</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· ${t.n1}</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· ${t.n2}</p></div></div>`;
+  // ── ERP 블루 팔레트 ──
+  const G='#2E5AAC',G2='#4A7BC9',AM='#4A7BC9',CO='#234887';
+  const INK='#1f2937',IM='#374151',IL='#6b7280';
+  const LN='#dfe4ec',LS='#e5e7eb',BC='#FFFFFF',BA='#EAF0F8';
+  const SS=`'Malgun Gothic','맑은 고딕',sans-serif`;
+  // KPI / row 헬퍼
+  const kpi=(n,u,nm,d,last)=>`<div style="padding:24px 18px;${last?'':`border-right:1px solid ${LS};`}background:${BC};text-align:center;"><div style="font-size:12pt;letter-spacing:.15em;text-transform:uppercase;color:${IL};margin:0 0 10px;font-weight:500;">${nm}</div><div style="font-size:16pt;font-weight:700;line-height:1.2;color:${INK};margin:0 0 6px;">${n}<span style="font-size:12pt;color:${IM};margin-left:2px;font-weight:400;">${u}</span></div><div style="font-size:12pt;color:${IL};">${d}</div></div>`;
+  const row=(k,v)=>`<tr><th style="text-align:left;padding:12px 16px;background:${BA};border-bottom:1px solid ${LS};font-weight:600;font-size:12pt;letter-spacing:.05em;color:${G};width:160px;vertical-align:top;">${k}</th><td style="padding:12px 16px;border-bottom:1px solid ${LS};font-size:12pt;color:${IM};vertical-align:top;">${v}</td></tr>`;
+  // 섹션 헬퍼 (번호 + 타이틀 + 강조 박스)
+  const sectionHead=(num,title)=>`<div style="font-size:12pt;letter-spacing:.25em;color:${G};font-weight:900;margin:0 0 6px;">${num}</div><h2 style="font-size:16pt;font-weight:800;color:${INK};margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">${title}</h2>`;
+  return `<div class="ev-wrap" style="max-width:880px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:${SS};font-size:12pt;line-height:1.7;color:${INK};letter-spacing:-.01em;background:${BC};">`+
+  // ── 1) 상단 이미지 placeholder ──
+  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
+  // ── 2) 타이틀 박스 (짙은 파란색 윗부분) ──
+  `<div style="background:${G};padding:48px 32px 36px;text-align:center;">`+
+    `<div style="font-size:12pt;letter-spacing:.25em;color:#fff;font-weight:700;margin:0 0 14px;text-transform:uppercase;opacity:.85;">${t.brand||''}</div>`+
+    `<h1 style="font-size:18pt;font-weight:800;color:#fff;line-height:1.3;margin:0 0 14px;letter-spacing:-.5px;">${t.title}</h1>`+
+    `<div style="font-size:12pt;color:#cfdcf3;font-weight:600;margin:0;">${t.eyebrow||''}</div>`+
+  `</div>`+
+  // ── 3) 타이틀 박스 (살짝 연한 파란색 — 슬로건/서브카피) ──
+  `<div style="background:${G2};padding:24px 32px;text-align:center;">`+
+    `<p style="font-size:16pt;color:#fff;line-height:1.6;font-weight:600;margin:0;letter-spacing:-.3px;">${t.hero}</p>`+
+  `</div>`+
+  // ── 4) 본문 영역 시작 ──
+  `<div style="padding:48px 32px 64px;">`+
+  // 도입 문단
+  `<p style="font-size:12pt;color:${IM};line-height:1.95;margin:0 0 14px;">${t.s1p1}</p>`+
+  `<p style="font-size:12pt;color:${INK};line-height:1.95;margin:0 0 36px;">${t.s1p2}</p>`+
+  // ── Section 01 ──
+  `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
+  `<div style="margin:0 0 36px;">`+
+    sectionHead('01',t.s1)+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;margin:0 0 18px;">`+
+      `<div style="font-size:12pt;color:${IM};line-height:1.85;">핵심 수치 한눈에 정리했습니다.</div>`+
+    `</div>`+
+    `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid ${LN};background:${BC};">${kpi(t.c1n,t.c1u,t.c1nm,t.c1d)}${kpi(t.c2n,t.c2u,t.c2nm,t.c2d)}${kpi(t.c3n,t.c3u,t.c3nm,t.c3d,true)}</div>`+
+  `</div>`+
+  // ── Section 02 ──
+  `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
+  `<div style="margin:0 0 36px;">`+
+    sectionHead('02',t.s2)+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;margin:0 0 18px;">`+
+      `<div style="font-size:12pt;color:${IM};line-height:1.85;">${t.s2p}</div>`+
+    `</div>`+
+    `<div style="font-style:italic;font-size:12pt;color:${G};margin:0 0 12px;letter-spacing:.03em;">— ${t.side}</div>`+
+    `<table style="width:100%;border-collapse:collapse;background:${BC};border:1px solid ${LN};margin:0;">${row(t.r1k,t.r1v)}${row(t.r2k,t.r2v)}${row(t.r3k,t.r3v)}${row(t.r4k,t.r4v)}</table>`+
+  `</div>`+
+  // ── Pull quote ──
+  `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
+  `<blockquote style="font-size:16pt;font-weight:500;line-height:1.5;color:${G};padding:24px 0 24px 24px;border-left:3px solid ${AM};margin:0 0 36px;font-style:italic;">${t.quote}</blockquote>`+
+  // ── Section 03 (유의사항) ──
+  `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
+  `<div style="margin:0;">`+
+    sectionHead('03','유의사항')+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;">`+
+      `<div style="font-size:12pt;color:${IM};line-height:1.95;">· ${t.n1}<br>· ${t.n2}</div>`+
+    `</div>`+
+  `</div>`+
+  `</div>`+ // 본문 영역 끝
+  `</div>`;
 }
 
+// ── 상품이벤트 (특가 장바구니 형식) ──
+// 기존 매거진 템플릿과 동일한 ERP 블루 팔레트를 사용하되,
+// 실제 이벤트 콘텐츠를 미리 채워 사용자가 곧바로 편집·교체만 하면 되도록 구성
+const SOGSIK_SALES_EVENT=(function(){
+  const G='#2E5AAC',G2='#4A7BC9',INK='#1f2937',IM='#374151',IL='#6b7280';
+  const LN='#dfe4ec',LS='#e5e7eb',BA='#EAF0F8',BC='#FFFFFF',BG_SOFT='#f8fafc';
+  const SS=`'Malgun Gothic','맑은 고딕',sans-serif`;
+  // 상품 데이터
+  const P=[
+    ['22000A3K00','발효녹즙M*8개입*과채가공센터','30,000','40%','18,000','4/26(일)~5/3(일)'],
+    ['88085O7700','클린*250ml*18입*해피푸르츠','53,000','40%','31,800','4/26(일)~5/3(일)'],
+    ['20261KMB00','(8개입)생들기름+까망콩낫또*까망발효','19,600','39.8%','11,800','4/26(일)~5/3(일)'],
+    ['10118GYX00','푹자고싶을때1*100ml*7포*자연이정답이다','31,500','40%','18,900','4/26(일)~5/3(일)'],
+    ['10119GYX00','푹자고싶을때2*100ml*7포*자연이정답이다','31,500','40%','18,900','4/26(일)~5/3(일)'],
+    ['10120GYX00','푹자고싶을때3*100ml*7포*자연이정답이다','31,500','40%','18,900','4/26(일)~5/3(일)'],
+    ['10121GYX00','푹자고싶을때4*100ml*7포*자연이정답이다','35,000','40%','21,000','4/26(일)~5/3(일)'],
+    ['10092GYX00','엔케이9*200ml*15포*자연이정답이다','37,000','40%','22,200','4/26(일)~5/3(일)'],
+    ['37000A3K00','요요굿바이1*8개입*과채가공센터','40,000','40%','24,000','4/26(일)~5/3(일)'],
+    ['39000A3K00','요요굿바이2*8개입*과채가공센터','44,000','40%','26,400','4/26(일)~5/3(일)'],
+    ['96038CK300','(번들)발효후랑크소시지*120g*6개번들*미토리','21,000','40%','12,600','4/26(일)~5/3(일)'],
+    ['00001CAZ00','본정심본흑염소진액*30포*80ml*대한한방연구소1','148,000','40%','88,800','4/26(일)~5/3(일)'],
+    ['99999GSM00','(번들)김밥세트*1152g*김공방','29,700','39.7%','17,900','4/26(일)~4/28(화)'],
+    ['10100GYX00','발효홍삼*50ml*30포*자연이정답이다','90,000','40%','54,000','4/26(일)~4/28(화)'],
+    ['10101GYX00','발효홍삼*50ml*60포*자연이정답이다','180,000','40%','108,000','4/26(일)~4/28(화)'],
+    ['71000C9C00','눈엔베타카로틴*7.2g*알피바이오','15,500','40%','9,300','4/26(일)~4/28(화)'],
+    ['70000C9C00','멀티비타민스틱젤리*15g*30포*(주)알피바이오','24,000','40%','14,400','4/26(일)~4/28(화)'],
+    ['11111C9C00','알티지오메가-3*37.74g*(주)알피바이오','30,000','40%','18,000','4/26(일)~4/28(화)'],
+    ['35000C9C00','에이치에프(HF)코엔자임Q10*21g*알피바이오','27,000','40%','16,200','4/26(일)~4/28(화)'],
+    ['75000C9C00','초임계식물성알티지오메가3*30g*알피바이오','33,000','40%','19,800','4/26(일)~4/28(화)'],
+    ['11100GUG00','간엔밀크씨슬*60정*엠에스바이오텍(주)','18,500','40%','11,100','4/26(일)~4/28(화)'],
+    ['60000GUG00','메가비타민C2000*63.6g*엠에스바이오텍(주)','22,500','40%','13,500','4/26(일)~4/28(화)'],
+    ['40000GUG00','장엔신바이오틱스플러스*3.5g*100포*엠에스바이오텍','36,000','40%','21,600','4/26(일)~4/28(화)'],
+    ['00001DHN00','과자꾸러미세트*1개*과자공방','16,100','39.8%','9,700','4/26(일)~4/28(화)'],
+    ['12067DHL00','계란과자&미니초코칩쿠키세트*1065g*베이커리공방','27,600','39.9%','16,600','4/26(일)~4/28(화)'],
+  ];
+  // 카드 — 모든 텍스트 12pt, 가격 강조 16pt
+  const card=(g)=>`<div style="flex:1 1 calc(25% - 12px);min-width:160px;background:${BC};padding:14px;border-radius:12px;border:1px solid ${G};box-sizing:border-box;"><div style="position:relative;width:100%;padding-bottom:100%;overflow:hidden;border-radius:8px;margin-bottom:10px;background:${LS};"><img src="https://www.icoop.or.kr/coopmall/goodimages/${g[0]}.jpg" alt="${g[1]}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.opacity='0'"><div style="position:absolute;top:0;right:0;background:${G};color:#fff;padding:5px 10px;border-bottom-left-radius:8px;font-size:12pt;font-weight:700;letter-spacing:-.3px;">${g[5]}</div></div><p style="margin:0 0 10px;font-size:12pt;font-weight:700;color:${INK};line-height:1.35;letter-spacing:-.3px;word-break:keep-all;">${g[1]}</p><div style="margin:0 0 10px;"><div style="font-size:12pt;color:${IL};margin-bottom:2px;">기존가: <span style="text-decoration:line-through;">${g[2]}</span> 원</div><div style="font-size:16pt;font-weight:800;letter-spacing:-.5px;"><span style="color:${G};margin-right:4px;">${g[3]}</span><span style="color:${G};">${g[4]}</span><span style="color:${INK};font-size:12pt;font-weight:700;"> 원</span></div></div><div style="display:flex;gap:4px;"><a href="https://www.icoop.or.kr/coopmall/goodsmall.phtm?act=detail&gc=${g[0]}" target="_blank" style="flex:1 1 50%;text-align:center;padding:9px 0;border-radius:6px;text-decoration:none;font-size:12pt;font-weight:700;background:${BC};color:${G};border:1px solid ${G};letter-spacing:-.5px;">PC 구매</a><a href="https://www.icoop.or.kr/mobile/goodsmall.phtm?act=detail&gc=${g[0]}" target="_blank" style="flex:1 1 50%;text-align:center;padding:9px 0;border-radius:6px;text-decoration:none;font-size:12pt;font-weight:700;background:${G};color:#fff;border:1px solid ${G};letter-spacing:-.5px;">모바일 구매</a></div></div>`;
+  // 섹션 헬퍼 — 번호 + 타이틀
+  const sectionHead=(num,title)=>`<div style="font-size:12pt;letter-spacing:.25em;color:${G};font-weight:900;margin:0 0 6px;">${num}</div><h2 style="font-size:16pt;font-weight:800;color:${INK};margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">${title}</h2>`;
+  return `<div class="ev-wrap" style="max-width:880px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:${SS};font-size:12pt;line-height:1.65;color:${INK};letter-spacing:-.01em;background:${BC};">`+
+  // ── 1) 상단 이미지 placeholder ──
+  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
+  // ── 2) 타이틀 박스 (짙은 파란 윗부분 — prelude + 태그 칩) ──
+  `<div style="background:${G};padding:48px 32px 36px;text-align:center;">`+
+    `<p style="margin:0 0 18px;font-weight:700;color:#fff;letter-spacing:-.3px;opacity:.92;"><span style="font-size:16pt;">조합원만의 한정 수량 특가 장바구니</span></p>`+
+    `<span style="display:inline-block;background:${BA};color:${G};padding:7px 18px;font-weight:700;letter-spacing:-.3px;"><span style="font-size:16pt;">#가족에게 전하는 자연드림의 5월 선물</span></span>`+
+  `</div>`+
+  // ── 3) 타이틀 박스 (살짝 연한 파란색 — 메인 슬로건) ──
+  `<div style="background:${G2};padding:28px 32px;text-align:center;">`+
+    `<p style="margin:0;font-weight:700;color:#fff;line-height:1.55;letter-spacing:-.3px;"><span style="font-size:16pt;">특별한 날 한 번 잘 먹는 것보다, 매일 조금씩 몸이 달라지는 것.</span><br><span style="border-bottom:3px solid rgba(255,255,255,.45);padding-bottom:2px;"><span style="font-size:18pt;">생활치유 챌린지 필수식품 포함 총 25종의 특가상품으로 만나보세요.</span></span></p>`+
+  `</div>`+
+  // ── 4) 본문 영역 시작 ──
+  `<div style="padding:48px 32px 64px;">`+
+  // 본문 도입
+  `<p style="margin:0 0 36px;font-size:12pt;line-height:1.95;color:${IM};">부모님을 위한 건강식품부터 아이 간식, 나를 위한 챌린지 아이템까지.<br>최대 40% 특가, 하나의 장바구니에 담아 한 번에 결제하세요.<br><strong style="color:${G};font-weight:800;">생활치유 챌린지 물품을 조합원만의 특가 혜택으로! 지금 바로 확인하세요.</strong></p>`+
+  // ── Section 01 — 특가 상품 ──
+  `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
+  `<div style="margin:0 0 36px;">`+
+    sectionHead('01','특가 이벤트 품목 (한정수량)')+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;margin:0 0 18px;">`+
+      `<div style="font-size:12pt;color:${IM};line-height:1.85;">※ 이벤트 기간 중 재고상황에 따라 특가상품이 중단·변경되거나 추가될 수 있습니다.<br><span style="color:${G};font-weight:700;">※ 더 많은 분들이 혜택을 함께 누릴 수 있도록 품목당 1인 3개까지 구매 가능합니다.</span></div>`+
+    `</div>`+
+    // 카드 그리드 (4열)
+    `<div style="display:flex;flex-wrap:wrap;gap:12px;">${P.map(card).join('')}${(()=>{const n=(4-P.length%4)%4;let s='';for(let i=0;i<n;i++)s+='<div style="flex:1 1 calc(25% - 12px);min-width:160px;height:0;visibility:hidden;padding:0;margin:0;border:0;"></div>';return s;})()}</div>`+
+  `</div>`+
+  // ── Section 02 — 유의사항 ──
+  `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
+  `<div style="margin:0;">`+
+    sectionHead('02','구매 시 유의사항')+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;">`+
+      `<div style="display:flex;flex-wrap:wrap;gap:20px;">`+
+        `<div style="flex:1 1 240px;"><h4 style="margin:0 0 8px;font-size:12pt;font-weight:700;color:${G};">· 대상 회원</h4><ul style="margin:0;padding-left:18px;font-size:12pt;color:${IM};line-height:1.75;"><li style="margin-bottom:4px;">본 이벤트는 골드 이상 회원만 구매 가능합니다.</li><li>실버 회원은 골드 이상 회원 전환 시 구매 가능합니다.</li></ul></div>`+
+        `<div style="flex:1 1 240px;"><h4 style="margin:0 0 8px;font-size:12pt;font-weight:700;color:${G};">· 결제 수단</h4><ul style="margin:0;padding-left:18px;font-size:12pt;color:${IM};line-height:1.75;"><li style="margin-bottom:4px;">특가 혜택 상품은 카드, 가상계좌, 선수금, 자연드림페이로만 결제 가능합니다.</li><li>할인적립(페이백) 및 마일리지 사용은 불가합니다.</li></ul></div>`+
+        `<div style="flex:1 1 240px;"><h4 style="margin:0 0 8px;font-size:12pt;font-weight:700;color:${G};">· 배송 안내</h4><ul style="margin:0;padding-left:18px;font-size:12pt;color:${IM};line-height:1.75;"><li style="margin-bottom:4px;">특가 상품을 포함하여 총 결제 금액이 30,000원 이상이어야 결제 가능합니다.</li><li>특가 장바구니와 일반 장바구니가 통합되어, 일반배송 장바구니에서 다른 장보기 물품과 함께 결제 및 배송 됩니다.</li></ul></div>`+
+      `</div>`+
+      `<p style="margin:18px 0 0;padding-top:14px;border-top:1px dashed ${LN};text-align:center;font-size:12pt;font-weight:600;color:${IL};">※ 본 이벤트의 운영 정책은 사전 공지 없이 변경될 수 있으며, 이벤트의 물품은 한정 수량으로 진행되는 특가 물품으로 소진 시 종료됩니다.</p>`+
+    `</div>`+
+  `</div>`+
+  `</div>`+ // 본문 영역 끝
+  `</div>`;
+})();
+
 const SOGSIK_EVENT=_sogsikTpl({
-  title:'이벤트 제목을 입력하세요',sub1:'일시 · 장소 · 주최 기관',sub2:'참가 대상 또는 추가 정보 (선택)',
-  hero:'이벤트 핵심 메시지를 입력하세요',
-  s1:'행사 개요',s1p1:'이벤트의 배경과 목적, 주요 내용을 소개하세요. 참가자에게 전달하고 싶은 메시지를 작성합니다.',s1p2:'행사 진행 방식과 주요 볼거리, 기대 효과를 설명하세요.',
-  c1n:'00',c1u:'명',c1nm:'참가 인원',c1d:'선착순 또는 정원',
-  c2n:'00',c2u:'시간',c2nm:'진행 시간',c2d:'행사 총 소요 시간',
-  c3n:'00',c3u:'원',c3nm:'참가비',c3d:'무료 또는 참가 비용',
-  s2:'프로그램 안내',s2p:'프로그램 구성과 주요 세션, 특별 순서 등을 소개하세요.',
+  brand:'주최 기관 · 담당 부서',meta:'0000.00 · Notice',
+  eyebrow:'EVENT · 행사 안내',
+  title:'이벤트 제목을 입력하세요',
+  hero:'행사의 의미와 핵심 메시지를 한두 문장으로 입력하세요. 누구를 위한 어떤 자리인지 분명히 전달합니다.',
+  tagline:'함께 만드는 시간',
+  s1:'행사 개요',
+  s1p1:'이벤트의 배경과 목적, 주요 내용을 소개하세요. 왜 이 자리를 마련했는지, 어떤 가치를 전하고 싶은지 작성합니다.',
+  s1p2:'행사 진행 방식과 주요 볼거리, 참가자가 얻게 될 경험과 기대 효과를 본문 흐름에 맞춰 설명해 주세요.',
+  c1n:'00',c1u:'명',c1nm:'Capacity',c1d:'선착순 또는 정원',
+  c2n:'00',c2u:'시간',c2nm:'Duration',c2d:'행사 총 소요 시간',
+  c3n:'00',c3u:'원',c3nm:'Fee',c3d:'무료 또는 참가 비용',
+  s2:'프로그램 안내',s2p:'프로그램 구성과 주요 세션, 특별 순서 등을 소개하세요. 시간대별 흐름이 한눈에 들어오도록 정리합니다.',
   side:'세부 일정',
-  r1k:'📅 일시',r1v:'0000년 00월 00일 (요일) 오전/오후 00:00',
-  r2k:'📍 장소',r2v:'행사 장소를 입력하세요',
-  r3k:'👥 대상',r3v:'참가 대상을 입력하세요',
-  r4k:'📝 신청',r4v:'신청 방법 및 접수처를 입력하세요',
+  r1k:'DATE',r1v:'0000년 00월 00일 (요일) 오전/오후 00:00',
+  r2k:'PLACE',r2v:'행사 장소를 입력하세요',
+  r3k:'TARGET',r3v:'참가 대상을 입력하세요',
+  r4k:'APPLY',r4v:'신청 방법 및 접수처를 입력하세요',
   quote:'문의 및 신청 안내 — 담당자명 / 연락처 / 이메일을 입력하세요.',
   n1:'사전 신청이 필요한 경우 마감일을 확인해 주세요.',
-  n2:'우천·천재지변 등 불가피한 사유로 일정이 변경될 수 있습니다.'
+  n2:'우천 · 천재지변 등 불가피한 사유로 일정이 변경될 수 있습니다.'
 });
 
 const SOGSIK_PRODUCT=_sogsikTpl({
-  title:'상품명을 입력하세요',sub1:'브랜드 · 출시일 · 카테고리',sub2:'상품 라인 또는 컬렉션명 (선택)',
-  hero:'상품의 핵심 가치 / 슬로건을 입력하세요',
-  s1:'상품 소개',s1p1:'상품의 특징과 강점을 소개하세요. 고객이 얻을 수 있는 핵심 가치를 작성합니다.',s1p2:'타겟 고객과 사용 시나리오, 차별점을 설명하세요.',
-  c1n:'00,000',c1u:'원',c1nm:'판매가',c1d:'정가 또는 할인가',
-  c2n:'00',c2u:'%',c2nm:'할인율',c2d:'프로모션 할인 혜택',
-  c3n:'0.0',c3u:'★',c3nm:'평점',c3d:'고객 리뷰 평균',
-  s2:'상품 상세 정보',s2p:'상품의 구성, 사용 방법, 관리 방법 등 상세 정보를 입력하세요.',
+  brand:'브랜드 · 출시 라인',meta:'0000.00 · Product',
+  eyebrow:'PRODUCT · 상품 소개',
+  title:'상품명을 입력하세요',
+  hero:'상품의 핵심 가치와 슬로건을 한 줄로 입력하세요. 누구를 위한 어떤 의미의 제품인지 명확히 전달합니다.',
+  tagline:'당신의 일상에',
+  s1:'상품 소개',
+  s1p1:'상품의 특징과 강점을 소개하세요. 고객이 얻을 수 있는 핵심 가치와 사용 경험을 작성합니다.',
+  s1p2:'타겟 고객과 사용 시나리오, 경쟁 제품과의 차별점을 본문 흐름에 맞춰 풀어 설명해 주세요.',
+  c1n:'00,000',c1u:'원',c1nm:'Price',c1d:'정가 또는 할인가',
+  c2n:'00',c2u:'%',c2nm:'Discount',c2d:'프로모션 할인 혜택',
+  c3n:'0.0',c3u:'★',c3nm:'Rating',c3d:'고객 리뷰 평균',
+  s2:'상품 상세 정보',s2p:'상품의 구성, 사용 방법, 관리 방법 등 상세 정보를 정리하세요. 구매 결정에 도움이 되는 사실 위주로 작성합니다.',
   side:'주요 스펙',
-  r1k:'📦 구성',r1v:'본품 / 구성품 / 사은품을 입력하세요',
-  r2k:'📏 규격',r2v:'크기 / 무게 / 용량을 입력하세요',
-  r3k:'🏷 소재',r3v:'주요 소재 및 원료를 입력하세요',
-  r4k:'🏭 제조사',r4v:'제조사 / 원산지 / 제조일을 입력하세요',
+  r1k:'COMPOSITION',r1v:'본품 / 구성품 / 사은품을 입력하세요',
+  r2k:'SPEC',r2v:'크기 / 무게 / 용량을 입력하세요',
+  r3k:'MATERIAL',r3v:'주요 소재 및 원료를 입력하세요',
+  r4k:'MAKER',r4v:'제조사 / 원산지 / 제조일을 입력하세요',
   quote:'구매 안내 — 주문 방법, 배송 정책, 문의처를 입력하세요.',
   n1:'상품 이미지는 촬영 환경에 따라 실물과 차이가 있을 수 있습니다.',
   n2:'교환 · 환불은 수령 후 7일 이내 가능하며 상세 정책을 확인해 주세요.'
 });
 
 const SOGSIK_INFO=_sogsikTpl({
-  title:'공지 / 정보 제목을 입력하세요',sub1:'작성자 · 발행일 · 분류',sub2:'관련 부서 또는 담당 기관 (선택)',
-  hero:'핵심 공지사항 / 주요 메시지를 입력하세요',
-  s1:'주요 내용',s1p1:'공지의 배경과 목적, 전달하고자 하는 주요 내용을 작성하세요.',s1p2:'관련 대상자와 시행 범위, 영향 등을 설명하세요.',
-  c1n:'0000',c1u:'.00.00',c1nm:'시행일',c1d:'적용 시작 일자',
-  c2n:'00',c2u:'건',c2nm:'적용 범위',c2d:'대상 인원 또는 건수',
-  c3n:'00',c3u:'일',c3nm:'기간',c3d:'공지 유효 기간',
-  s2:'세부 안내',s2p:'세부 사항과 절차, 준수 방법 등을 안내하세요.',
+  brand:'담당 부서 · 작성자',meta:'0000.00 · Notice',
+  eyebrow:'NOTICE · 공지 사항',
+  title:'공지 / 정보 제목을 입력하세요',
+  hero:'전달하고자 하는 핵심 메시지를 한두 문장으로 입력하세요. 누가, 언제부터, 무엇이 달라지는지를 분명히 전합니다.',
+  tagline:'정확한 안내',
+  s1:'주요 내용',
+  s1p1:'공지의 배경과 목적, 전달하고자 하는 주요 내용을 작성하세요. 왜 이 안내가 필요한지부터 시작합니다.',
+  s1p2:'관련 대상자와 시행 범위, 영향과 후속 일정을 본문 흐름에 맞춰 풀어서 설명해 주세요.',
+  c1n:'0000',c1u:'.00.00',c1nm:'Effective',c1d:'적용 시작 일자',
+  c2n:'00',c2u:'건',c2nm:'Scope',c2d:'대상 인원 또는 건수',
+  c3n:'00',c3u:'일',c3nm:'Period',c3d:'공지 유효 기간',
+  s2:'세부 안내',s2p:'세부 사항과 절차, 준수 방법 등을 안내하세요. 단계별로 따라갈 수 있도록 정리합니다.',
   side:'참고 사항',
-  r1k:'📌 대상',r1v:'적용 대상 / 수혜자 / 관련자를 입력하세요',
-  r2k:'📅 기간',r2v:'시행 / 접수 / 종료 일자를 입력하세요',
-  r3k:'🏢 문의처',r3v:'담당 부서 / 전화 / 이메일을 입력하세요',
-  r4k:'🔗 관련 자료',r4v:'관련 링크 / 첨부 문서 / 참고 안내를 입력하세요',
+  r1k:'TARGET',r1v:'적용 대상 / 수혜자 / 관련자를 입력하세요',
+  r2k:'PERIOD',r2v:'시행 / 접수 / 종료 일자를 입력하세요',
+  r3k:'CONTACT',r3v:'담당 부서 / 전화 / 이메일을 입력하세요',
+  r4k:'REFERENCE',r4v:'관련 링크 / 첨부 문서 / 참고 안내를 입력하세요',
   quote:'추가 안내 사항 — 자주 묻는 질문이나 보충 설명을 입력하세요.',
   n1:'본 공지는 사정에 따라 변경될 수 있으며 최신 내용은 공식 채널을 확인해 주세요.',
   n2:'문의사항은 담당 부서로 연락해 주시기 바랍니다.'
@@ -1221,26 +1518,26 @@ const SOGSIK_INFO=_sogsikTpl({
 // ══════════════════════════════════
 // 기안 템플릿
 // ══════════════════════════════════
-const GIAN_BASIC=`<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#2E2A24;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> 0000년 00월 00일(요일)</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> 기안 제목을 입력하세요</p></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① 본 기안의 배경 및 현황을 간략히 설명해 주세요.</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② 기안의 <b>주요 내용</b>과 기대 효과를 아래와 같이 요약해 주세요. 필요한 경우 관련 안내를 함께 작성해 주세요.</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">세부 항목별 내용을 아래 표에 정리해 주세요. 구분 · 담당에 따라 처리 경로가 달라질 수 있습니다.</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #D9D3C1;table-layout:fixed;"><thead><tr style="background:#FBE8DC;"><th style="width:45%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">항목</th><th style="width:25%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">구분</th><th style="width:30%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 1</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#FBE8DC;color:#B45E35;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 A</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 2</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#F5F2EA;color:#6B5E48;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 B</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">항목 3</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#EDE7D5;color:#8B7A4F;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 C</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#6B5E48;font-weight:500;background:#F5F2EA;">담당부서 2</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ 표 하단 유의사항 또는 안내 문구를 작성해 주세요.</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#B45E35;">요청은 <span style="color:#2E2A24;font-weight:bold;background:#FBE8DC;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">①</div><div>필요 항목 및 담당 부서 확인</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">②</div><div>하단 댓글란에 <span style="font-weight:600;text-decoration:underline;">[4. 작성 양식]</span>에 맞춰 내용 작성</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">③</div><div>관련 파일 / 첨부 자료 댓글에 업로드</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">④</div><div>담당팀에서 확인 후 영업일 기준 N일 내 처리</div></div><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">아래 항목을 빠짐없이 작성해 주시면 보다 신속하게 처리해 드릴 수 있습니다.</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#2E2A24;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #D9D3C1;background:#FAF9F5;table-layout:fixed;"><thead><tr style="background:#F5F2EA;"><th style="padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#2E2A24;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #D9D3C1;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#2E2A24;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
+const GIAN_BASIC=`<div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:32px 24px 60px !important;box-sizing:border-box !important;font-size:14px;line-height:1.8;color:#1f2937;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> 0000년 00월 00일(요일)</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> 기안 제목을 입력하세요</p></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:1.5rem 0 2rem;"><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① 본 기안의 배경 및 현황을 간략히 설명해 주세요.</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② 기안의 <b>주요 내용</b>과 기대 효과를 아래와 같이 요약해 주세요. 필요한 경우 관련 안내를 함께 작성해 주세요.</p><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">세부 항목별 내용을 아래 표에 정리해 주세요. 구분 · 담당에 따라 처리 경로가 달라질 수 있습니다.</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #dfe4ec;table-layout:fixed;"><thead><tr style="background:#EAF0F8;"><th style="width:45%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">항목</th><th style="width:25%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">구분</th><th style="width:30%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">항목 1</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#EAF0F8;color:#234887;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 A</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#234887;font-weight:500;background:#EAF0F8;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">항목 2</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 B</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#234887;font-weight:500;background:#EAF0F8;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">항목 3</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#EAF0F8;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 C</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#6b7280;font-weight:500;background:#f3f4f6;">담당부서 2</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ 표 하단 유의사항 또는 안내 문구를 작성해 주세요.</p><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#234887;">요청은 <span style="color:#1f2937;font-weight:bold;background:#EAF0F8;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">①</div><div>필요 항목 및 담당 부서 확인</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">②</div><div>하단 댓글란에 <span style="font-weight:600;text-decoration:underline;">[4. 작성 양식]</span>에 맞춰 내용 작성</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">③</div><div>관련 파일 / 첨부 자료 댓글에 업로드</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">④</div><div>담당팀에서 확인 후 영업일 기준 N일 내 처리</div></div><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">아래 항목을 빠짐없이 작성해 주시면 보다 신속하게 처리해 드릴 수 있습니다.</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#1f2937;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #dfe4ec;background:#f5f5f7;table-layout:fixed;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#1f2937;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #dfe4ec;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#1f2937;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
 1. 요청 기간 : 0000.00.00 ~ 0000.00.00
 2. 요청 항목 :
 3. 첨부 파일 : 첨부파일
 4. 참고 URL :
-5. 비고 <span style="color:#C86F43;">(선택 시 작성)</span>
+5. 비고 <span style="color:#2E5AAC;">(선택 시 작성)</span>
 -
-- </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#B45E35;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 관련 작업이 완료된 이후 요청을 진행해 주세요.</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 수정 / 종료 요청도 동일하게 <span style="font-weight:600;">본 문서 댓글</span>을 통해 접수 바랍니다.</div></div>`;
+- </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#234887;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 관련 작업이 완료된 이후 요청을 진행해 주세요.</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 수정 / 종료 요청도 동일하게 <span style="font-weight:600;">본 문서 댓글</span>을 통해 접수 바랍니다.</div></div>`;
 
-// AI용 빈 템플릿 (내용 채울 구조만 제공)
-const SOGSIK_AI_TPL=`<!-- 아래 HTML 구조에서 [대괄호] 안의 내용을 실제 내용으로 교체해 주세요. 스타일은 절대 수정하지 마세요. --><div style="max-width:900px;margin:0 auto;padding:40px 24px 80px;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:16px;line-height:1.8;color:#222;letter-spacing:-.3px;"><div style="margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid #E8E3D3;"><h1 style="font-size:26px;font-weight:700;line-height:1.35;letter-spacing:-.5px;margin:0 0 8px;">[소식 제목을 여기에 입력]</h1><div style="font-size:16px;color:#888;margin-top:4px;">[부제목 또는 날짜 · 주최 정보]</div></div><div style="text-align:center;padding:28px 24px;margin-bottom:32px;background:#FBE8DC;border-radius:10px;border:1px solid #F2D5BE;"><div style="font-size:22px;font-weight:700;color:#C86F43;letter-spacing:-.5px;line-height:1.4;">[핵심 메시지 한 줄]</div></div><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;">[첫 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p style="margin-bottom:10px;">[첫 번째 본문 내용]</p><p style="margin-bottom:0;">[두 번째 문단]</p></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 12px;"><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div><div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 14px;text-align:center;"><div style="font-size:22px;font-weight:700;color:#C86F43;">[수치]<span style="font-size:14px;font-weight:400;color:#888;">[단위]</span></div><div style="font-size:15px;font-weight:700;color:#222;margin-bottom:8px;">[항목명]</div><div style="font-size:13px;color:#888;">[설명]</div></div></div></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><div style="margin-bottom:36px;"><div style="font-size:18px;font-weight:700;color:#C86F43;letter-spacing:-.3px;margin-bottom:16px;padding:12px 18px;background:#FBE8DC;border:1px solid #F2D5BE;border-radius:8px;">[두 번째 소제목]</div><div style="font-size:15px;color:#555;line-height:1.8;margin-bottom:20px;"><p>[본문 내용]</p></div><div style="font-size:16px;font-weight:700;color:#555;margin-bottom:12px;padding:4px 0 4px 10px;border-left:2px solid #c0c0c0;">[세부 항목 제목]</div><table style="width:100%;border-collapse:collapse;margin:0 0 20px;"><tr style="border-bottom:1px solid #e0e0e0;border-top:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr><tr style="border-bottom:1px solid #e0e0e0;"><th style="width:160px;padding:12px 14px;font-size:14px;font-weight:700;color:#222;text-align:left;vertical-align:top;border-right:1px solid #e0e0e0;white-space:nowrap;">[항목]</th><td style="padding:12px 14px;font-size:14px;color:#555;">[내용]</td></tr></table></div><hr style="border:none;border-top:1px solid #e0e0e0;margin:36px 0;"><blockquote style="border-left:3px solid #e0e0e0;padding:14px 18px;font-size:16px;color:#555;line-height:1.85;background:#fafafa;margin:0 0 24px;">[마무리 인용 또는 강조 문장]</blockquote><div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;padding:16px 20px;"><p style="font-size:15px;color:#555;line-height:1.75;margin-bottom:6px;padding-left:1em;text-indent:-1em;">· [유의사항 1]</p><p style="font-size:15px;color:#555;line-height:1.75;margin:0;padding-left:1em;text-indent:-1em;">· [유의사항 2]</p></div></div>`;
+// AI용 빈 템플릿 (내용 채울 구조만 제공) — 매거진 리포트 레이아웃
+const SOGSIK_AI_TPL=`<!-- 작성 규칙: (1) 아래 [대괄호] 안의 내용만 실제 내용으로 교체. (2) style 속성/색상/구조는 절대 수정 금지. (3) 이모지 사용 금지 - 인트라넷 sanitizer가 4바이트 이모지에서 본문을 잘라내므로 반드시 텍스트·일반 기호(·, ※, ▶, ■, ◆, ●, 1)2)3), -)로만 작성할 것. (4) 본문은 한국어로 작성. (5) 폰트 크기는 본문 12pt / 강조 16pt / 최대 강조 18pt 만 사용. (6) data-banner-upload 영역과 번호 섹션 구조는 절대 변경하지 말 것. --><div class="ev-wrap" style="max-width:880px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:12pt;line-height:1.7;color:#1f2937;letter-spacing:-.01em;background:#FFFFFF;"><div data-banner-upload="1" contenteditable="false" style="background:#EAF0F8;border:2px dashed #2E5AAC;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:#2E5AAC;font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 - 클릭하여 업로드</div><div style="background:#2E5AAC;padding:48px 32px 36px;text-align:center;"><p style="margin:0 0 18px;font-weight:700;color:#fff;letter-spacing:-.3px;opacity:.92;"><span style="font-size:16pt;">[작은 라인 - 카테고리 또는 주최]</span></p><h1 style="margin:0;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.3;"><span style="font-size:18pt;">[소식 제목을 여기에 입력]</span></h1></div><div style="background:#4A7BC9;padding:28px 32px;text-align:center;"><p style="margin:0;font-weight:700;color:#fff;line-height:1.55;letter-spacing:-.3px;"><span style="font-size:16pt;">[부제 슬로건 한 줄]</span><br><span style="border-bottom:3px solid rgba(255,255,255,.45);padding-bottom:2px;"><span style="font-size:18pt;">[강조 슬로건 - 18pt 핵심 메시지]</span></span></p></div><div style="padding:48px 32px 64px;"><p style="margin:0 0 36px;font-size:12pt;line-height:1.95;color:#374151;">[본문 도입 - 한 문단 정도. 마지막 문장은 <strong style="color:#2E5AAC;font-weight:800;">블루 강조</strong> 로 마무리.]</p><hr style="border:0;border-top:1px solid #dfe4ec;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#2E5AAC;font-weight:900;margin:0 0 6px;">01</div><h2 style="font-size:16pt;font-weight:800;color:#1f2937;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[첫 번째 소제목]</h2><div style="border-left:4px solid #2E5AAC;background:#EAF0F8;padding:18px 22px;border-radius:0 8px 8px 0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[강조 박스 안 내용 - 굵게는 <strong>이렇게</strong> 사용]</div></div></div><hr style="border:0;border-top:1px solid #dfe4ec;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#2E5AAC;font-weight:900;margin:0 0 6px;">02</div><h2 style="font-size:16pt;font-weight:800;color:#1f2937;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[두 번째 소제목]</h2><div style="border-left:4px solid #2E5AAC;background:#EAF0F8;padding:18px 22px;border-radius:0 8px 8px 0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[두 번째 섹션 내용]</div></div></div><hr style="border:0;border-top:1px solid #dfe4ec;margin:0 0 28px;"><div style="margin:0;"><div style="font-size:12pt;letter-spacing:.25em;color:#2E5AAC;font-weight:900;margin:0 0 6px;">03</div><h2 style="font-size:16pt;font-weight:800;color:#1f2937;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">유의사항</h2><div style="border-left:4px solid #2E5AAC;background:#EAF0F8;padding:18px 22px;border-radius:0 8px 8px 0;"><div style="font-size:12pt;color:#374151;line-height:1.95;">· [유의사항 1]<br>· [유의사항 2]</div></div></div></div></div>`;
 
-const GIAN_AI_TPL=`<!-- 아래 기안문 양식에 실제 내용을 채워주세요. [대괄호] 안의 텍스트만 실제 내용으로 교체하고, 스타일/색상은 절대 수정하지 마세요. -->
-<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#2E2A24;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> [0000년 00월 00일(요일)]</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> [기안 제목]</p></div><hr style="border:0;border-top:1px solid #E8E3D3;margin:1.5rem 0 2rem;"><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① [기안의 배경 및 현황]</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② [주요 내용 및 기대 효과]</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">[세부 내역에 대한 간략한 설명]</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #D9D3C1;table-layout:fixed;"><thead><tr style="background:#FBE8DC;"><th style="width:45%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">항목</th><th style="width:25%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">구분</th><th style="width:30%;padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#B45E35;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">[항목 1]</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#FBE8DC;color:#B45E35;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#B45E35;font-weight:500;background:#FDF4EC;">[담당부서]</td></tr><tr><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;">[항목 2]</td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;"><span style="background:#F5F2EA;color:#6B5E48;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #D9D3C1;text-align:center;color:#6B5E48;font-weight:500;background:#F5F2EA;">[담당부서]</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ [표 하단 안내]</p><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#B45E35;">요청은 <span style="color:#2E2A24;font-weight:bold;background:#FBE8DC;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">①</div><div>[1단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">②</div><div>[2단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">③</div><div>[3단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#B45E35;min-width:25px;">④</div><div>[4단계]</div></div><div style="background:#FBE8DC;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#B45E35;border:1px solid #F2D5BE;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">[양식 안내 문구]</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#2E2A24;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #D9D3C1;background:#FAF9F5;table-layout:fixed;"><thead><tr style="background:#F5F2EA;"><th style="padding:10px;border:1px solid #D9D3C1;text-align:center;font-weight:600;color:#2E2A24;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #D9D3C1;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#2E2A24;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
+const GIAN_AI_TPL=`<!-- 작성 규칙: (1) 아래 기안문 양식의 [대괄호] 안 텍스트만 실제 내용으로 교체. (2) style/색상/구조는 절대 수정 금지. (3) 이모지(📅 📌 ✅ 📝 🎯 등) 사용 금지 — 인트라넷 게시판 sanitizer가 4바이트 이모지에서 본문을 잘라내므로 반드시 일반 기호(·, ※, ▶, ■, ◆, ●, ①②③, -)와 텍스트로만 작성할 것. (4) 본문은 한국어 기안체로 작성. -->
+<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#1f2937;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> [0000년 00월 00일(요일)]</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> [기안 제목]</p></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:1.5rem 0 2rem;"><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① [기안의 배경 및 현황]</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② [주요 내용 및 기대 효과]</p><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">[세부 내역에 대한 간략한 설명]</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #dfe4ec;table-layout:fixed;"><thead><tr style="background:#EAF0F8;"><th style="width:45%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">항목</th><th style="width:25%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">구분</th><th style="width:30%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">[항목 1]</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#EAF0F8;color:#234887;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#234887;font-weight:500;background:#EAF0F8;">[담당부서]</td></tr><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">[항목 2]</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#6b7280;font-weight:500;background:#f3f4f6;">[담당부서]</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ [표 하단 안내]</p><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#234887;">요청은 <span style="color:#1f2937;font-weight:bold;background:#EAF0F8;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">①</div><div>[1단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">②</div><div>[2단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">③</div><div>[3단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">④</div><div>[4단계]</div></div><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">[양식 안내 문구]</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#1f2937;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #dfe4ec;background:#f5f5f7;table-layout:fixed;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#1f2937;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #dfe4ec;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#1f2937;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
 1. 요청 기간 : [날짜]
 2. 요청 항목 : [항목]
 3. 첨부 파일 : [파일명]
 4. 참고 URL : [URL]
-5. 비고 <span style="color:#C86F43;">(선택 시 작성)</span>
-- [추가 정보] </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#B45E35;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 1]</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 2]</div></div>`;
+5. 비고 <span style="color:#2E5AAC;">(선택 시 작성)</span>
+- [추가 정보] </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#234887;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 1]</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 2]</div></div>`;
 
 // 템플릿 데이터 맵
 const TPLS={
@@ -1248,8 +1545,9 @@ const TPLS={
     name:'소식',desc:'소식 콘텐츠 제작',
     ai:SOGSIK_AI_TPL,
     list:[
-      {icon:'📅',title:'이벤트',desc:'행사·이벤트 안내 레이아웃',html:SOGSIK_EVENT},
+      {icon:'🏷',title:'상품이벤트',desc:'특가·프로모션 상품 그리드 레이아웃',html:SOGSIK_SALES_EVENT},
       {icon:'🛍',title:'상품',desc:'상품 소개 및 프로모션 레이아웃',html:SOGSIK_PRODUCT},
+      {icon:'📅',title:'일반이벤트',desc:'행사·이벤트 안내 레이아웃',html:SOGSIK_EVENT},
       {icon:'ℹ️',title:'정보',desc:'공지·정보 전달 레이아웃',html:SOGSIK_INFO},
     ]
   },
@@ -1339,7 +1637,7 @@ function applyAiHtml(){
   scheduleAutoSave();syncHtmlPanel();
   showToast('✅ AI 작성 내용이 에디터에 적용됐습니다!');
 }
-function startFree(){document.getElementById('start-modal').style.display='none';editor.innerHTML='';editor.focus();}
+function startFree(){document.getElementById('start-modal').style.display='none';editor.innerHTML='';try{editor.focus({preventScroll:true});}catch{editor.focus();}}
 
 // ══════════════════════════════════
 // 에디터 기본
@@ -1347,7 +1645,7 @@ function startFree(){document.getElementById('start-modal').style.display='none'
 function execCmd(cmd,val=null){
   // 도형 편집 중이면 도형에 포커스 유지, 아니면 에디터에
   if(!shapeEditMode){
-    editor.focus();
+    try{editor.focus({preventScroll:true});}catch{editor.focus();}
     // 포커스가 다른 컨트롤(폰트 select 등)에서 돌아온 직후 selection 이 무효/붕괴됐다면 savedRange 로 복원
     const sel=window.getSelection();
     const needRestore=!sel||sel.rangeCount===0||!editor.contains(sel.anchorNode)||(sel.isCollapsed&&savedRange&&!savedRange.collapsed&&editor.contains(savedRange.startContainer));
@@ -1367,15 +1665,34 @@ function execCmd(cmd,val=null){
 // ══════════════════════════════════
 function applyFontSizePt(pt){
   const ptNum=parseInt(pt);if(!ptNum||ptNum<1)return;
-  editor.focus();
+  try{editor.focus({preventScroll:true});}catch{editor.focus();}
   let sel=window.getSelection();
-  // 포커스가 다른 컨트롤에서 돌아와 selection 이 무효/붕괴된 경우 savedRange 로 복원
+  // 포커스가 다른 컨트롤(select/input)에서 돌아와 selection 이 붕괴된 경우 savedRange 로 복원
   const needRestore=!sel||sel.rangeCount===0||!editor.contains(sel.anchorNode)||(sel.isCollapsed&&savedRange&&!savedRange.collapsed&&editor.contains(savedRange.startContainer));
   if(needRestore&&savedRange){
     try{sel.removeAllRanges();sel.addRange(savedRange);}catch(_){}
     sel=window.getSelection();
   }
-  if(!sel||!sel.rangeCount||sel.getRangeAt(0).collapsed)return;
+  if(!sel||!sel.rangeCount)return;
+  // ★ 드래그 없이 캐럿만 있을 때 — 캐럿이 속한 가장 가까운 진짜 블록(P/H/LI/DIV 등) 전체에 폰트 크기 적용.
+  //   SPAN 은 의도적으로 제외해 inline 스타일이 부모 P 의 설정을 덮어쓰는 일이 없도록 함.
+  if(sel.getRangeAt(0).collapsed){
+    const rng=sel.getRangeAt(0);
+    let n=rng.startContainer;if(n.nodeType===3)n=n.parentElement;
+    const BLK=['P','H1','H2','H3','H4','H5','H6','LI','DIV','PRE','DT','DD','BLOCKQUOTE','TD','TH'];
+    let blk=null,c=n;
+    while(c&&c!==editor){if(c.nodeType===1&&BLK.includes(c.tagName)){blk=c;break;}c=c.parentElement;}
+    if(!blk)blk=n&&n.nodeType===1?n:null;  // 폴백: 노드 자체
+    if(blk){
+      blk.style.fontSize=ptNum+'pt';
+      // 자식 inline font-size 를 모두 제거해 부모 설정이 살아나도록
+      blk.querySelectorAll('[style*="font-size"]').forEach(ch=>{ch.style.fontSize='';if(!ch.getAttribute('style'))ch.removeAttribute('style');});
+      try{syncHtmlPanel();}catch{}
+      document.getElementById('fs-input').value=ptNum;updateFsSelect(ptNum);
+      const s2=window.getSelection();if(s2&&s2.rangeCount>0)savedRange=s2.getRangeAt(0).cloneRange();
+    }
+    return;
+  }
   const preExisting=new Set(editor.querySelectorAll('font[size]'));
   document.execCommand('fontSize',false,'7');
   const newSpans=[];
@@ -1395,8 +1712,83 @@ function applyFontSizePt(pt){
   // 적용 후 selection 저장(연속 조정 대응)
   const s2=window.getSelection();if(s2&&s2.rangeCount>0&&editor.contains(s2.anchorNode))savedRange=s2.getRangeAt(0).cloneRange();
 }
-function stepFontSize(delta){const inp=document.getElementById('fs-input');applyFontSizePt((parseInt(inp.value)||12)+delta);}
+function stepFontSize(delta){
+  const inp=document.getElementById('fs-input');
+  const cur=parseInt(inp.value)||12;
+  const next=Math.max(1,Math.min(200,cur+delta));
+  inp.value=next;updateFsSelect(next);
+  _fsLockUntil=Date.now()+300;  // 자동 동기화로 값이 덮이는 것 방지
+  applyFontSizePt(next);
+}
+
+// ── 줄간격(line-height) / 자간(letter-spacing) 적용 ──
+//   선택 영역이 있으면 그 영역을 감싸는 span 에, 없으면 캐럿이 속한 블록(p/h/li/div)에 스타일 적용
+function _applyInlineOrBlockStyle(prop,value){
+  try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();
+  const sel=window.getSelection();if(!sel||!sel.rangeCount)return;
+  const rng=sel.getRangeAt(0);
+  if(!rng.collapsed){
+    // 선택 영역 → execCommand fontName 패턴 흉내내기 (span 으로 감쌈)
+    const span=document.createElement('span');
+    span.style[prop]=value;
+    try{
+      span.appendChild(rng.extractContents());
+      rng.insertNode(span);
+      // 선택 복원
+      const nr=document.createRange();nr.selectNodeContents(span);
+      sel.removeAllRanges();sel.addRange(nr);
+    }catch{}
+  } else {
+    // 캐럿만 → 가장 가까운 블록 단위에 적용
+    let n=rng.startContainer;if(n.nodeType===3)n=n.parentElement;
+    const BLK=['P','H1','H2','H3','H4','H5','H6','LI','DIV','PRE','DT','DD','BLOCKQUOTE','TD','TH'];
+    let blk=null,c=n;
+    while(c&&c!==editor){if(c.nodeType===1&&BLK.includes(c.tagName)){blk=c;break;}c=c.parentElement;}
+    if(blk)blk.style[prop]=value;
+  }
+  saveRange();syncHtmlPanel();
+}
+function applyLineHeight(v){if(!v)return;_applyInlineOrBlockStyle('lineHeight',v);}
+function applyLetterSpacing(v){if(v==='')return;_applyInlineOrBlockStyle('letterSpacing',v==='0'?'normal':v);}
+// ── 폰트 패밀리 적용 (execCommand fontName 보다 안정적) ──
+function applyFontFamily(family){
+  if(!family)return;
+  try{editor.focus({preventScroll:true});}catch{editor.focus();}
+  let sel=window.getSelection();
+  const needRestore=!sel||sel.rangeCount===0||!editor.contains(sel.anchorNode)||(sel.isCollapsed&&savedRange&&!savedRange.collapsed&&editor.contains(savedRange.startContainer));
+  if(needRestore&&savedRange){try{sel.removeAllRanges();sel.addRange(savedRange);}catch(_){}sel=window.getSelection();}
+  if(!sel||!sel.rangeCount)return;
+  const rng=sel.getRangeAt(0);
+  if(!rng.collapsed){
+    // 선택 영역: span 으로 감싸 fontFamily 적용
+    const span=document.createElement('span');
+    span.style.fontFamily=family;
+    try{
+      span.appendChild(rng.extractContents());
+      rng.insertNode(span);
+      // 안쪽 자식 span 들의 font-family 가 우선되어 무력화되지 않도록 자식의 font-family 제거
+      span.querySelectorAll('[style*="font-family"]').forEach(ch=>{ch.style.fontFamily='';if(!ch.getAttribute('style'))ch.removeAttribute('style');});
+      const nr=document.createRange();nr.selectNodeContents(span);
+      sel.removeAllRanges();sel.addRange(nr);
+    }catch{}
+  } else {
+    // 캐럿만: 가장 가까운 진짜 블록 전체에 적용
+    let n=rng.startContainer;if(n.nodeType===3)n=n.parentElement;
+    const BLK=['P','H1','H2','H3','H4','H5','H6','LI','DIV','PRE','DT','DD','BLOCKQUOTE','TD','TH'];
+    let blk=null,c=n;
+    while(c&&c!==editor){if(c.nodeType===1&&BLK.includes(c.tagName)){blk=c;break;}c=c.parentElement;}
+    if(blk){
+      blk.style.fontFamily=family;
+      blk.querySelectorAll('[style*="font-family"]').forEach(ch=>{ch.style.fontFamily='';if(!ch.getAttribute('style'))ch.removeAttribute('style');});
+    }
+  }
+  try{syncHtmlPanel();}catch{}
+  const s2=window.getSelection();if(s2&&s2.rangeCount>0)savedRange=s2.getRangeAt(0).cloneRange();
+}
+let _fsLockUntil=0;
 function updateFontSizeUI(){
+  // 사용자가 폰트 크기를 방금 적용했으면(±200ms) selectionchange 의 자동 동기화로 값이 덮이지 않도록 보호
+  if(Date.now()<_fsLockUntil)return;
   const sel=window.getSelection();if(!sel||!sel.rangeCount)return;
   let node=sel.getRangeAt(0).startContainer;if(node.nodeType===Node.TEXT_NODE)node=node.parentElement;
   if(!node||!editor.contains(node))return;
@@ -1416,7 +1808,130 @@ function refreshHtml(){htmlEditor.value=formatHtml(editor.innerHTML);}
 function syncHtmlPanel(){if(htmlPanelOpen)refreshHtml();}
 function formatHtml(html){return html.replace(/></g,'>\n<').replace(/\n\s*\n/g,'\n');}
 function applyHtml(){const html=htmlEditor.value.trim();if(!html){showToast('HTML 내용이 없습니다.');return;}editor.innerHTML=html;showToast('✅ HTML 적용됐습니다!');scheduleAutoSave();}
-function copyHtml(){const html=editor.innerHTML;if(!html.trim()){showToast('내용이 없습니다.');return;}navigator.clipboard.writeText(html).then(()=>showToast('✅ HTML 복사됐습니다!')).catch(()=>{const ta=document.createElement('textarea');ta.value=html;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('✅ HTML 복사됐습니다!');});}
+function copyHtml(){
+  // 선택 해제해 오버레이/하이라이트가 끼지 않도록
+  try{if(typeof deselectAll==='function')deselectAll(false);}catch(e){}
+  // 클린 클론 생성 → 에디터 전용 속성/찌꺼기 제거
+  const clone=editor.cloneNode(true);
+  clone.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));
+  clone.querySelectorAll('[data-text-edit],[data-selected],[data-multi-selected]').forEach(el=>{
+    el.removeAttribute('data-text-edit');el.removeAttribute('data-selected');el.removeAttribute('data-multi-selected');
+  });
+  // 에디터에서만 쓰는 클래스 제거 (선택 outline 등)
+  clone.querySelectorAll('.selected,.multi-selected,.text-edit-mode').forEach(el=>{
+    el.classList.remove('selected','multi-selected','text-edit-mode');
+    if(el.getAttribute('class')==='')el.removeAttribute('class');
+  });
+  let html=clone.innerHTML.trim();
+  if(!html){showToast('내용이 없습니다.');return;}
+  // === HTML 압축 (CMS 본문 길이 제한 대응) ===
+  html=html
+    .replace(/<!--[\s\S]*?-->/g,'')           // 주석 제거
+    .replace(/\s{2,}/g,' ')                    // 중복 공백 축소
+    .replace(/>\s+</g,'><')                    // 태그 사이 공백 제거
+    .replace(/;\s+/g,';')                      // 스타일 세미콜론 뒤 공백
+    .replace(/:\s+/g,':')                      // 스타일 콜론 뒤 공백
+    .replace(/,\s+/g,',')                      // 콤마 뒤 공백
+    .replace(/style="([^"]*);"/g,'style="$1"') // 스타일 끝 세미콜론 제거
+    .replace(/\s+"/g,'"')                      // 속성 값 앞 공백
+    .replace(/"\s+/g,'" ')                     // 속성 값 뒤 공백 정리
+    .trim();
+  // ClipboardItem 으로 text/html + text/plain 동시 제공
+  const done=()=>showToast('✅ HTML 복사됐습니다!');
+  const fallback=()=>{
+    const ta=document.createElement('textarea');ta.value=html;
+    document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);done();
+  };
+  if(window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write){
+    try{
+      const item=new ClipboardItem({
+        'text/html': new Blob([html],{type:'text/html'}),
+        'text/plain':new Blob([html],{type:'text/plain'})
+      });
+      navigator.clipboard.write([item]).then(done).catch(()=>{
+        navigator.clipboard.writeText(html).then(done).catch(fallback);
+      });
+      return;
+    }catch(e){}
+  }
+  navigator.clipboard.writeText(html).then(done).catch(fallback);
+}
+
+// ══════════════════════════════════
+// SE2 (Naver SmartEditor 2) 호환 내보내기
+// ══════════════════════════════════
+//   인트라넷의 SmartEditor 2 가 깨는 패턴들을 사전에 제거/치환:
+//   1) contenteditable=false (제거됨, 큰 문제 없음)
+//   2) on* 속성 — 특히 onerror="this.style.opacity='0'" 가 SE2 자동링크 변환에 망가짐
+//   3) data-banner-upload placeholder — 게시 후엔 의미 없으니 빈 자리로 변환
+//   4) <style> <script> <meta> <link> <base> — 통째 제거
+//   5) javascript: / vbscript: href — 제거
+//   6) 4바이트 유니코드(이모지) — DB가 utf8(3바이트)면 본문 잘림 → 텍스트 기호 치환
+//   7) text.tld 패턴(예: this.style) — SE2 자동링크 변환되므로 회피
+function copyHtmlForSE2(){
+  try{if(typeof deselectAll==='function')deselectAll(false);}catch(e){}
+  const clone=editor.cloneNode(true);
+  // 에디터 전용 속성 제거
+  clone.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));
+  clone.querySelectorAll('[data-text-edit],[data-selected],[data-multi-selected]').forEach(el=>{
+    ['data-text-edit','data-selected','data-multi-selected'].forEach(a=>el.removeAttribute(a));
+  });
+  clone.querySelectorAll('.selected,.multi-selected,.text-edit-mode').forEach(el=>{
+    el.classList.remove('selected','multi-selected','text-edit-mode');
+    if(el.getAttribute('class')==='')el.removeAttribute('class');
+  });
+  // ★ SE2 호환 처리
+  // (1) on* 이벤트 속성 전부 제거 — SE2 의 자동링크 변환 버그 회피
+  clone.querySelectorAll('*').forEach(el=>{
+    [...el.attributes].forEach(attr=>{
+      if(/^on/i.test(attr.name))el.removeAttribute(attr.name);
+    });
+  });
+  // (2) data-banner-upload placeholder → 빈 줄로 변환
+  clone.querySelectorAll('[data-banner-upload]').forEach(el=>{
+    const ph=document.createElement('p');ph.style.margin='0 0 24px';ph.innerHTML='<br>';
+    el.parentNode.replaceChild(ph,el);
+  });
+  // (3) 위험 태그 제거
+  clone.querySelectorAll('script,style,meta,link,base,iframe[src^="javascript:"i],iframe:not([src^="https://www.youtube.com"i]):not([src^="https://player.vimeo.com"i])').forEach(el=>el.remove());
+  // (4) javascript:/vbscript: href
+  clone.querySelectorAll('a[href]').forEach(a=>{
+    const h=a.getAttribute('href')||'';
+    if(/^\s*(javascript|vbscript|data):/i.test(h))a.removeAttribute('href');
+  });
+  // (5) 직렬화
+  let html=clone.innerHTML.trim();
+  if(!html){showToast('내용이 없습니다.');return;}
+  // (6) 4바이트 유니코드(이모지 등) 제거 — DB utf8 truncate 방지
+  //     surrogate pair 범위(U+10000 이상) 와 일부 변형 셀렉터 제거
+  const before=html;
+  html=html.replace(/[\u{10000}-\u{10FFFF}]/gu,'');
+  html=html.replace(/[︀-️‍]/g,'');  // variation selectors / ZWJ
+  const removedEmoji=before.length!==html.length;
+  // (7) text.tld 패턴(자동링크 변환 회피) — 우리 본문엔 보통 없지만 안전 차원
+  //     마침표 양쪽이 영문자/숫자인 경우 SE2 가 도메인으로 오인 → 우리는 그런 패턴이 출력에 남지 않게 됐으므로 패스
+  // (8) 압축 — 단, 콤마 뒤 공백은 유지 (SE2 가 어차피 떼지만 가독성 위해 원본 보존)
+  html=html
+    .replace(/<!--[\s\S]*?-->/g,'')
+    .replace(/\s{2,}/g,' ')
+    .replace(/>\s+</g,'><')
+    .replace(/;\s+/g,';')
+    .replace(/style="([^"]*);"/g,'style="$1"')
+    .trim();
+  // 클립보드 복사
+  const note=removedEmoji?' (이모지 자동 제거됨)':'';
+  const done=()=>showToast('✅ SE2 호환 HTML 복사됨'+note+' — SmartEditor 의 「HTML」 탭에 붙여넣기');
+  const fallback=()=>{const ta=document.createElement('textarea');ta.value=html;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);done();};
+  if(window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write){
+    try{
+      const item=new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([html],{type:'text/plain'})});
+      navigator.clipboard.write([item]).then(done).catch(()=>navigator.clipboard.writeText(html).then(done).catch(fallback));
+      return;
+    }catch(e){}
+  }
+  navigator.clipboard.writeText(html).then(done).catch(fallback);
+}
 
 // ══════════════════════════════════
 // 선택 & 오버레이 & 속성 패널
@@ -1427,11 +1942,19 @@ function selectElem(el, type){
   clearMultiSelect();
   if(selectedElem&&selectedElem!==el)selectedElem.style.outline='';
   selectedElem=el;selectedType=type;
-  if(type!=='table')el.style.outline='2px solid #C86F43';
+  if(type!=='table')el.style.outline='2px solid #2E5AAC';
   positionOverlay();
   resizeOverlay.classList.add('visible');
   // 속성 패널 열기
   showPropsPanel(el,type);
+  // 개체 선택 시엔 본문 캐럿/드래그 선택을 완전히 제거 → "글이 같이 눌리는" 느낌 방지
+  try{
+    const sel=window.getSelection();if(sel)sel.removeAllRanges();
+    // 다른 요소의 텍스트 편집 모드 해제 (단일 클릭 = 개체만 선택)
+    editor.querySelectorAll('*').forEach(x=>{if(x!==el&&x._textEditMode)x._textEditMode=false;});
+    // 에디터에서 blur 시켜 블링킹 커서 제거 (단, 입력은 오버레이에서 키 이벤트로 받음)
+    if(document.activeElement===editor)editor.blur();
+  }catch(_){}
 }
 
 // ── 다중 선택 ──
@@ -1501,7 +2024,7 @@ function deselectAll(refocusEditor=false){
   selectedType=null;
   resizeOverlay.classList.remove('visible');
   hidePropsPanel();
-  if(refocusEditor)editor.focus();
+  if(refocusEditor)try{editor.focus({preventScroll:true});}catch{editor.focus();}
 }
 
 function positionOverlay(){
@@ -1522,6 +2045,13 @@ function showPropsPanel(el, type){
   // 패널 열리면서 레이아웃 변경 → 오버레이 재계산
   requestAnimationFrame(()=>{ if(selectedElem)positionOverlay(); });
   renderRecentColors();
+  // ★ 링크 input 동기화 (type 별 input id 모두 같은 값으로 채움)
+  {
+    const _link=_getElemLink(el);
+    ['pp-shape-link','pp-image-link','pp-table-link','pp-block-link'].forEach(id=>{
+      const i=document.getElementById(id);if(i)i.value=_link;
+    });
+  }
 
   if(type==='shape'){
     const g=document.getElementById('pp-shape');g.classList.add('active');
@@ -1572,49 +2102,79 @@ function showPropsPanel(el, type){
   } else if(type==='image'){
     const g=document.getElementById('pp-image');g.classList.add('active');
     const rect=el.getBoundingClientRect();
+    const cs=getComputedStyle(el);
+    const _v=(inline,computed)=>(inline&&inline.trim())?inline:computed;
     document.getElementById('pp-img-w').value=Math.round(rect.width);
     document.getElementById('pp-img-h').value=Math.round(rect.height);
-    const r=parseInt(el.style.borderRadius)||0;document.getElementById('pp-img-radius').value=r;document.getElementById('pp-img-r-v').textContent=r+'px';
-    const op=Math.round((parseFloat(el.style.opacity)||1)*100);document.getElementById('pp-img-opacity').value=op;document.getElementById('pp-img-op-v').textContent=op+'%';
-    const imgBc=document.getElementById('pp-img-border-color');if(imgBc)imgBc.value=rgbToHex(el.style.borderColor)||'#cccccc';
-    const imgBw=document.getElementById('pp-img-border-w');if(imgBw)imgBw.value=parseInt(el.style.borderWidth)||0;
-    const imgBs=document.getElementById('pp-img-border-style');if(imgBs)imgBs.value=el.style.borderStyle&&el.style.borderStyle!=='none'?el.style.borderStyle:'solid';
-    const imgBnEl=document.getElementById('pp-img-border-none');if(imgBnEl)imgBnEl.checked=!el.style.borderStyle||el.style.borderStyle==='none'||parseInt(el.style.borderWidth)===0;
+    const radiusVal=_v(el.style.borderRadius,cs.borderRadius);
+    const r=parseInt(radiusVal)||0;
+    document.getElementById('pp-img-radius').value=r;document.getElementById('pp-img-r-v').textContent=r+'px';
+    const op=Math.round((parseFloat(el.style.opacity||cs.opacity)||1)*100);document.getElementById('pp-img-opacity').value=op;document.getElementById('pp-img-op-v').textContent=op+'%';
+    const bdrColor=_v(el.style.borderColor,cs.borderColor);
+    const bdrWidth=parseInt(_v(el.style.borderWidth,cs.borderWidth))||0;
+    const bdrStyle=_v(el.style.borderStyle,cs.borderStyle);
+    const imgBc=document.getElementById('pp-img-border-color');if(imgBc)imgBc.value=rgbToHex(bdrColor)||'#cccccc';
+    const imgBw=document.getElementById('pp-img-border-w');if(imgBw)imgBw.value=bdrWidth;
+    const imgBs=document.getElementById('pp-img-border-style');if(imgBs)imgBs.value=(bdrStyle&&bdrStyle!=='none')?bdrStyle:'solid';
+    const imgBnEl=document.getElementById('pp-img-border-none');if(imgBnEl)imgBnEl.checked=!bdrStyle||bdrStyle==='none'||bdrWidth===0;
   } else if(type==='block'){
     const g=document.getElementById('pp-block');g.classList.add('active');
-    // 배경: 그라데이션이면 분해해 UI에 반영, 아니면 단색으로
-    const bgInline=el.style.background||'';
-    const grad=_parseLinearGradient(bgInline);
+    // ★ getComputedStyle 을 주 소스로 — 어떤 형태(shorthand/longhand)로 inline 이 적혀도 실제 렌더링 값 반환
+    const cs=getComputedStyle(el);
+    const _isTransp=(c)=>!c||c==='transparent'||/rgba\(0,\s*0,\s*0,\s*0\)/i.test(c);
+    const _toHex=(c,fb)=>{if(_isTransp(c))return fb;const h=rgbToHex(c);return h||fb;};
+    // 배경: 그라데이션이면 분해, 아니면 단색
+    const bgImg=el.style.backgroundImage||cs.backgroundImage||'';
+    const grad=_parseLinearGradient(bgImg);
     const gradOnEl=document.getElementById('pp-block-grad-on');
     const bg2El=document.getElementById('pp-block-bg2');
     const gradDirEl=document.getElementById('pp-block-grad-dir');
+    const bgInput=document.getElementById('pp-block-bg');
     if(grad){
-      document.getElementById('pp-block-bg').value=rgbToHex(grad.c1)||grad.c1;
+      bgInput.value=rgbToHex(grad.c1)||grad.c1;
       if(bg2El)bg2El.value=rgbToHex(grad.c2)||grad.c2;
       if(gradDirEl)gradDirEl.value=grad.dir;
       if(gradOnEl)gradOnEl.checked=true;
       if(bg2El)bg2El.style.display='';
       if(gradDirEl)gradDirEl.style.display='';
     } else {
-      document.getElementById('pp-block-bg').value=rgbToHex(el.style.backgroundColor)||'#FBE8DC';
+      const bgC=_toHex(cs.backgroundColor,'#EAF0F8');
+      bgInput.value=bgC;
+      if(bg2El)bg2El.value=bgC;  // 그라데이션 켤 때 두 번째 색이 검정 안 되도록 같은 색으로 시드
       if(gradOnEl)gradOnEl.checked=false;
       if(bg2El)bg2El.style.display='none';
       if(gradDirEl)gradDirEl.style.display='none';
     }
-    document.getElementById('pp-block-line').value=rgbToHex(el.style.borderLeftColor)||'#C86F43';
-    document.getElementById('pp-block-color').value=rgbToHex(el.style.color)||'#555555';
-    const bgNone=!el.style.backgroundColor||el.style.backgroundColor==='transparent';
-    const lineNone=!el.style.borderLeft||el.style.borderLeft==='none'||(!el.style.borderLeftStyle||el.style.borderLeftStyle==='none');
+    document.getElementById('pp-block-line').value=_toHex(cs.borderLeftColor,'#2E5AAC');
+    document.getElementById('pp-block-color').value=_toHex(cs.color,'#1f2937');
+    const bgNone=_isTransp(cs.backgroundColor);
+    const lineWidth=parseInt(cs.borderLeftWidth)||0;
+    const lineStyle=cs.borderLeftStyle;
+    const lineNone=!lineStyle||lineStyle==='none'||lineWidth===0;
     const bgnEl=document.getElementById('pp-block-bg-none');const lnEl=document.getElementById('pp-block-line-none');
     if(bgnEl)bgnEl.checked=bgNone;if(lnEl)lnEl.checked=lineNone;
-    const blkLwEl=document.getElementById('pp-block-line-w');if(blkLwEl)blkLwEl.value=parseInt(el.style.borderLeftWidth)||4;
-    const blkLsEl=document.getElementById('pp-block-line-style');if(blkLsEl)blkLsEl.value=el.style.borderLeftStyle&&el.style.borderLeftStyle!=='none'?el.style.borderLeftStyle:'solid';
+    const blkLwEl=document.getElementById('pp-block-line-w');if(blkLwEl)blkLwEl.value=lineWidth||4;
+    const blkLsEl=document.getElementById('pp-block-line-style');if(blkLsEl)blkLsEl.value=(lineStyle&&lineStyle!=='none')?lineStyle:'solid';
+    // 모서리
+    const blkR=parseInt(cs.borderRadius)||0;
+    const blkRSlider=document.getElementById('pp-block-radius');if(blkRSlider)blkRSlider.value=blkR;
+    const blkRV=document.getElementById('pp-block-r-v');if(blkRV)blkRV.textContent=blkR+'px';
     const rBlk=el.getBoundingClientRect();
     const bw2=Math.round(rBlk.width)||el.offsetWidth||300;
     const bh2=Math.round(rBlk.height)||el.offsetHeight||100;
     const wBlk=document.getElementById('pp-block-w');const hBlk=document.getElementById('pp-block-h');
     if(wBlk)wBlk.value=bw2;if(hBlk)hBlk.value=bh2;
     lockedAspectRatio=bh2>0?bh2/bw2:1;
+  }
+  // ── 배치 UI 동기화 (shape·block 공통) ──
+  if(type==='shape'||type==='block'||type==='image'){
+    const layer=(el.dataset&&el.dataset.layer)||'flow';
+    ['flow','front','back'].forEach(m=>{
+      const b1=document.getElementById('pp-block-layer-'+m);
+      const b2=document.getElementById('pp-shape-layer-'+m);
+      if(b1)b1.classList.toggle('active',m===layer);
+      if(b2)b2.classList.toggle('active',m===layer);
+    });
   }
 }
 function hidePropsPanel(){propsPanel.classList.remove('visible');document.body.classList.remove('props-open');}
@@ -1660,11 +2220,47 @@ function toggleImgBorderNone(isNone){
   }
   positionOverlay();syncHtmlPanel();scheduleAutoSave();
 }
+
+// ── 배치 (글과의 레이어 관계) ──
+function applyLayer(mode){
+  if(!selectedElem)return;
+  const el=selectedElem;
+  // 버튼 active 상태 갱신 헬퍼
+  const setBtns=(pref)=>{
+    ['flow','front','back'].forEach(m=>{
+      const b=document.getElementById(pref+'-layer-'+m);
+      if(b){b.classList.toggle('active',m===mode);}
+    });
+  };
+  if(mode==='flow'){
+    // 본문 흐름 복귀: position/z-index 초기화
+    el.style.position='';
+    el.style.zIndex='';
+    // dataset 정리
+    delete el.dataset.layer;
+  } else if(mode==='front'){
+    el.style.position='relative';
+    el.style.zIndex='10';
+    el.dataset.layer='front';
+  } else if(mode==='back'){
+    el.style.position='relative';
+    el.style.zIndex='-1';
+    el.dataset.layer='back';
+    // 에디터 자체에 stacking context 가 없으면 배경 뒤로 숨을 수 있어 보정
+    const eCs=getComputedStyle(editor);
+    if(eCs.position==='static')editor.style.position='relative';
+    if(eCs.zIndex==='auto')editor.style.zIndex='0';
+  }
+  setBtns('pp-block');
+  setBtns('pp-shape');
+  positionOverlay();syncHtmlPanel();scheduleAutoSave();
+}
+
 function toggleBlockNone(prop, isNone){
   if(!selectedElem)return;
   if(prop==='bg'){
     if(isNone){selectedElem.style.background='transparent';selectedElem.style.backgroundColor='transparent';}
-    else{applyBlockProp('bg',document.getElementById('pp-block-bg').value||'#FBE8DC');return;}
+    else{applyBlockProp('bg',document.getElementById('pp-block-bg').value||'#EAF0F8');return;}
   }
   else if(prop==='line'){
     if(isNone){selectedElem.style.borderLeftStyle='none';}
@@ -1782,6 +2378,7 @@ function applyBlockProp(prop, value){
     case 'lineStyle': el.style.borderLeftStyle=value;break;
     case 'color':  el.style.color=value;break;
     case 'shadow': el.style.boxShadow=getShadow(value,'#000000');break;
+    case 'radius': el.style.borderRadius=(parseInt(value)||0)+'px';break;
   }
   syncHtmlPanel();scheduleAutoSave();
 }
@@ -2103,6 +2700,87 @@ function distributeRows(){
 }
 
 // ── 정렬 ──
+// ── 선택된 개체의 링크 (a 태그 wrap) ──
+//   selectedElem 의 부모가 <a> 면 그 href 를 사용. 새 URL 적용 시 <a> 가 없으면 wrap, 있으면 href 만 갱신.
+function _findElemAnchor(el){
+  if(!el)return null;
+  // 부모가 a (이미지/도형 wrap 케이스)
+  let p=el.parentElement;
+  if(p&&p.tagName==='A'&&p.children.length===1)return p;
+  // 자기 자신이 a 인 경우는 거의 없지만 일단 체크
+  if(el.tagName==='A')return el;
+  return null;
+}
+function _getElemLink(el){
+  const a=_findElemAnchor(el);
+  return a?(a.getAttribute('href')||''):'';
+}
+function applyElemLink(url){
+  if(!selectedElem)return;
+  url=(url||'').trim();
+  if(!url){clearElemLink();return;}
+  // 프로토콜 보정
+  if(!/^(https?:|mailto:|tel:|#|\/)/i.test(url))url='https://'+url;
+  let a=_findElemAnchor(selectedElem);
+  if(a){
+    a.setAttribute('href',url);
+    a.setAttribute('target','_blank');
+    a.setAttribute('rel','noopener');
+  } else {
+    // 새 wrap
+    a=document.createElement('a');
+    a.setAttribute('href',url);
+    a.setAttribute('target','_blank');
+    a.setAttribute('rel','noopener');
+    a.style.textDecoration='none';
+    a.style.color='inherit';
+    selectedElem.parentNode.insertBefore(a,selectedElem);
+    a.appendChild(selectedElem);
+  }
+  try{syncHtmlPanel();}catch{}
+  showToast&&showToast('🔗 링크가 적용되었습니다');
+}
+function clearElemLink(){
+  if(!selectedElem)return;
+  const a=_findElemAnchor(selectedElem);
+  if(!a)return;
+  // a 의 자식(=selectedElem) 을 a 의 위치로 끌어올리고 a 삭제
+  if(a.parentNode){
+    a.parentNode.insertBefore(selectedElem,a);
+    a.remove();
+  }
+  // input 비우기
+  document.querySelectorAll('#pp-shape-link,#pp-image-link,#pp-table-link,#pp-block-link').forEach(i=>i.value='');
+  try{syncHtmlPanel();}catch{}
+  showToast&&showToast('🔗 링크가 제거되었습니다');
+}
+
+// ── 선택된 이미지 교체 ──
+//   props panel 의 이미지 변경 / URL 버튼에서 호출. selectedElem(이미지)의 src 만 교체.
+function replaceSelectedImage(input){
+  if(!selectedElem||selectedElem.tagName!=='IMG')return;
+  const f=input.files&&input.files[0];if(!f){input.value='';return;}
+  const r=new FileReader();
+  r.onload=(e)=>{
+    selectedElem.src=e.target.result;
+    // alt 도 업데이트(파일명 베이스)
+    if(!selectedElem.alt||selectedElem.alt==='소식 본문 상단 이미지')selectedElem.alt=f.name.replace(/\.[^.]+$/,'');
+    try{syncHtmlPanel();}catch{}
+    try{updateResizeOverlay&&updateResizeOverlay();}catch{}
+    showToast&&showToast('이미지가 교체되었습니다.');
+  };
+  r.readAsDataURL(f);
+  input.value='';
+}
+function replaceSelectedImageByUrl(){
+  if(!selectedElem||selectedElem.tagName!=='IMG'){showToast&&showToast('이미지를 먼저 선택하세요.');return;}
+  const url=prompt('새 이미지 URL을 입력하세요:',selectedElem.src||'');
+  if(!url||!url.trim())return;
+  selectedElem.src=url.trim();
+  try{syncHtmlPanel();}catch{}
+  try{updateResizeOverlay&&updateResizeOverlay();}catch{}
+  showToast&&showToast('이미지 URL이 교체되었습니다.');
+}
 function alignElem(align){
   const elems=selectedElems.length>0?selectedElems:(selectedElem?[selectedElem]:[]);
   if(!elems.length)return;
@@ -2359,24 +3037,29 @@ window.addEventListener('resize',()=>{if(selectedElem)positionOverlay();renderRu
 // ══════════════════════════════════
 // 눈금자 생성 (50px 단위 minor, 100px 단위 major+라벨)
 // ══════════════════════════════════
+// ★ 가로 자: position:fixed 로 viewport 상단에 고정. 에디터 콘텐츠(900px) 좌측 끝이 0,
+//   우측 끝이 900 이 되도록 매번 editor 의 viewport 좌표로 left/width 갱신.
 function renderRulers(){
-  const wrap=document.getElementById('editor-wrap');if(!wrap)return;
-  const rh=document.getElementById('ruler-h'),rv=document.getElementById('ruler-v');if(!rh||!rv)return;
-  const W=wrap.clientWidth,H=wrap.clientHeight;
-  let hh='',vv='';
-  for(let x=0;x<=W;x+=10){
+  const ed=document.getElementById('editor');if(!ed)return;
+  const rh=document.getElementById('ruler-h');if(!rh)return;
+  const r=ed.getBoundingClientRect();
+  const contentW=Math.round(r.width);
+  rh.style.left=Math.round(r.left)+'px';
+  rh.style.width=contentW+'px';
+  let hh='';
+  for(let x=0;x<=contentW;x+=10){
     const major=x%100===0,minor=x%50===0&&!major;
-    if(major||minor){hh+=`<span class="tick ${major?'major':'minor'}" style="left:${x}px;"></span>`;}
-    if(major&&x>0)hh+=`<span class="lbl" style="left:${x}px;">${x}</span>`;
+    if(major||minor)hh+=`<span class="tick ${major?'major':'minor'}" style="left:${x}px;"></span>`;
+    if(major)hh+=`<span class="lbl" style="left:${x}px;">${x}</span>`;
   }
-  for(let y=0;y<=H;y+=10){
-    const major=y%100===0,minor=y%50===0&&!major;
-    if(major||minor){vv+=`<span class="tick ${major?'major':'minor'}" style="top:${y}px;"></span>`;}
-    if(major&&y>0)vv+=`<span class="lbl" style="top:${y}px;">${y}</span>`;
-  }
-  rh.innerHTML=hh;rv.innerHTML=vv;
+  rh.innerHTML=hh;
 }
 renderRulers();
+// 스크롤·리사이즈 시 자 위치 재계산
+window.addEventListener('resize',renderRulers);
+window.addEventListener('scroll',renderRulers,{passive:true});
+const _epScroll=document.getElementById('editor-panel');
+if(_epScroll)_epScroll.addEventListener('scroll',renderRulers,{passive:true});
 // 콘텐츠 높이 변화 감지 → 세로 눈금자 재생성
 new MutationObserver(()=>{clearTimeout(window._rulT);window._rulT=setTimeout(renderRulers,100);}).observe(document.getElementById('editor'),{childList:true,subtree:true,characterData:true});
 
@@ -2533,7 +3216,25 @@ editor.addEventListener('mousedown',(e)=>{
 
 function onTblColMove(e){
   if(!tblColResizeCell)return;
-  const nw=Math.max(24,tblColResizeStartW+(e.clientX-tblColResizeStartX));
+  let nw=Math.max(24,tblColResizeStartW+(e.clientX-tblColResizeStartX));
+  // ★ 표 전체가 에디터 콘텐츠 영역 폭(≈900px)을 넘지 않도록 캡
+  const tbl=tblColResizeCell.closest('table');
+  const ed=document.getElementById('editor');
+  if(tbl&&ed){
+    const maxW=ed.clientWidth-2;
+    // 표 자체의 max-width 도 고정 (이전에 width:100% 등으로 늘어나는 경우 방지)
+    tbl.style.maxWidth=maxW+'px';
+    tbl.style.tableLayout='fixed';
+    const tr=tblColResizeCell.closest('tr');
+    let otherCellsW=0;
+    if(tr){
+      for(const c of tr.cells){
+        if(c===tblColResizeCell)continue;
+        otherCellsW+=c.offsetWidth;
+      }
+    }
+    nw=Math.min(nw,Math.max(24,maxW-otherCellsW));
+  }
   tblColResizeCell.style.width=nw+'px';
 }
 function onTblColEnd(){
@@ -2562,7 +3263,13 @@ editor.addEventListener('mousedown',(e)=>{
   const cell=e.target.closest('td,th');
   if(!cell)return;
   // Ctrl/Shift+클릭은 click 핸들러에서 처리 — 드래그 선택 로직이 셀 선택을 지우지 않도록 스킵
-  if(e.ctrlKey||e.metaKey||e.shiftKey)return;
+  // 단, 네이티브 텍스트 확장 선택이 발생하지 않도록 mousedown 단계에서 preventDefault
+  if(e.ctrlKey||e.metaKey||e.shiftKey){
+    e.preventDefault();
+    // 현재 선택 범위(커서)가 있으면 즉시 지워 "글자 드래그 따라오는" 증상 차단
+    try{const s=window.getSelection();if(s)s.removeAllRanges();}catch(_){}
+    return;
+  }
   const rect=cell.getBoundingClientRect();
   const nearRight=Math.abs(e.clientX-rect.right)<7;
   const nearBottom=Math.abs(e.clientY-rect.bottom)<7;
@@ -2600,6 +3307,9 @@ function onTblDragEnd(e){
   tblDragSelecting=false;
   if(tblDragStartCell&&tblDragCurrentCell&&tblDragStartCell!==tblDragCurrentCell){
     tblDragWasMulti=true; // 다중 선택 완료 — 이후 click 이벤트가 선택 지우지 못하게
+    // 드래그 중 브라우저가 만든 텍스트 선택 흔적 제거
+    try{const s=window.getSelection();if(s)s.removeAllRanges();}catch(_){}
+    if(document.activeElement===editor)editor.blur();
   } else {
     clearCellSelection();
   }
@@ -2649,14 +3359,23 @@ document.addEventListener('dblclick',(e)=>{
   const plainBlock=realTarget.closest?realTarget.closest('p,h1,h2,h3,h4,h5,h6,ul,ol,li,figure,pre,dl'):null;
   const textTarget=bq||sb||plainBlock||(selectedElem&&(selectedType==='block')?selectedElem:null);
   if(textTarget&&editor.contains(textTarget)&&textTarget!==editor){
+    // ★ 이미 텍스트 편집 모드인 블록 내부에서 다시 더블클릭(또는 트리플클릭) 한 경우
+    //   브라우저가 단어/줄을 자동 선택해 둔 상태이므로 selection 을 건드리지 않고 통과.
+    const alreadyEditing=!!textTarget._textEditMode;
     textTarget._textEditMode=true;
+    if(alreadyEditing){
+      // 브라우저 native 단어/줄 선택 그대로 유지 — 캐럿 덮어쓰기 금지
+      return;
+    }
     if(selectedElem===textTarget){selectedElem.style.outline='';selectedElem=null;selectedType=null;hidePropsPanel();resizeOverlay.classList.remove('visible');}
     // 오버레이 아래의 좌표로 캐럿 위치 계산 (오버레이 일시 차단)
     const prevPE=resizeOverlay.style.pointerEvents;
     resizeOverlay.style.pointerEvents='none';
     const caret=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;
     resizeOverlay.style.pointerEvents=prevPE;
-    editor.focus();
+    // ★ preventScroll: 더블클릭 시 에디터에 focus() 가 걸리며 viewport 가
+    //   에디터 최상단으로 점프하는 문제 방지
+    try{editor.focus({preventScroll:true});}catch{editor.focus();}
     if(caret&&editor.contains(caret.startContainer)){const s=window.getSelection();s.removeAllRanges();s.addRange(caret);}
     else {
       // 폴백: 편집 대상의 끝으로 캐럿
@@ -2673,23 +3392,29 @@ document.addEventListener('selectionchange',()=>{
     if(el._textEditMode&&!el.contains(node)&&node!==el)el._textEditMode=false;
   });
 });
+// ★ 에디터 내 anchor 링크 클릭으로 스크롤 점프 방지 — 편집 모드에선 링크 이동 막음
 editor.addEventListener('click',(e)=>{
+  const a=e.target.closest&&e.target.closest('a');
+  if(a&&editor.contains(a)){
+    // Ctrl/Cmd 클릭이면 새 탭으로 진짜 이동 허용, 그 외엔 차단
+    if(!(e.ctrlKey||e.metaKey)){
+      e.preventDefault();
+    }
+  }
+},true);
+
+editor.addEventListener('click',(e)=>{
+  // ★ 텍스트 드래그(여러 줄 포함) 또는 더블/트리플 클릭 등으로 이미 비-collapsed selection 이
+  //   에디터 안에 만들어진 상태면 캐럿을 덮어쓰지 않도록 통과 — 사용자의 선택을 보존.
+  {
+    const _s=window.getSelection();
+    if(_s&&_s.rangeCount>0&&!_s.isCollapsed&&editor.contains(_s.anchorNode)&&editor.contains(_s.focusNode))return;
+  }
   const target=e.target;
-  // ── 헬퍼: 개체 상하 edge(6px) 클릭이면 인접 단락 삽입 + 커서 배치 후 true 반환
-  const _edgeInsert=(el)=>{
-    const r=el.getBoundingClientRect();const E=6;
-    const top=e.clientY<r.top+E,bot=e.clientY>r.bottom-E;
-    if(!top&&!bot)return false;
-    const p=document.createElement('p');p.innerHTML='<br>';
-    const anchor=(el.tagName==='IMG'||el.tagName==='HR')?(el.closest('p,div,figure')||el):el;
-    if(top)anchor.parentNode.insertBefore(p,anchor);
-    else anchor.parentNode.insertBefore(p,anchor.nextSibling);
-    exitShapeEditMode();
-    if(selectedElem||selectedCell||selectedCells.length>0)deselectAll(false);
-    const rg=document.createRange();rg.setStart(p,0);rg.collapse(true);
-    editor.focus();const s=window.getSelection();s.removeAllRanges();s.addRange(rg);
-    return true;
-  };
+  // ── 헬퍼: 개체 edge 클릭 시 자동으로 빈 단락 삽입하던 동작 — 비활성화 ──
+  //   사용자 요구: 개체 근처 어디를 클릭하든 자동으로 한 줄 밀어내리지 않음.
+  //   기존 ⑩ gap-click 핸들러가 직접 캐럿 배치를 담당하므로 항상 false 반환.
+  const _edgeInsert=(el)=>false;
   // ① 도형(텍스트박스) — 클릭이 실제로 도형 bounding box 안일 때만 처리
   const shape=target.closest('.in-shape:not(.in-line)');
   if(shape){
@@ -2727,6 +3452,9 @@ editor.addEventListener('click',(e)=>{
         if(selectedCell){selectedCell.classList.remove('cell-selected');selectedCell=null;}
         highlightCellRange(anchor,shiftCell);
         showCellPanel(selectedCells[0]||shiftCell,selectedCells);
+        // 셀 다중 선택 상태에서 텍스트 드래그 선택이 남지 않도록 제거
+        try{const s=window.getSelection();if(s)s.removeAllRanges();}catch(_){}
+        if(document.activeElement===editor)editor.blur();
         exitShapeEditMode();return;
       }
       e.preventDefault();addToMultiSelect(tbl);return;
@@ -2766,6 +3494,9 @@ editor.addEventListener('click',(e)=>{
         clickedCell.classList.add('cell-selected-multi');selectedCells.push(clickedCell);
       }
       showCellPanel(selectedCells.length>0?selectedCells[0]:clickedCell,selectedCells);
+      // Ctrl+클릭 후에도 텍스트 캐럿/드래그 선택 제거
+      try{const s=window.getSelection();if(s)s.removeAllRanges();}catch(_){}
+      if(document.activeElement===editor)editor.blur();
       exitShapeEditMode();return;
     }
     // 단순 클릭 → 단일 셀 선택 (리사이즈 오버레이 숨김 — 표 전체 선택 아님)
@@ -2795,9 +3526,11 @@ editor.addEventListener('click',(e)=>{
   {
     let hr=target.closest('hr')||(target.tagName==='HR'?target:null);
     if(!hr){
+      // 근접 판정은 매우 좁게 — HR 본체(1~2px) + ±3px 마진만. 이보다 넓으면
+      // 구분선 위/아래 빈 공간 클릭이 HR 선택으로 흡수되어 "gap 에 글쓰기" 가 막힘.
       for(const h of editor.querySelectorAll('hr')){
         const r=h.getBoundingClientRect();
-        if(e.clientX>=r.left-4&&e.clientX<=r.right+4&&e.clientY>=r.top-12&&e.clientY<=r.bottom+12){hr=h;break;}
+        if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top-3&&e.clientY<=r.bottom+3){hr=h;break;}
       }
     }
     if(hr){
@@ -2817,8 +3550,10 @@ editor.addEventListener('click',(e)=>{
     const _nullVal=v=>!v||v==='none'||v==='initial'||v==='inherit'||v==='unset'||v==='transparent'||v==='rgba(0, 0, 0, 0)';
     // 에디터 콘텐츠 폭의 >=90% 이면 페이지 래퍼로 간주 → 개체 아님
     const _editorW=editor.clientWidth;
+    // 시맨틱 흐름 컨테이너 — 본문 레이아웃이지 개체 아님
+    const _flowTag=t=>['HEADER','FOOTER','SECTION','ARTICLE','MAIN','ASIDE','NAV'].includes(t);
     while(sb&&sb!==editor){
-      if(sb.nodeType===1){
+      if(sb.nodeType===1&&!_flowTag(sb.tagName)){
         const cs=getComputedStyle(sb);
         // 배경 이미지/그라디언트 있으면 인정, 아니면 bg-color 가 투명/없음이면 무시
         const bgImg=cs.backgroundImage&&cs.backgroundImage!=='none';
@@ -2830,7 +3565,9 @@ editor.addEventListener('click',(e)=>{
           const st=cs['border'+side+'Style'];
           return w>0&&st&&st!=='none';
         };
-        const hasBdr=bdrOn('Top')||bdrOn('Right')||bdrOn('Bottom')||bdrOn('Left');
+        const bdrSides=(bdrOn('Top')?1:0)+(bdrOn('Right')?1:0)+(bdrOn('Bottom')?1:0)+(bdrOn('Left')?1:0);
+        // 한 변짜리 border 는 타이포 구분선(밑줄/윗줄) — 프레임 아님
+        const hasBdr=bdrSides>=2;
         const hasOutline=(parseFloat(cs.outlineWidth)||0)>0&&cs.outlineStyle&&cs.outlineStyle!=='none';
         const hasShadow=cs.boxShadow&&cs.boxShadow!=='none';
         if((hasBg||hasBdr||hasOutline||hasShadow)&&sb.parentElement!==null){
@@ -2855,23 +3592,8 @@ editor.addEventListener('click',(e)=>{
       }
     }
   }
-  // ⑧-b 일반 글 블록(문단/제목/목록/인용 등) — 배경·테두리 없어도 개체로 취급
-  //   단일 클릭 = 개체 선택만, 글 수정은 더블클릭으로만 진입 (_textEditMode)
-  {
-    const plain=target.closest('p,h1,h2,h3,h4,h5,h6,ul,ol,figure,pre,dl');
-    if(plain&&plain!==editor&&editor.contains(plain)){
-      // 이미 텍스트 편집 모드면 캐럿 배치 허용
-      if(plain._textEditMode){/* fall through → 기본 캐럿 배치 */}
-      else {
-        // edge 자동 엔터 삽입 제거: 글 사이 클릭이 새 문단을 만들어 아래를 밀어내던 버그 방지
-        if(e.shiftKey){e.preventDefault();addToMultiSelect(plain);return;}
-        e.preventDefault();
-        if(plain!==selectedElem)selectElem(plain,'block');
-        else showPropsPanel(plain,'block');
-        exitShapeEditMode();return;
-      }
-    }
-  }
+  // ⑧-b 제거 — 한글(HWP) 모델: 시각 컨테이너 없는 일반 글(<p><h1~h6><ul><ol><pre><dl>)은
+  //   개체가 아닌 "본문 흐름"으로 간주 → 클릭 즉시 캐럿 배치 (아래 ⑩에서 처리)
   // ⑨ Ctrl+클릭 — 스타일/클래스 있는 임의 블록 강제 선택
   if(e.ctrlKey){
     const styledBlock=target.closest('div[class],div[style],section,article');
@@ -2879,20 +3601,341 @@ editor.addEventListener('click',(e)=>{
       selectElem(styledBlock,'block');exitShapeEditMode();return;
     }
   }
-  // ⑩ 개체 없는 영역 클릭 → 선택 해제 + 반드시 커서 배치
+  // ⑩ 개체 없는 영역 클릭 → 선택 해제 + 커서 배치
+  //   핵심: 브라우저의 caretRangeFromPoint 은 gap 클릭 시 인접 텍스트로 캐럿을
+  //   끌어당기므로 신뢰할 수 없다. 직접 DOM 트리를 탐색해서 "클릭이 어느 형제
+  //   사이 gap 인지" 판정하고, 그 사이에 빈 <p> 를 만들어 캐럿을 둔다.
   exitShapeEditMode();
-  if(selectedElem||selectedCell||selectedCells.length>0)deselectAll(false);
-  const caret=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;
-  if(caret&&editor.contains(caret.startContainer)){
-    editor.focus();const sel=window.getSelection();sel.removeAllRanges();sel.addRange(caret);
-  } else {editor.focus();}
+  // ★ 선택된 개체 자체 또는 그 안쪽 클릭이면 해제하지 말고 선택 유지
+  //   (이전엔 모든 클릭에서 무조건 deselectAll 호출 → 우측 패널 컨트롤 다루다
+  //    selectionchange 가 발사되거나 가까운 다른 클릭이 들어오면 해제되던 증상)
+  if(selectedElem||selectedCell||selectedCells.length>0){
+    const keepSelected=selectedElem&&(selectedElem===target||selectedElem.contains(target));
+    if(!keepSelected)deselectAll(false);
+  }
+  const _isObjBlock=(el)=>{
+    if(!el||el.nodeType!==1||el===editor)return false;
+    if(['IMG','TABLE','HR','IFRAME','BLOCKQUOTE'].includes(el.tagName))return true;
+    if(el.classList&&el.classList.contains('in-shape'))return true;
+    // 시맨틱 흐름 컨테이너는 본문 레이아웃이지 개체가 아님
+    if(['HEADER','FOOTER','SECTION','ARTICLE','MAIN','ASIDE','NAV'].includes(el.tagName))return false;
+    const cs=getComputedStyle(el);
+    const _nv=v=>!v||v==='none'||v==='transparent'||v==='rgba(0, 0, 0, 0)';
+    const hasBg=(cs.backgroundImage&&cs.backgroundImage!=='none')||!_nv(cs.backgroundColor);
+    const bdrOn=s=>(parseFloat(cs['border'+s+'Width'])||0)>0&&cs['border'+s+'Style']&&cs['border'+s+'Style']!=='none';
+    const bdrSides=(bdrOn('Top')?1:0)+(bdrOn('Right')?1:0)+(bdrOn('Bottom')?1:0)+(bdrOn('Left')?1:0);
+    // 한 변짜리 border 는 타이포그래피 구분선(밑줄/윗줄) — 프레임 아님
+    const hasFrameBdr=bdrSides>=2;
+    const hasShadow=cs.boxShadow&&cs.boxShadow!=='none';
+    if(!(hasBg||hasFrameBdr||hasShadow))return false;
+    const r=el.getBoundingClientRect();const ew=editor.clientWidth;
+    if(el.parentElement===editor&&ew>0&&r.width>=ew*0.85)return false;
+    return true;
+  };
+  // 클릭 좌표를 포함하는 가장 깊은 자손 찾기 (margin gap 은 포함 안 함)
+  const _deepestAt=(x,y)=>{
+    let cur=editor;
+    while(true){
+      let hit=null;
+      for(const c of cur.children){
+        if(c.nodeType!==1)continue;
+        const r=c.getBoundingClientRect();
+        if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){hit=c;break;}
+      }
+      if(!hit)return cur;
+      cur=hit;
+    }
+  };
+  const _isEmptyTextBlock=(el)=>{
+    if(!el||el.nodeType!==1)return false;
+    if(!['P','DIV','H1','H2','H3','H4','H5','H6'].includes(el.tagName))return false;
+    if(_isObjBlock(el))return false;
+    return (el.textContent||'').replace(/\s/g,'')==='';
+  };
+  const _placeCaretIn=(el)=>{
+    const rg=document.createRange();rg.setStart(el,0);rg.collapse(true);
+    try{editor.focus({preventScroll:true});}catch{editor.focus();}const s=window.getSelection();s.removeAllRanges();s.addRange(rg);
+  };
+  const _createP=()=>{
+    const p=document.createElement('p');p.style.margin='0';p.innerHTML='<br>';return p;
+  };
+  const cx=e.clientX,cy=e.clientY;
+  const deepest=_deepestAt(cx,cy);
+  // (a) deepest 가 개체 내부(편집모드 아님) 면 → 개체 바깥에 삽입
+  let objAnc=null;
+  {let n=deepest;while(n&&n!==editor){if(n._textEditMode){objAnc=null;break;}if(_isObjBlock(n)){objAnc=n;break;}n=n.parentElement;}}
+  // (a-pre) ★ 클릭이 실제 텍스트 위(=caretRangeFromPoint 가 TEXT_NODE 반환) 면
+  //   무조건 native 캐럿 사용. P 안에 강조용 span 들이 있어도, span 사이의 클릭이어도
+  //   글자 위에 떨어진 클릭은 그 위치에 그대로 캐럿이 가야 함.
+  //   (이전엔 span 자식이 있으면 leaf 가 아니라고 판정해 (b) gap-logic 으로 떨어져
+  //    캐럿이 다음 줄로 점프하던 버그)
+  if(!objAnc){
+    const cr=document.caretRangeFromPoint?document.caretRangeFromPoint(cx,cy):null;
+    if(cr&&editor.contains(cr.startContainer)&&cr.startContainer.nodeType===Node.TEXT_NODE){
+      // 텍스트 노드 위 클릭 — 개체 내부 텍스트(편집모드 아님)인지만 한 번 더 확인
+      let inObj=false;let m=cr.startContainer.parentElement;
+      while(m&&m!==editor){if(m._textEditMode){inObj=false;break;}if(_isObjBlock(m)){inObj=true;break;}m=m.parentElement;}
+      if(!inObj){
+        try{editor.focus({preventScroll:true});}catch{editor.focus();}
+        const s=window.getSelection();s.removeAllRanges();s.addRange(cr);return;
+      }
+    }
+  }
+  // (a-pre 보조) deepest 가 "빈 리프 블록"(자식 없거나 BR 뿐) — caretRangeFromPoint 가
+  //   Element 를 반환할 때 그 블록 안에 캐럿
+  if(!objAnc&&deepest&&deepest!==editor){
+    const blockTags=['P','DIV','H1','H2','H3','H4','H5','H6','LI','PRE','DT','DD','FIGCAPTION','BLOCKQUOTE'];
+    const isBlkTag=blockTags.includes(deepest.tagName);
+    const hasNonBrChild=Array.from(deepest.children).some(c=>c.tagName!=='BR');
+    if(isBlkTag&&!hasNonBrChild&&!deepest.textContent.trim()){
+      _placeCaretIn(deepest);return;
+    }
+  }
+  if(objAnc){
+    // ★ 개체 안/근처 클릭 — 빈 p 자동 삽입 금지. 가장 가까운 기존 글 블록에 캐럿.
+    const r=objAnc.getBoundingClientRect();
+    const topHalf=cy<r.top+r.height/2;
+    const _seek=(start,dir)=>{let s=start;while(s){if(s.nodeType===1&&!_isObjBlock(s))return s;s=dir==='prev'?s.previousElementSibling:s.nextElementSibling;}return null;};
+    const upBlk=_seek(objAnc.previousElementSibling,'prev');
+    const downBlk=_seek(objAnc.nextElementSibling,'next');
+    const pick=topHalf?(upBlk||downBlk):(downBlk||upBlk);
+    if(pick){
+      // 빈 글 블록이면 그 안에, 아니면 끝/시작에 캐럿
+      if(_isEmptyTextBlock(pick)){_placeCaretIn(pick);return;}
+      const rg=document.createRange();rg.selectNodeContents(pick);
+      rg.collapse(pick===upBlk?false:true);
+      try{editor.focus({preventScroll:true});}catch{editor.focus();}
+      const s=window.getSelection();s.removeAllRanges();s.addRange(rg);return;
+    }
+    // 글 블록이 전혀 없으면 그냥 개체 선택만
+    selectElem(objAnc,'block');return;
+  }
+  // (b) deepest 가 개체 아닌 컨테이너 — 클릭은 그 컨테이너 자식들 사이 gap
+  //     Y 기준으로 바로 위/아래 자식 형제를 찾는다.
+  let prevSib=null,nextSib=null;
+  for(const c of deepest.children){
+    if(c.nodeType!==1)continue;
+    const r=c.getBoundingClientRect();
+    if(r.bottom<=cy){prevSib=c;}
+    else if(r.top>cy){nextSib=c;break;}
+  }
+  // (b) 통합 로직 — 클릭 Y 에서 "더 가까운 형제"를 기준으로 행동 결정
+  //   · 가까운 형제가 글: 그 끝/시작에 캐럿 (빈 p 중복 생성 없음)
+  //   · 가까운 형제가 개체: 개체 옆 기존 빈 p 재사용, 없으면 새 p 삽입
+  if(prevSib||nextSib){
+    let target,atStart;  // atStart=true → target 의 시작에 캐럿(=target 이 nextSib)
+    if(prevSib&&nextSib){
+      const distPrev=cy-prevSib.getBoundingClientRect().bottom;
+      const distNext=nextSib.getBoundingClientRect().top-cy;
+      if(distPrev<=distNext){target=prevSib;atStart=false;}
+      else {target=nextSib;atStart=true;}
+    } else if(prevSib){target=prevSib;atStart=false;}
+    else {target=nextSib;atStart=true;}
+    if(_isObjBlock(target)){
+      // ★ 빈 p 자동 삽입 금지. 양쪽 형제를 탐색해 첫 글 블록에 캐럿.
+      const _seek=(start,dir)=>{let s=start;while(s){if(s.nodeType===1&&!_isObjBlock(s))return s;s=dir==='prev'?s.previousElementSibling:s.nextElementSibling;}return null;};
+      const upBlk=_seek(target.previousElementSibling,'prev');
+      const downBlk=_seek(target.nextElementSibling,'next');
+      const pick=atStart?(upBlk||downBlk):(downBlk||upBlk);
+      if(pick){
+        if(_isEmptyTextBlock(pick)){_placeCaretIn(pick);return;}
+        const rg=document.createRange();rg.selectNodeContents(pick);
+        rg.collapse(pick===upBlk?false:true);
+        try{editor.focus({preventScroll:true});}catch{editor.focus();}
+        const s=window.getSelection();s.removeAllRanges();s.addRange(rg);return;
+      }
+      // 글 블록 전무 — 개체 선택만
+      selectElem(target,'block');return;
+    }
+    // target 이 글 — 빈 블록이면 그 안에, 아니면 끝/시작에 캐럿
+    if(_isEmptyTextBlock(target)){_placeCaretIn(target);return;}
+    // ★ 글 블록의 margin gap 클릭: 클릭 X 를 보존하고 Y 만 블록 내부로 클램프해
+    //   caretRangeFromPoint 로 그 줄의 X 좌표에 가장 가까운 위치에 캐럿을 둔다
+    //   (예: 큰 제목의 line-height 여유분 + 마진 갭을 찍었을 때 제목 끝/다음줄
+    //   시작이 아니라 사용자가 의도한 "제목을 뒤" 같은 정확한 위치에 캐럿)
+    {const tr=target.getBoundingClientRect();
+     const clampY=atStart?tr.top+2:tr.bottom-2;
+     const cr2=document.caretRangeFromPoint?document.caretRangeFromPoint(cx,clampY):null;
+     if(cr2&&editor.contains(cr2.startContainer)){
+       let host=cr2.startContainer;if(host.nodeType===3)host=host.parentElement;
+       if(target.contains(host)){
+         try{editor.focus({preventScroll:true});}catch{editor.focus();}const s=window.getSelection();s.removeAllRanges();s.addRange(cr2);return;
+       }
+     }}
+    const rg=document.createRange();
+    rg.selectNodeContents(target);
+    rg.collapse(atStart);
+    try{editor.focus({preventScroll:true});}catch{editor.focus();}const s=window.getSelection();s.removeAllRanges();s.addRange(rg);
+    return;
+  }
+  // (c) 컨테이너가 비어 있음 — 바로 컨테이너 안에 p 삽입
+  const tp=_createP();
+  deepest.appendChild(tp);
+  _placeCaretIn(tp);
 });
+
+// ── ArrowUp/Down 시 개체(시각 컨테이너) 건너뛰기 ──
+// 한글(HWP) 모델: 방향키로 글줄 이동할 때 "글"(본문 흐름 텍스트)만 순회,
+// 개체 내부 텍스트는 더블클릭(텍스트 편집 모드) 으로만 진입되도록 스킵.
+(function(){
+  const _isObj=(el)=>{
+    if(!el||el.nodeType!==1||el===editor)return false;
+    if(['IMG','TABLE','HR','IFRAME','BLOCKQUOTE'].includes(el.tagName))return true;
+    if(el.classList&&el.classList.contains('in-shape'))return true;
+    if(['HEADER','FOOTER','SECTION','ARTICLE','MAIN','ASIDE','NAV'].includes(el.tagName))return false;
+    const cs=getComputedStyle(el);
+    const _nv=v=>!v||v==='none'||v==='transparent'||v==='rgba(0, 0, 0, 0)';
+    const hasBg=(cs.backgroundImage&&cs.backgroundImage!=='none')||!_nv(cs.backgroundColor);
+    const bdrOn=s=>(parseFloat(cs['border'+s+'Width'])||0)>0&&cs['border'+s+'Style']&&cs['border'+s+'Style']!=='none';
+    const bdrSides=(bdrOn('Top')?1:0)+(bdrOn('Right')?1:0)+(bdrOn('Bottom')?1:0)+(bdrOn('Left')?1:0);
+    const hasFrameBdr=bdrSides>=2;
+    const hasShadow=cs.boxShadow&&cs.boxShadow!=='none';
+    if(!(hasBg||hasFrameBdr||hasShadow))return false;
+    const r=el.getBoundingClientRect();const ew=editor.clientWidth;
+    if(el.parentElement===editor&&ew>0&&r.width>=ew*0.85)return false;
+    return true;
+  };
+  // 현재 캐럿이 속한 "가장 안쪽 본문 블록"(개체 내부가 아닌) 찾기
+  // — isAtEdge 판정은 innermost 블록의 bbox 기준이어야 줄 단위 이동이 올바름
+  const _currentTextBlock=(node)=>{
+    if(!node)return null;
+    if(node.nodeType===3)node=node.parentElement;
+    // 먼저 조상 중 개체/편집모드 유무 확인
+    let chk=node;
+    while(chk&&chk!==editor){
+      if(chk._textEditMode)return null;
+      if(_isObj(chk))return null;
+      chk=chk.parentElement;
+    }
+    // 가장 안쪽 블록 태그 반환
+    let n=node;
+    while(n&&n!==editor){
+      if(n.nodeType===1&&['P','DIV','H1','H2','H3','H4','H5','H6','LI','PRE','DT','DD'].includes(n.tagName))return n;
+      n=n.parentElement;
+    }
+    return null;
+  };
+  // 블록이 편집 가능한 "글"인지 (개체 아님)
+  const _isTextBlock=(el)=>{
+    if(!el||el.nodeType!==1)return false;
+    if(_isObj(el))return false;
+    return true;
+  };
+  // 하위 트리에서 첫/마지막 "글 리프 블록" (개체 자손 없는 본문 블록)
+  // 전부 개체뿐이어서 실제 텍스트가 있을 수 없는 컨테이너는 null 반환
+  const _firstTextLeaf=(el)=>{
+    if(!el||el.nodeType!==1||_isObj(el))return null;
+    if(el.children.length===0)return el;  // 텍스트 노드만 있는 리프
+    for(const c of el.children){
+      if(c.nodeType!==1)continue;
+      if(_isObj(c))continue;
+      const inner=_firstTextLeaf(c);
+      if(inner)return inner;
+    }
+    return null;  // 모든 엘리먼트 자식이 개체
+  };
+  const _lastTextLeaf=(el)=>{
+    if(!el||el.nodeType!==1||_isObj(el))return null;
+    if(el.children.length===0)return el;
+    for(let i=el.children.length-1;i>=0;i--){
+      const c=el.children[i];
+      if(c.nodeType!==1)continue;
+      if(_isObj(c))continue;
+      const inner=_lastTextLeaf(c);
+      if(inner)return inner;
+    }
+    return null;
+  };
+  // 문서 순서 상 다음/이전 "글 리프" 찾기 (개체는 건너뜀). 없으면 null.
+  const _findAdjacentTextLeaf=(fromEl,dir)=>{
+    let el=fromEl;
+    while(el&&el!==editor){
+      let sib=dir==='next'?el.nextElementSibling:el.previousElementSibling;
+      while(sib){
+        if(!_isObj(sib)){
+          const leaf=dir==='next'?_firstTextLeaf(sib):_lastTextLeaf(sib);
+          if(leaf)return leaf;
+        }
+        sib=dir==='next'?sib.nextElementSibling:sib.previousElementSibling;
+      }
+      el=el.parentElement;
+    }
+    return null;
+  };
+  // 현재 블록의 앞/뒤로 (같은 부모 기준) 바로 다음 "개체" 가 나오면 그 개체를 건너뛴 위치,
+  // 같은 부모 내에서 만나는 게 텍스트면 기본 이동을 허용(null 반환).
+  const _nextObjToSkip=(curBlock,dir)=>{
+    let el=curBlock;
+    while(el&&el!==editor){
+      let sib=dir==='next'?el.nextElementSibling:el.previousElementSibling;
+      while(sib){
+        if(_isObj(sib))return sib;
+        // 비-개체 형제를 만나면: 그 내부가 전부 개체만으로 구성돼 있는지 확인
+        // (예: section div 안에 첫 자식이 개체) → 그 경우 그 개체도 스킵 대상
+        const firstLeaf=dir==='next'?_firstTextLeaf(sib):_lastTextLeaf(sib);
+        if(firstLeaf)return null;  // 텍스트 리프 있음 → 기본 이동 허용
+        // 텍스트 리프 없음 → 컨테이너 내부 전부 개체뿐 → 컨테이너 자체를 "묶음 개체" 로 취급
+        return sib;
+      }
+      el=el.parentElement;
+    }
+    return null;
+  };
+  editor.addEventListener('keydown',(e)=>{
+    if(e.key!=='ArrowDown'&&e.key!=='ArrowUp')return;
+    if(e.shiftKey||e.ctrlKey||e.altKey||e.metaKey)return;
+    const sel=window.getSelection();
+    if(!sel||sel.rangeCount===0)return;
+    if(!sel.isCollapsed)return;
+    const rg=sel.getRangeAt(0);
+    const curBlock=_currentTextBlock(rg.startContainer);
+    if(!curBlock)return;  // 개체 내부/편집모드에선 기본
+    const dir=e.key==='ArrowDown'?'next':'prev';
+    // 현재 블록이 다중 라인이면, 캐럿이 블록 끝(ArrowDown)/시작(ArrowUp) 에 있을 때만 블록 이동
+    // 블록 내부 라인 이동은 브라우저 기본에 맡김
+    const isAtEdge=(()=>{
+      // 빈 블록(텍스트 없음) 이면 항상 edge
+      if((curBlock.textContent||'').replace(/\s/g,'')==='')return true;
+      const r=rg.getBoundingClientRect();
+      const blkR=curBlock.getBoundingClientRect();
+      // 캐럿 bbox 가 0 크기면 주변 Range 로 대체 측정
+      let cy=r.top,ch=r.height;
+      if(ch===0&&r.bottom===0&&r.top===0){
+        // 빈 Range — 블록 bbox 기준으로 offset 비교
+        return true;
+      }
+      if(dir==='next'){
+        return Math.abs(r.bottom-blkR.bottom)<4 || (blkR.bottom-r.bottom)<8;
+      } else {
+        return Math.abs(r.top-blkR.top)<4 || (r.top-blkR.top)<8;
+      }
+    })();
+    if(!isAtEdge)return;  // 블록 안에서 일반 ArrowDown → 기본 동작
+    // 다음에 만나는 것이 개체인가?
+    const skipObj=_nextObjToSkip(curBlock,dir);
+    if(!skipObj)return;  // 다음이 일반 글이면 기본 동작
+    // 개체를 건너뛰어 그 너머 "글 리프" 로 점프
+    e.preventDefault();
+    let destLeaf=_findAdjacentTextLeaf(skipObj,dir);
+    if(!destLeaf){
+      // 끝/시작에 도달 — 개체 바깥에 빈 p 삽입
+      destLeaf=document.createElement('p');
+      destLeaf.style.margin='0';destLeaf.innerHTML='<br>';
+      if(dir==='next')skipObj.parentNode.insertBefore(destLeaf,skipObj.nextSibling);
+      else skipObj.parentNode.insertBefore(destLeaf,skipObj);
+    }
+    const nr=document.createRange();
+    if(dir==='next'){nr.selectNodeContents(destLeaf);nr.collapse(true);}
+    else {nr.selectNodeContents(destLeaf);nr.collapse(false);}
+    const s=window.getSelection();s.removeAllRanges();s.addRange(nr);
+  },true);  // capture 로 선점 — 브라우저 기본이 개체 안에 들어가기 전에 처리
+})();
 
 // 도형 내 keydown - 기본 텍스트 편집 허용, ESC로 편집 종료
 editor.addEventListener('keydown',(e)=>{
   const inShape=e.target.closest&&e.target.closest('.in-shape:not(.in-line)');
   if(shapeEditMode&&inShape){
-    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();exitShapeEditMode();editor.focus();return;}
+    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();exitShapeEditMode();try{editor.focus({preventScroll:true});}catch{editor.focus();}return;}
     if(e.key==='Enter'){
       e.preventDefault();e.stopPropagation();
       // DOM 직접 삽입으로 도형 복사 현상 완전 방지
@@ -2972,23 +4015,34 @@ function restoreRange(){if(savedRange){const sel=window.getSelection();sel.remov
 // 링크
 // ══════════════════════════════════
 function openLinkModal(){saveRange();const sel=window.getSelection();document.getElementById('link-text').value=sel?sel.toString():'';document.getElementById('link-url').value='';openModal('link-modal');setTimeout(()=>document.getElementById('link-url').focus(),100);}
-function insertLink(){const url=document.getElementById('link-url').value.trim(),text=document.getElementById('link-text').value.trim();if(!url){showToast('URL을 입력해주세요.');return;}editor.focus();restoreRange();const sel=window.getSelection();if(sel&&sel.rangeCount>0&&!sel.isCollapsed){document.execCommand('createLink',false,url);}else{const a=document.createElement('a');a.href=url;a.textContent=text||url;a.target='_blank';if(savedRange){savedRange.deleteContents();savedRange.insertNode(a);}}closeModal('link-modal');syncHtmlPanel();}
+function insertLink(){const url=document.getElementById('link-url').value.trim(),text=document.getElementById('link-text').value.trim();if(!url){showToast('URL을 입력해주세요.');return;}try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();const sel=window.getSelection();if(sel&&sel.rangeCount>0&&!sel.isCollapsed){document.execCommand('createLink',false,url);}else{const a=document.createElement('a');a.href=url;a.textContent=text||url;a.target='_blank';if(savedRange){savedRange.deleteContents();savedRange.insertNode(a);}}closeModal('link-modal');syncHtmlPanel();}
 
 // ══════════════════════════════════
 // 이미지
 // ══════════════════════════════════
 function openImgModal(){saveRange();document.getElementById('img-url-input').value='';openModal('img-modal');}
 function handleImgFile(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=(e)=>{insertImageHtml(e.target.result);closeModal('img-modal');};r.readAsDataURL(file);}
+// ── 템플릿 배너 placeholder 클릭 → 이미지 업로드 후 placeholder 를 img 로 교체 ──
+editor.addEventListener('click',(e)=>{
+  const ph=e.target.closest&&e.target.closest('[data-banner-upload]');
+  if(!ph||!editor.contains(ph))return;
+  e.preventDefault();e.stopPropagation();
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();
+    r.onload=(ev)=>{const img=document.createElement('img');img.src=ev.target.result;img.alt='소식 본문 상단 이미지';img.style.cssText='width:100%;display:block;border-radius:8px;margin-bottom:24px;';if(ph.parentNode)ph.parentNode.replaceChild(img,ph);try{syncHtmlPanel();}catch{}};
+    r.readAsDataURL(f);};
+  inp.click();
+},true);
 function insertImageFromUrl(){const url=document.getElementById('img-url-input').value.trim();if(!url){showToast('URL을 입력하거나 파일을 선택하세요.');return;}insertImageHtml(url);closeModal('img-modal');}
 function insertImageHtml(src){
-  editor.focus();restoreRange();
+  try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();
   const img=document.createElement('img');img.src=src;img.style.maxWidth='900px';img.style.width='100%';
   if(savedRange){savedRange.collapse(false);savedRange.insertNode(img);savedRange.setStartAfter(img);savedRange.collapse(true);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(savedRange);}
   else editor.appendChild(img);
   syncHtmlPanel();
 }
 const dropZone=document.getElementById('img-drop-zone');
-dropZone.addEventListener('dragover',(e)=>{e.preventDefault();dropZone.style.borderColor='#C86F43';});
+dropZone.addEventListener('dragover',(e)=>{e.preventDefault();dropZone.style.borderColor='#2E5AAC';});
 dropZone.addEventListener('dragleave',()=>{dropZone.style.borderColor='#ddd';});
 dropZone.addEventListener('drop',(e)=>{e.preventDefault();dropZone.style.borderColor='#ddd';const file=e.dataTransfer.files[0];if(file&&file.type.startsWith('image/')){const r=new FileReader();r.onload=(ev)=>{insertImageHtml(ev.target.result);closeModal('img-modal');};r.readAsDataURL(file);}});
 
@@ -3052,7 +4106,7 @@ dropZone.addEventListener('drop',(e)=>{e.preventDefault();dropZone.style.borderC
     const ph=e.target.closest('div,img,.in-shape');
     if(!ph||ph===editor)return;
     e.preventDefault();
-    if(_dragTarget!==ph){clearHL();_dragTarget=ph;ph.style.outline='2px dashed #C86F43';}
+    if(_dragTarget!==ph){clearHL();_dragTarget=ph;ph.style.outline='2px dashed #2E5AAC';}
   });
   editor.addEventListener('dragleave',(e)=>{
     if(e.target===_dragTarget)clearHL();
@@ -3094,7 +4148,7 @@ function insertVideoEmbed(){
   const match=url.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
   if(!match){showToast('올바른 YouTube URL을 입력해주세요.\n(youtube.com 또는 youtu.be 링크)');return;}
   const vid=match[1];
-  editor.focus();restoreRange();
+  try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();
   const embedUrl=`https://www.youtube.com/embed/${vid}?rel=0&modestbranding=1`;
   const watchUrl=`https://www.youtube.com/watch?v=${vid}`;
   document.execCommand('insertHTML',false,
@@ -3103,7 +4157,7 @@ function insertVideoEmbed(){
     `allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" `+
     `referrerpolicy="strict-origin-when-cross-origin" `+
     `allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe></div>`+
-    `<p style="font-size:12px;color:#999;margin:4px 0 14px;">▶ <a href="${watchUrl}" target="_blank" style="color:#C86F43;">YouTube에서 직접 보기</a> (임베드 오류 시)</p>`
+    `<p style="font-size:12px;color:#999;margin:4px 0 14px;">▶ <a href="${watchUrl}" target="_blank" style="color:#2E5AAC;">YouTube에서 직접 보기</a> (임베드 오류 시)</p>`
   );
   closeModal('video-modal');syncHtmlPanel();
 }
@@ -3112,7 +4166,7 @@ function insertVideoEmbed(){
 // 파일
 // ══════════════════════════════════
 function openFileModal(){saveRange();openModal('file-modal');}
-function handleAttachFile(input){const file=input.files[0];if(!file)return;editor.focus();restoreRange();document.execCommand('insertHTML',false,`<p>📎 <a href="#" style="color:#C86F43;">${file.name}</a> (${(file.size/1024).toFixed(1)}KB)</p>`);closeModal('file-modal');syncHtmlPanel();input.value='';}
+function handleAttachFile(input){const file=input.files[0];if(!file)return;try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();document.execCommand('insertHTML',false,`<p>📎 <a href="#" style="color:#2E5AAC;">${file.name}</a> (${(file.size/1024).toFixed(1)}KB)</p>`);closeModal('file-modal');syncHtmlPanel();input.value='';}
 
 // ══════════════════════════════════
 // 표 삽입
@@ -3127,15 +4181,15 @@ function insertTable(){
     if(r===0&&header)html+='<th style="border:1px solid #ccc;padding:10px 14px;background:#f5f5f5;font-weight:700;font-size:15px;vertical-align:top;">&nbsp;</th>';
     else html+='<td style="border:1px solid #ccc;padding:10px 14px;font-size:15px;vertical-align:top;">&nbsp;</td>';
   }html+='</tr>';}html+='</table>';
-  editor.focus();restoreRange();document.execCommand('insertHTML',false,html);closeModal('table-modal');syncHtmlPanel();
+  try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();document.execCommand('insertHTML',false,html);closeModal('table-modal');syncHtmlPanel();
 }
 
 // ══════════════════════════════════
 // 구분선 / 인용
 // ══════════════════════════════════
-function insertHR(){saveRange();editor.focus();restoreRange();document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #e0e0e0;margin:22px 0;">');syncHtmlPanel();}
+function insertHR(){saveRange();try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #e0e0e0;margin:22px 0;">');syncHtmlPanel();}
 function insertBlockquote(){
-  saveRange();editor.focus();restoreRange();
+  saveRange();try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();
   const text=window.getSelection()?window.getSelection().toString():'';
   document.execCommand('insertHTML',false,`<blockquote style="border-left:3px solid ${THEMES[currentThemeIdx]?THEMES[currentThemeIdx].primary:DEFAULT_PRIMARY};margin:14px 0;padding:10px 18px;background:${THEMES[currentThemeIdx]?THEMES[currentThemeIdx].light:DEFAULT_LIGHT};color:#555;font-size:16px;">${text||'인용 내용을 입력하세요'}</blockquote>`);
   syncHtmlPanel();
@@ -3176,7 +4230,7 @@ function exitShapeEditMode(){
   resizeOverlay.style.pointerEvents='';
   resizeOverlay.querySelectorAll('.rh').forEach(h=>h.style.display='');
   document.getElementById('ro-move').style.display='';
-  resizeOverlay.style.boxShadow='0 0 0 2px #C86F43';
+  resizeOverlay.style.boxShadow='0 0 0 2px #2E5AAC';
   resizeOverlay.style.background='transparent';
   if(selectedElem)positionOverlay();
 }
@@ -3256,14 +4310,14 @@ function insertShape(){
     const bs=bw>0?`${bw}px solid ${bc}`:'none';
     html=`<div class="in-shape" data-shape="${type}" contenteditable="false" style="display:block;width:${w}px;min-height:${h}px;background:${noFill?'transparent':fillBg};border:${bs};border-radius:${br};color:${textColor};font-size:14pt;text-align:center;line-height:1.5;padding:12px 16px;${marginStyle}opacity:${opacity};box-shadow:none;">텍스트를 입력하세요</div>`;
   }
-  editor.focus();restoreRange();document.execCommand('insertHTML',false,html);
+  try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();document.execCommand('insertHTML',false,html);
   toggleShapePanel();syncHtmlPanel();
 }
 
 // ══════════════════════════════════
 // 색상 팔레트
 // ══════════════════════════════════
-const COLORS=['#000000','#333333','#555555','#777777','#999999','#bbbbbb','#dddddd','#ffffff','#C86F43','#B45E35','#e67e22','#f39c12','#f1c40f','#2ecc71','#27ae60','#1abc9c','#3498db','#2980b9','#9b59b6','#8e44ad','#2c3e50','#34495e','#795548','#607d8b','transparent'];
+const COLORS=['#000000','#1f2937','#374151','#4b5563','#6b7280','#9ca3af','#d1d5db','#e5e7eb','#f5f5f7','#ffffff','#2E5AAC','#234887','#4A7BC9','#7BA0D5','#C7D5EA','#EAF0F8','#D4A017','#B8860B','#F5CF5C','#FFF9E6','#991B1B','#854D0E','#166534','#2c3e50','transparent'];
 function buildPalette(pid,cmd){
   const el=document.getElementById(pid);
   if(!el)return;
@@ -3273,7 +4327,7 @@ function buildPalette(pid,cmd){
     if(color==='#ffffff')sw.style.border='1px solid #ccc';
     sw.addEventListener('mousedown',(e)=>e.preventDefault());
     sw.addEventListener('click',(e)=>{
-      e.stopPropagation();editor.focus();restoreRange();
+      e.stopPropagation();try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();
       if(cmd==='foreColor'){document.execCommand('foreColor',false,color==='transparent'?'#000000':color);document.getElementById('textColorBtn').style.background=color==='transparent'?'#000000':color;}
       else{document.execCommand('hiliteColor',false,color==='transparent'?'transparent':color);document.getElementById('bgColorBtn').style.background=color==='transparent'?'transparent':color;}
       closePalettes();syncHtmlPanel();
@@ -3289,57 +4343,123 @@ function closePalettes(){document.querySelectorAll('.color-palette').forEach(p=>
 // 색상 테마
 // ══════════════════════════════════
 // 기본 브랜드 컬러 (템플릿 기준색)
-const DEFAULT_PRIMARY='#C86F43';
-const DEFAULT_LIGHT='#FBE8DC';
-const DEFAULT_BORDER='#F2D5BE';
+const DEFAULT_PRIMARY='#2E5AAC';
+const DEFAULT_MID='#4A7BC9';
+const DEFAULT_LIGHT='#EAF0F8';
+const DEFAULT_BORDER='#C7D5EA';
+const DEFAULT_DARK='#234887';
+const DEFAULT_LINE='#dfe4ec';
 function reEsc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+// ── 색상 유틸 ──
+function _hex2(rgb){
+  if(!rgb||rgb==='transparent'||rgb==='rgba(0, 0, 0, 0)')return null;
+  if(rgb[0]==='#'){if(rgb.length===4)return ('#'+rgb[1]+rgb[1]+rgb[2]+rgb[2]+rgb[3]+rgb[3]).toLowerCase();return rgb.toLowerCase();}
+  const m=rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+  if(!m)return null;
+  return '#'+[+m[1],+m[2],+m[3]].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+function _lum(hex){
+  if(!hex||hex.length<7)return 1;
+  const c=[hex.slice(1,3),hex.slice(3,5),hex.slice(5,7)].map(h=>{
+    const v=parseInt(h,16)/255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);
+  });
+  return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2];
+}
+function _ratio(a,b){const la=_lum(a),lb=_lum(b);return (Math.max(la,lb)+0.05)/(Math.min(la,lb)+0.05);}
+// 인라인 배경색이 있는 요소의 글자색을 검사해 contrast 부족하면 자동 보정
+function fixThemeContrast(rootEl){
+  rootEl.querySelectorAll('*').forEach(el=>{
+    if(!el.style)return;
+    const inlineBg=el.style.backgroundColor||el.style.background||'';
+    if(!inlineBg||/transparent|rgba\(0,\s*0,\s*0,\s*0\)/i.test(inlineBg))return;
+    const cs=getComputedStyle(el);
+    const bg=_hex2(cs.backgroundColor);
+    const fg=_hex2(cs.color);
+    if(!bg||!fg)return;
+    if(_ratio(bg,fg)<4.0){
+      // 가독성 낮음 — bg 의 luminance 에 따라 text 색을 어둡게 또는 밝게 설정
+      el.style.color=_lum(bg)>0.55?'#1f2937':'#FFFFFF';
+    }
+  });
+}
+
 function applyTheme(idx){
   saveUndo();
   const to=THEMES[idx];
   let html=editor.innerHTML;
-  // 현재 테마 primary + 기본 브랜드 컬러 모두 교체
-  const fromPrimary=THEMES[currentThemeIdx].primary;
-  const fromLight=THEMES[currentThemeIdx].light;
-  // primary 계열 교체 (현재 테마색, 기본값 모두)
-  [fromPrimary,DEFAULT_PRIMARY].forEach(c=>{
-    if(c!==to.primary)html=html.replace(new RegExp(reEsc(c),'gi'),to.primary);
-  });
-  // light 계열 교체
-  [fromLight,DEFAULT_LIGHT,'#fff8f9'].forEach(c=>{
-    if(c!==to.light)html=html.replace(new RegExp(reEsc(c),'gi'),to.light);
-  });
-  // border 계열 교체 (light와 분리)
-  const fromBorder=THEMES[currentThemeIdx].border||DEFAULT_BORDER;
-  const toBorder=to.border||to.light;
-  [fromBorder,DEFAULT_BORDER].forEach(c=>{
-    if(c!==toBorder)html=html.replace(new RegExp(reEsc(c),'gi'),toBorder);
-  });
+  const from=THEMES[currentThemeIdx];
+  // hex + 그에 대응하는 rgb() 양쪽 모두 치환하는 헬퍼
+  const _replaceColor=(fromColor,toColor)=>{
+    if(!fromColor||!toColor||fromColor.toLowerCase()===toColor.toLowerCase())return;
+    // 1) hex 형태
+    html=html.replace(new RegExp(reEsc(fromColor),'gi'),toColor);
+    // 2) rgb() 형태 (브라우저가 inline style 직렬화 시 hex 를 rgb 로 바꾸는 경우 대응)
+    const m=fromColor.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+    if(m){
+      const r=parseInt(m[1],16),g=parseInt(m[2],16),b=parseInt(m[3],16);
+      const rgbA=`rgb(${r}, ${g}, ${b})`;
+      const rgbB=`rgb(${r},${g},${b})`;
+      html=html.split(rgbA).join(toColor).split(rgbB).join(toColor);
+    }
+  };
+  // primary 계열
+  [from.primary,DEFAULT_PRIMARY].forEach(c=>_replaceColor(c,to.primary));
+  // mid (G2) 계열 — section eyebrow, pullquote 보더 등
+  [from.mid,DEFAULT_MID].forEach(c=>_replaceColor(c,to.mid||to.primary));
+  // light 계열
+  [from.light,DEFAULT_LIGHT,'#fff8f9'].forEach(c=>_replaceColor(c,to.light));
+  // border 계열
+  [from.border||DEFAULT_BORDER,DEFAULT_BORDER].forEach(c=>_replaceColor(c,to.border||to.light));
+  // dark(짙은 primary) 계열 — 제목/강조색
+  [from.dark||DEFAULT_DARK,DEFAULT_DARK].forEach(c=>_replaceColor(c,to.dark||to.primary));
+  // line 계열 — hr 등
+  [from.line||DEFAULT_LINE,DEFAULT_LINE].forEach(c=>_replaceColor(c,to.line||to.border));
+  // 선택 outline 인라인 직렬화 흔적 정리
+  if(selectedElem){try{selectedElem.style.outline='';}catch(_){}}
   editor.innerHTML=html;currentThemeIdx=idx;updateThemeDots();
+  // DOM 교체로 selectedElem 참조 무효화 → 해제
+  try{if(typeof deselectAll==='function')deselectAll(false);}catch(_){}
+  // ★ 색상 적용 후 가독성 자동 보정 — bg 가 있는 요소의 글자 contrast 부족 시 INK 또는 흰색으로 교체
+  fixThemeContrast(editor);
   syncHtmlPanel();scheduleAutoSave();showToast('🎨 '+to.name+' 테마 적용됨');
 }
 function updateThemeDots(){document.querySelectorAll('.theme-dot[data-idx]').forEach(dot=>dot.classList.toggle('active',parseInt(dot.dataset.idx)===currentThemeIdx));}
 function applyCustomTheme(color){
   saveUndo();
   const from=THEMES[currentThemeIdx];
-  // light 버전 자동 계산 (원색 12% + 흰색 88% 혼합)
+  const _toHex=(r,g,b)=>'#'+[r,g,b].map(x=>Math.max(0,Math.min(255,x)).toString(16).padStart(2,'0')).join('');
   const r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);
-  const lr=Math.round(r*0.12+255*0.88),lg=Math.round(g*0.12+255*0.88),lb=Math.round(b*0.12+255*0.88);
-  const newLight='#'+[lr,lg,lb].map(x=>x.toString(16).padStart(2,'0')).join('');
+  const newMid=_toHex(Math.round(r*0.6+255*0.4),Math.round(g*0.6+255*0.4),Math.round(b*0.6+255*0.4));
+  const newLight=_toHex(Math.round(r*0.12+255*0.88),Math.round(g*0.12+255*0.88),Math.round(b*0.12+255*0.88));
+  const newBorder=_toHex(Math.round(r*0.3+255*0.7),Math.round(g*0.3+255*0.7),Math.round(b*0.3+255*0.7));
+  const newDark=_toHex(Math.round(r*0.88),Math.round(g*0.88),Math.round(b*0.88));
+  const newLine=_toHex(Math.round(r*0.18+255*0.82),Math.round(g*0.18+255*0.82),Math.round(b*0.18+255*0.82));
   let html=editor.innerHTML;
-  // primary 계열 교체
-  [from.primary,DEFAULT_PRIMARY].forEach(c=>{if(c!==color)html=html.replace(new RegExp(reEsc(c),'gi'),color);});
-  // light 계열 교체
-  [from.light,DEFAULT_LIGHT,'#fff8f9'].forEach(c=>{if(c!==newLight)html=html.replace(new RegExp(reEsc(c),'gi'),newLight);});
-  // border 계열 교체
-  const lr2=parseInt(color.slice(1,3),16),lg2=parseInt(color.slice(3,5),16),lb2=parseInt(color.slice(5,7),16);
-  const br2=Math.round(lr2*0.3+255*0.7),bg2=Math.round(lg2*0.3+255*0.7),bb2=Math.round(lb2*0.3+255*0.7);
-  const newBorder='#'+[br2,bg2,bb2].map(x=>x.toString(16).padStart(2,'0')).join('');
-  const fromBorder2=from.border||DEFAULT_BORDER;
-  [fromBorder2,DEFAULT_BORDER].forEach(c=>{if(c!==newBorder)html=html.replace(new RegExp(reEsc(c),'gi'),newBorder);});
-  THEMES[currentThemeIdx].border=newBorder;
+  const _replaceColor=(fromColor,toColor)=>{
+    if(!fromColor||!toColor||fromColor.toLowerCase()===toColor.toLowerCase())return;
+    html=html.replace(new RegExp(reEsc(fromColor),'gi'),toColor);
+    const m=fromColor.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+    if(m){
+      const rR=parseInt(m[1],16),gG=parseInt(m[2],16),bB=parseInt(m[3],16);
+      html=html.split(`rgb(${rR}, ${gG}, ${bB})`).join(toColor).split(`rgb(${rR},${gG},${bB})`).join(toColor);
+    }
+  };
+  [from.primary,DEFAULT_PRIMARY].forEach(c=>_replaceColor(c,color));
+  [from.mid,DEFAULT_MID].forEach(c=>_replaceColor(c,newMid));
+  [from.light,DEFAULT_LIGHT,'#fff8f9'].forEach(c=>_replaceColor(c,newLight));
+  [from.border||DEFAULT_BORDER,DEFAULT_BORDER].forEach(c=>_replaceColor(c,newBorder));
+  [from.dark||DEFAULT_DARK,DEFAULT_DARK].forEach(c=>_replaceColor(c,newDark));
+  [from.line||DEFAULT_LINE,DEFAULT_LINE].forEach(c=>_replaceColor(c,newLine));
+  if(selectedElem){try{selectedElem.style.outline='';}catch(_){}}
   editor.innerHTML=html;
   THEMES[currentThemeIdx].primary=color;
+  THEMES[currentThemeIdx].mid=newMid;
   THEMES[currentThemeIdx].light=newLight;
+  THEMES[currentThemeIdx].border=newBorder;
+  THEMES[currentThemeIdx].dark=newDark;
+  THEMES[currentThemeIdx].line=newLine;
+  try{if(typeof deselectAll==='function')deselectAll(false);}catch(_){}
+  fixThemeContrast(editor);
   syncHtmlPanel();scheduleAutoSave();
   showToast('🎨 커스텀 색상 적용됨');
 }
@@ -3456,6 +4576,25 @@ function cpSyncAll(hex,skipRecent){
       cpTarget.dispatchEvent(new Event('input',{bubbles:true}));
       cpTarget.dispatchEvent(new Event('change',{bubbles:true}));
     }
+  }
+}
+// ── 스포이드(EyeDropper API) ──
+//   화면에서 색을 픽 → 현재 색상 피커의 hex 입력에 반영
+function cpUseEyedropper(){
+  if(!('EyeDropper' in window)){
+    showToast&&showToast('이 브라우저는 스포이드를 지원하지 않습니다 (Chrome/Edge 최신 필요)');
+    return;
+  }
+  try{
+    const ed=new window.EyeDropper();
+    ed.open().then(result=>{
+      const hex=(result&&result.sRGBHex||'').toLowerCase();
+      if(!/^#[0-9a-f]{6}$/.test(hex))return;
+      const inp=document.getElementById('cp-hex');
+      if(inp){inp.value=hex;cpHexInput(hex);}
+    }).catch(()=>{/* 사용자 취소 — 무시 */});
+  }catch(e){
+    showToast&&showToast('스포이드 실행 실패');
   }
 }
 function cpHexInput(val){
@@ -3601,7 +4740,7 @@ function applyTextGradient(){
     return;
   }
   // ② 개체 미선택 — 선택된 텍스트 범위에 적용
-  editor.focus();restoreRange();
+  try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();
   const sel=window.getSelection();
   if(!sel||sel.rangeCount===0||sel.isCollapsed){showToast('텍스트 또는 개체를 먼저 선택해 주세요');return;}
   saveUndo();
@@ -3795,16 +4934,17 @@ function doUndo(){
   isUndoing=true;
   redoStack.push(editor.innerHTML);
   editor.innerHTML=undoStack.pop();
-  isUndoing=false;
   deselectAll();syncHtmlPanel();
+  // MutationObserver가 비동기로 발화하므로 충분히 지난 뒤 플래그 해제
+  setTimeout(()=>{isUndoing=false;_pendingUndo=false;clearTimeout(undoInputTimer);},50);
 }
 function doRedo(){
   if(!redoStack.length)return;
   isUndoing=true;
   undoStack.push(editor.innerHTML);
   editor.innerHTML=redoStack.pop();
-  isUndoing=false;
   deselectAll();syncHtmlPanel();
+  setTimeout(()=>{isUndoing=false;_pendingUndo=false;clearTimeout(undoInputTimer);},50);
 }
 // 속성 변경 전 자동 스냅샷
 // 같은 드래그/연속 변경 중엔 하나의 스냅샷만 누적되도록 디바운싱
@@ -3834,12 +4974,51 @@ if(typeof toggleBlockNone==='function'){const _o=toggleBlockNone;toggleBlockNone
 if(typeof startWithTpl==='function'){const _o=startWithTpl;startWithTpl=function(){saveUndo();_o.apply(this,arguments);};}
 if(typeof applyAiHtml==='function'){const _o=applyAiHtml;applyAiHtml=function(){saveUndo();_o.apply(this,arguments);};}
 if(typeof applyHtml==='function'){const _o=applyHtml;applyHtml=function(){saveUndo();_o.apply(this,arguments);};}
-// editor input 시 스냅샷 (0.5초 디바운스)
+// 모든 변경(입력/DOM 조작/스타일 변경)을 포착해 스냅샷 — MutationObserver 기반
 let undoInputTimer=null;
-editor.addEventListener('input',()=>{
+let _pendingUndo=false;
+function _scheduleUndoSnapshot(delay){
+  if(isUndoing)return;
+  _pendingUndo=true;
   clearTimeout(undoInputTimer);
-  undoInputTimer=setTimeout(()=>{ if(!isUndoing)saveUndo(); },500);
-});
+  undoInputTimer=setTimeout(()=>{
+    if(!isUndoing&&_pendingUndo){saveUndo();_pendingUndo=false;}
+  }, delay==null?400:delay);
+}
+// 대기 중인 스냅샷을 즉시 저장 (Ctrl+Z 직전 호출)
+function flushPendingUndo(){
+  if(_pendingUndo&&!isUndoing){
+    clearTimeout(undoInputTimer);
+    saveUndo();_pendingUndo=false;
+  }
+}
+try{
+  const _mo=new MutationObserver((muts)=>{
+    if(isUndoing)return;
+    // 선택/outline만 바뀐 경우는 스냅샷 스킵 (오버레이 소음 방지)
+    let meaningful=false;
+    for(const m of muts){
+      if(m.type==='childList'&&(m.addedNodes.length||m.removedNodes.length)){meaningful=true;break;}
+      if(m.type==='characterData'){meaningful=true;break;}
+      if(m.type==='attributes'){
+        const an=m.attributeName;
+        // outline/선택 클래스는 무시
+        if(an==='class'){
+          const t=m.target;
+          // elem-multi-selected/selected 같은 내부 선택 클래스만 바뀐 경우 스킵은 어려움 → 그냥 포함
+        }
+        if(an==='style'||an==='src'||an==='href'||an==='colspan'||an==='rowspan'||an==='width'||an==='height'||an==='class'){meaningful=true;break;}
+      }
+    }
+    if(meaningful)_scheduleUndoSnapshot(400);
+  });
+  _mo.observe(editor,{childList:true,subtree:true,characterData:true,attributes:true,attributeOldValue:false});
+}catch(e){
+  // MutationObserver 미지원 폴백: 기존 input 리스너
+  editor.addEventListener('input',()=>_scheduleUndoSnapshot(500));
+}
+// input 이벤트도 보조로 유지 (IME 조합 안정성)
+editor.addEventListener('input',()=>_scheduleUndoSnapshot(400));
 
 let copiedElem=null;
 document.addEventListener('keydown',(e)=>{
@@ -3851,13 +5030,21 @@ document.addEventListener('keydown',(e)=>{
     if(selectedElems&&selectedElems.length>0){e.preventDefault();deleteMulti();return;}
   }
   if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&e.key==='z'){
-    // 도형/표 편집 중이 아닐 때만 커스텀 undo
-    if(!shapeEditMode&&!selectedCell){e.preventDefault();doUndo();return;}
+    // input/textarea/select 포커스일 땐 브라우저 기본 undo 허용
+    const ae=document.activeElement;
+    if(ae&&['INPUT','TEXTAREA','SELECT'].includes(ae.tagName))return;
+    // 대기 중인 스냅샷 즉시 저장 후 undo
+    e.preventDefault();
+    flushPendingUndo();
+    doUndo();return;
   }
   if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.shiftKey&&e.key==='z'))){
-    if(!shapeEditMode&&!selectedCell){e.preventDefault();doRedo();return;}
+    const ae=document.activeElement;
+    if(ae&&['INPUT','TEXTAREA','SELECT'].includes(ae.tagName))return;
+    e.preventDefault();
+    doRedo();return;
   }
-  // Ctrl+A — 도형/표 내부에서는 해당 컨테이너만 전체선택
+  // Ctrl+A — 도형/표/텍스트 편집 중인 개체 내부에서는 해당 컨테이너만 전체선택
   if((e.ctrlKey||e.metaKey)&&e.key==='a'){
     if(shapeEditMode&&selectedElem){
       e.preventDefault();
@@ -3868,6 +5055,31 @@ document.addEventListener('keydown',(e)=>{
       e.preventDefault();
       const range=document.createRange();range.selectNodeContents(selectedCell);
       const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);return;
+    }
+    // 더블클릭으로 텍스트 편집 모드 진입한 블록 내부에서 Ctrl+A → 그 블록만 전체선택
+    {
+      const sel0=window.getSelection();
+      let caretNode=null;
+      if(sel0&&sel0.rangeCount>0){
+        const r=sel0.getRangeAt(0);
+        caretNode=r.startContainer.nodeType===3?r.startContainer.parentElement:r.startContainer;
+      }
+      // 캐럿 기반 + _textEditMode 플래그가 설정된 가장 가까운 조상 찾기
+      let editBlock=null;
+      if(caretNode&&editor.contains(caretNode)){
+        let n=caretNode;
+        while(n&&n!==editor){if(n._textEditMode){editBlock=n;break;} n=n.parentElement;}
+      }
+      // 캐럿이 없어도 편집모드인 요소가 단일로 있으면 그것 사용
+      if(!editBlock){
+        const candidates=Array.from(editor.querySelectorAll('*')).filter(x=>x._textEditMode);
+        if(candidates.length===1)editBlock=candidates[0];
+      }
+      if(editBlock){
+        e.preventDefault();
+        const range=document.createRange();range.selectNodeContents(editBlock);
+        const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);return;
+      }
     }
     // 표 안에서 입력 중인 경우
     const activeCell=document.activeElement?.closest?.('td,th')||window.getSelection()?.getRangeAt(0)?.startContainer?.parentElement?.closest?.('td,th');
@@ -3938,6 +5150,9 @@ setAutoSave(false);renderDocList();
   <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
     <div id="cp-preview" style="width:30px;height:30px;border-radius:6px;border:1px solid #ddd;flex-shrink:0;background:#cccccc;"></div>
     <input id="cp-hex" type="text" maxlength="7" placeholder="#ffffff" style="flex:1;border:1px solid #ddd;border-radius:6px;padding:5px 8px;font-size:12px;font-family:monospace;outline:none;" oninput="cpHexInput(this.value)">
+    <button id="cp-eyedropper" type="button" title="스포이드 — 화면의 색을 추출" onmousedown="event.preventDefault()" onclick="cpUseEyedropper()" style="flex-shrink:0;width:30px;height:30px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background 0.12s;" onmouseover="this.style.background='#f3f4f6';" onmouseout="this.style.background='#fff';">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22l8-8"/><path d="M14 4l6 6"/><path d="M14.5 6.5l3 3-9.5 9.5-3-3z"/><path d="M16 2l6 6-2 2-6-6z"/></svg>
+    </button>
   </div>
   <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
     <span style="font-size:10px;color:#999;flex-shrink:0;letter-spacing:.3px;">투명도</span>
