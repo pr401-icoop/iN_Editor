@@ -7,18 +7,19 @@
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
 :root{
-  --bg-app:#f5f5f7;
-  --bg-canvas:#EAF0F8;
-  --bg-surface:#FFFFFF;
-  --bg-muted:#f8fafc;
-  --border-soft:#e5e7eb;
-  --border-mid:#dfe4ec;
-  --text-main:#1f2937;
-  --text-sub:#6b7280;
-  --text-soft:#9ca3af;
-  --accent:#2E5AAC;
-  --accent-hover:#234887;
-  --accent-soft:#EAF0F8;
+  --bg-app:#f5f5f7;       /* 앱 전체 배경 (가장 옅은 회색) */
+  --bg-canvas:#e9ecef;    /* 캔버스(에디터 주변) — 중간 회색 */
+  --bg-surface:#FFFFFF;   /* 패널·카드 표면 */
+  --bg-muted:#f8fafc;     /* 약한 회색 (modal·intro-box) */
+  --border-soft:#e5e7eb;  /* 옅은 보더 */
+  --border-mid:#d1d5db;   /* 중간 보더 */
+  --text-main:#333333;    /* 본문 어두운 차콜 */
+  --text-sub:#6b7280;     /* 부연 회색 */
+  --text-soft:#9ca3af;    /* 더 옅은 회색 */
+  /* 메인 액센트 — 로고 와인레드 #bb1049, 회색 계열 위에 단일 강조 */
+  --accent:#bb1049;        /* 로고 와인레드 — 메인 버튼·포커스·활성 */
+  --accent-hover:#8e0c37;  /* 호버 시 더 진하게 */
+  --accent-soft:#fce7ed;   /* 와인레드 매우 옅은 톤 — 호버 배경 / 선택 배경 */
 }
 body { font-family:'Malgun Gothic','맑은 고딕',sans-serif; background:var(--bg-app); color:var(--text-main); font-size:14px; -webkit-font-smoothing:antialiased; }
 body.props-open { padding-bottom:62px; }
@@ -138,7 +139,7 @@ body.props-open { padding-bottom:62px; }
 #editor table td, #editor table th { border:1px solid #ccc; padding:10px 14px; min-width:60px; font-size:15px; vertical-align:top; cursor:text; word-break:break-word; }
 #editor table th { background:#f5f5f5; font-weight:700; }
 #editor hr { border:none; border-top:1px solid #e0e0e0; margin:22px 0; }
-#editor blockquote { border-left:3px solid var(--accent); margin:14px 0; padding:10px 18px; background:var(--accent-soft); color:var(--text-main); cursor:pointer; border-radius:0 8px 8px 0; }
+#editor blockquote { border-left:3px solid var(--accent); margin:14px 0; padding:10px 18px; background:var(--accent-soft); color:var(--text-main); cursor:pointer; border-radius:0; }
 #editor sup { font-size:0.75em; vertical-align:super; }
 #editor sub { font-size:0.75em; vertical-align:sub; }
 #editor a { color:var(--accent); }
@@ -191,6 +192,8 @@ body.props-open { padding-bottom:62px; }
 .pp-group { display:none; flex-direction:column; align-items:stretch; gap:6px; }
 .pp-group.active { display:flex; }
 .pp-label { font-size:11px; color:var(--text-sub); white-space:nowrap; flex-shrink:0; }
+/* W/H 같은 라벨+input 묶음 — 라벨과 input 사이 간격 4px 고정 */
+.pp-wh { display:inline-flex; align-items:center; gap:4px; }
 /* 섹션 구분선 — 가로 전체 차지 */
 .pp-sep { height:1px; width:100%; background:var(--border-soft); margin:6px 0 2px; }
 /* 섹션 타이틀 — 단독 행 */
@@ -366,7 +369,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <div class="dropdown-wrap" id="storage-wrap">
       <button class="hdr-btn" onclick="toggleStorageMenu()">📂 라이브러리 <span id="doc-count"></span></button>
       <div class="dropdown-menu" id="storage-menu">
-        <div class="dropdown-header"><span>저장된 문서</span><span id="doc-count2" style="font-size:11px;color:#bbb;"></span></div>
+        <div class="dropdown-header" style="display:flex;align-items:center;justify-content:space-between;gap:8px;"><span>저장된 문서 <span id="doc-count2" style="font-size:11px;color:#bbb;margin-left:4px;"></span></span><button id="doc-clear-btn" onclick="deleteAllDocs()" title="저장된 모든 문서 일괄 삭제" style="background:transparent;border:1px solid var(--border-soft);border-radius:999px;padding:3px 10px;font-size:11px;color:var(--text-sub);cursor:pointer;font-family:inherit;">🗑 전체 삭제</button></div>
         <div class="doc-list" id="doc-list"></div>
         <div class="dropdown-footer">
           <button onclick="newDocument()">＋ 새 문서</button>
@@ -395,11 +398,11 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   <span style="font-size:11px;color:#aaa;padding:0 4px;white-space:nowrap;">색상 테마</span>
   <div style="width:6px;flex-shrink:0;"></div>
   <div class="theme-dots" id="theme-dots">
-    <div class="theme-dot active" data-idx="0" style="background:#2E5AAC;" title="코퍼레이트블루" onmousedown="event.preventDefault()" onclick="applyTheme(0)"></div>
-    <div class="theme-dot" data-idx="1" style="background:#D4A017;" title="골드" onmousedown="event.preventDefault()" onclick="applyTheme(1)"></div>
-    <div class="theme-dot" data-idx="2" style="background:#4A6B3F;" title="세이지" onmousedown="event.preventDefault()" onclick="applyTheme(2)"></div>
-    <div class="theme-dot" data-idx="3" style="background:#9C5068;" title="플럼" onmousedown="event.preventDefault()" onclick="applyTheme(3)"></div>
-    <div class="theme-dot" data-idx="4" style="background:#374151;" title="슬레이트" onmousedown="event.preventDefault()" onclick="applyTheme(4)"></div>
+    <div class="theme-dot active" data-idx="0" style="background:#bb1049;" title="로고 와인레드" onmousedown="event.preventDefault()" onclick="applyTheme(0)"></div>
+    <div class="theme-dot" data-idx="1" style="background:#E59410;" title="수확 앰버" onmousedown="event.preventDefault()" onclick="applyTheme(1)"></div>
+    <div class="theme-dot" data-idx="2" style="background:#009245;" title="생기 그린" onmousedown="event.preventDefault()" onclick="applyTheme(2)"></div>
+    <div class="theme-dot" data-idx="3" style="background:#2E5AAC;" title="코퍼레이트블루" onmousedown="event.preventDefault()" onclick="applyTheme(3)"></div>
+    <div class="theme-dot" data-idx="4" style="background:#374151;" title="차콜" onmousedown="event.preventDefault()" onclick="applyTheme(4)"></div>
     <div class="theme-dot" id="custom-color-dot" title="커스텀 색상" style="background:conic-gradient(red,orange,yellow,lime,cyan,blue,violet,red);position:relative;overflow:hidden;" onmousedown="event.preventDefault()" onclick="openCpCustomTheme(this)">
       <input type="color" id="custom-color-input" style="position:absolute;inset:0;opacity:0;width:0;height:0;pointer-events:none;border:none;padding:0;" oninput="applyCustomTheme(this.value)">
     </div>
@@ -410,8 +413,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   <div id="editor-bg-btn" title="페이지 배경색" style="width:26px;height:26px;border-radius:4px;border:1px solid #ddd;cursor:pointer;flex-shrink:0;background:#ffffff;" onmousedown="event.preventDefault()" onclick="openCpEditorBg(this)"></div>
   <div class="ins-right">
     <button class="ins-right-btn" onclick="toggleHtmlPanel()">HTML 편집</button>
-    <button class="ins-right-btn" onclick="copyHtml()">HTML 복사</button>
-    <button class="ins-right-btn" onclick="copyHtmlForSE2()" title="네이버 SmartEditor 2 호환 — 인트라넷 게시판의 HTML 탭에 붙여넣기" style="background:#2E5AAC;color:#fff;border-color:#2E5AAC;">SE2 복사</button>
+    <button class="ins-right-btn" onclick="copyHtmlForSE2()" title="인트라넷 SmartEditor 2 호환 HTML 을 클립보드에 복사 — SE2 의 HTML 탭에 그대로 붙여넣기" style="background:var(--accent);color:#fff;border-color:var(--accent);">HTML 복사</button>
   </div>
 </div>
 
@@ -479,8 +481,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </div>
     <input type="color" id="bg-color-cp-input" value="#ffff00" style="display:none;">
     <div id="gradColorBtn" title="그라데이션" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:3px 5px;border-radius:3px;" onmousedown="event.preventDefault()" onclick="openGradModal()">
-      <span style="font-size:14px;font-weight:700;line-height:1;background:linear-gradient(135deg,#2E5AAC,#EAF0F8);-webkit-background-clip:text;background-clip:text;color:transparent;">가</span>
-      <div style="width:14px;height:3px;margin-top:2px;background:linear-gradient(to right,#2E5AAC,#EAF0F8);border-radius:1px;"></div>
+      <span style="font-size:14px;font-weight:700;line-height:1;background:linear-gradient(135deg,#bb1049,#fce7ed);-webkit-background-clip:text;background-clip:text;color:transparent;">가</span>
+      <div style="width:14px;height:3px;margin-top:2px;background:linear-gradient(to right,#bb1049,#fce7ed);border-radius:1px;"></div>
     </div>
   </div>
   <div class="fmt-sep"></div>
@@ -557,7 +559,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <textarea id="html-editor" spellcheck="false" placeholder="HTML을 직접 입력하거나 편집하세요..."></textarea>
     <div id="html-panel-footer">
       <button onclick="applyHtml()" style="background:var(--accent);color:#fff;border-radius:999px;">↩ 에디터에 적용</button>
-      <button onclick="copyHtml()" style="background:var(--text-main);color:#fff;border-radius:999px;">📋 HTML 복사</button>
+      <button onclick="copyHtmlForSE2()" style="background:var(--text-main);color:#fff;border-radius:999px;">📋 HTML 복사</button>
     </div>
   </div>
 </div>
@@ -594,7 +596,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </div>
     <div class="pp-row">
       <label class="pp-none-lbl"><input type="checkbox" id="pp-fill-grad-on" onchange="applyProp('fillGrad',this.checked)"> 그라데이션</label>
-      <input type="color" id="pp-fill-bg2" class="pp-color" value="#EAF0F8" style="display:none;" onmousedown="event.preventDefault()" onchange="applyProp('fill',document.getElementById('pp-fill').value)">
+      <input type="color" id="pp-fill-bg2" class="pp-color" value="#fce7ed" style="display:none;" onmousedown="event.preventDefault()" onchange="applyProp('fill',document.getElementById('pp-fill').value)">
       <select class="pp-select" id="pp-fill-grad-dir" style="display:none;" onchange="applyProp('fill',document.getElementById('pp-fill').value)">
         <option value="to bottom">↓</option><option value="to top">↑</option>
         <option value="to right">→</option><option value="to left">←</option>
@@ -646,10 +648,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기</span>
     <div class="pp-row">
-      <span class="pp-label">W</span>
-      <input type="number" id="pp-shape-w" class="pp-num" min="1" max="9999" onchange="resizeElemPanel('w',this.value)">
-      <span class="pp-label">H</span>
-      <input type="number" id="pp-shape-h" class="pp-num" min="1" max="9999" onchange="resizeElemPanel('h',this.value)">
+      <span class="pp-wh"><span class="pp-label">W</span><input type="number" id="pp-shape-w" class="pp-num" min="1" max="9999" onchange="resizeElemPanel('w',this.value)"></span>
+      <span class="pp-wh"><span class="pp-label">H</span><input type="number" id="pp-shape-h" class="pp-num" min="1" max="9999" onchange="resizeElemPanel('h',this.value)"></span>
     </div>
     <div class="pp-row">
       <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#888;cursor:pointer;">
@@ -737,10 +737,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기</span>
     <div class="pp-row">
-      <span class="pp-label">W</span>
-      <input type="number" id="pp-tbl-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
-      <span class="pp-label">H</span>
-      <input type="number" id="pp-tbl-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
+      <span class="pp-wh"><span class="pp-label">W</span><input type="number" id="pp-tbl-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)"></span>
+      <span class="pp-wh"><span class="pp-label">H</span><input type="number" id="pp-tbl-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)"></span>
     </div>
     <div class="pp-row">
       <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#888;cursor:pointer;">
@@ -846,7 +844,6 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <div class="pp-row">
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="document.getElementById('pp-img-replace-input').click()" title="현재 이미지를 새 파일로 교체">📷 변경</button>
       <input type="file" id="pp-img-replace-input" accept="image/*" style="display:none;" onchange="replaceSelectedImage(this)">
-      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="replaceSelectedImageByUrl()" title="URL로 이미지 교체">🔗 URL</button>
     </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">정렬</span>
@@ -871,10 +868,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기</span>
     <div class="pp-row">
-      <span class="pp-label">W</span>
-      <input type="number" id="pp-img-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
-      <span class="pp-label">H</span>
-      <input type="number" id="pp-img-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
+      <span class="pp-wh"><span class="pp-label">W</span><input type="number" id="pp-img-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)"></span>
+      <span class="pp-wh"><span class="pp-label">H</span><input type="number" id="pp-img-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)"></span>
     </div>
     <div class="pp-row">
       <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#888;cursor:pointer;">
@@ -922,14 +917,24 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <label class="pp-none-lbl"><input type="checkbox" id="pp-block-bg-none" onchange="toggleBlockNone('bg',this.checked)"> 없음</label>
     </div>
     <div class="pp-row">
-      <label class="pp-none-lbl"><input type="checkbox" id="pp-block-grad-on" onchange="applyBlockProp('grad',this.checked)"> 그라데이션</label>
-      <input type="color" id="pp-block-bg2" class="pp-color" style="display:none;" onmousedown="event.preventDefault()" onchange="applyBlockProp('bg',document.getElementById('pp-block-bg').value)">
-      <select class="pp-select" id="pp-block-grad-dir" style="display:none;" onchange="applyBlockProp('bg',document.getElementById('pp-block-bg').value)">
+      <label class="pp-none-lbl"><input type="checkbox" id="pp-block-grad-on" onchange="toggleBlockGrad(this.checked)"> 그라데이션</label>
+      <select class="pp-select" id="pp-block-grad-dir" style="display:none;" onchange="updateBlockGrad()">
         <option value="to bottom">↓</option><option value="to top">↑</option>
         <option value="to right">→</option><option value="to left">←</option>
         <option value="135deg">↘</option><option value="45deg">↗</option>
         <option value="225deg">↙</option><option value="315deg">↖</option>
       </select>
+      <input type="color" id="pp-block-bg2" style="display:none;width:0;height:0;border:0;padding:0;visibility:hidden;">
+    </div>
+    <!-- 그라데이션 바 (Adobe-style stops) — 그라데이션 ON 시에만 표시 -->
+    <div id="pp-block-grad-wrap" style="display:none;margin:6px 0 4px;">
+      <div id="pp-block-grad-bar" style="position:relative;height:22px;border-radius:6px;border:1px solid var(--border-soft);cursor:pointer;background:#eee;" onclick="addBlockGradStop(event)"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;font-size:11px;color:#888;">
+        <span>0%</span>
+        <span style="display:flex;align-items:center;gap:4px;">위치 <input type="number" id="pp-block-grad-pos" min="0" max="100" value="0" style="width:48px;border:1px solid var(--border-soft);border-radius:4px;padding:2px 4px;font-size:11px;font-family:inherit;" onchange="setBlockGradPos(this.value)"> %
+        <button type="button" class="pp-btn" onclick="removeBlockGradStop()" title="현재 정지점 제거" style="padding:2px 8px;font-size:11px;">−</button></span>
+        <span>100%</span>
+      </div>
     </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">테두리 선</span>
@@ -966,10 +971,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기</span>
     <div class="pp-row">
-      <span class="pp-label">W</span>
-      <input type="number" id="pp-block-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)">
-      <span class="pp-label">H</span>
-      <input type="number" id="pp-block-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)">
+      <span class="pp-wh"><span class="pp-label">W</span><input type="number" id="pp-block-w" class="pp-num" min="1" onchange="resizeElemPanel('w',this.value)"></span>
+      <span class="pp-wh"><span class="pp-label">H</span><input type="number" id="pp-block-h" class="pp-num" min="1" onchange="resizeElemPanel('h',this.value)"></span>
     </div>
     <div class="pp-row">
       <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#888;cursor:pointer;">
@@ -1049,12 +1052,12 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </select>
   </div>
   <div class="sh-row"><label>채우기</label>
-    <input type="color" id="sh-fill" value="#2E5AAC">
+    <input type="color" id="sh-fill" value="#bb1049">
     <label style="width:auto;margin-left:4px;font-size:11px;"><input type="checkbox" id="sh-no-fill"> 없음</label>
   </div>
   <div class="sh-row"><label>그라데이션</label>
     <label style="width:auto;font-size:11px;"><input type="checkbox" id="sh-grad-on" onchange="toggleShGrad()"> 사용</label>
-    <input type="color" id="sh-fill2" value="#EAF0F8" style="display:none;">
+    <input type="color" id="sh-fill2" value="#fce7ed" style="display:none;">
     <select id="sh-grad-dir" style="display:none;flex:0 0 auto;width:70px;">
       <option value="to bottom">↓</option>
       <option value="to top">↑</option>
@@ -1067,7 +1070,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
     </select>
   </div>
   <div class="sh-row"><label>텍스트색</label><input type="color" id="sh-text-color" value="#ffffff"></div>
-  <div class="sh-row"><label>테두리색</label><input type="color" id="sh-border-color" value="#2E5AAC"></div>
+  <div class="sh-row"><label>테두리색</label><input type="color" id="sh-border-color" value="#bb1049"></div>
   <div class="sh-row"><label>테두리</label><input type="number" id="sh-border-width" value="0" min="0" max="20"><span style="font-size:11px;color:#aaa;">px</span></div>
   <div class="sh-row" id="sh-radius-row"><label>모서리</label><input type="range" id="sh-radius" min="0" max="200" value="0"><span class="sh-val" id="sh-radius-v">0px</span></div>
   <div class="sh-row"><label>투명도</label><input type="range" id="sh-opacity" min="0" max="100" value="100"><span class="sh-val" id="sh-opacity-val">100%</span></div>
@@ -1091,8 +1094,8 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
         <option value="text">글자</option>
       </select>
     </div>
-    <div class="row"><label style="min-width:80px;">시작색</label><input type="color" id="grad-c1" value="#2E5AAC" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
-    <div class="row"><label style="min-width:80px;">끝색</label><input type="color" id="grad-c2" value="#EAF0F8" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
+    <div class="row"><label style="min-width:80px;">시작색</label><input type="color" id="grad-c1" value="#bb1049" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
+    <div class="row"><label style="min-width:80px;">끝색</label><input type="color" id="grad-c2" value="#fce7ed" style="width:50px;height:32px;padding:0;border-radius:6px;"></div>
     <div class="row"><label style="min-width:80px;">방향</label>
       <select id="grad-dir" style="flex:1;padding:8px 10px;border:1px solid var(--border-soft);border-radius:8px;font-size:14px;font-family:inherit;">
         <option value="to right">→ (왼쪽 → 오른쪽)</option>
@@ -1105,7 +1108,7 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
         <option value="315deg">↖ 대각선</option>
       </select>
     </div>
-    <div id="grad-preview" style="height:36px;border-radius:8px;margin:12px 0 4px;background:linear-gradient(to right,#2E5AAC,#EAF0F8);border:1px solid var(--border-soft);"></div>
+    <div id="grad-preview" style="height:36px;border-radius:8px;margin:12px 0 4px;background:linear-gradient(to right,#bb1049,#fce7ed);border:1px solid var(--border-soft);"></div>
     <div class="modal-btns"><button class="btn-cancel" onclick="closeModal('grad-modal')">취소</button><button class="btn-ok" onclick="applyTextGradient()">적용</button></div>
   </div>
 </div>
@@ -1192,12 +1195,13 @@ function getShadow(preset, color, dir){
 }
 
 // 색상 테마
+// 자연드림 컬렉션 — 무지개 순서: 빨(와인) → 주(앰버) → 초(그린) → 파(블루) → 중립(차콜)
 const THEMES=[
-  {name:'코퍼레이트블루',primary:'#2E5AAC',mid:'#4A7BC9',light:'#EAF0F8',border:'#C7D5EA',dark:'#234887',line:'#dfe4ec'},
-  {name:'골드',         primary:'#D4A017',mid:'#E0B845',light:'#FFF9E6',border:'#F5CF5C',dark:'#8B6914',line:'#e5e7eb'},
-  {name:'세이지',       primary:'#4A6B3F',mid:'#6B8759',light:'#EAF0E4',border:'#C5D2BA',dark:'#3A5A30',line:'#e5e7eb'},
-  {name:'플럼',         primary:'#9C5068',mid:'#B96A82',light:'#F4E4E8',border:'#E0BDC6',dark:'#7C3F52',line:'#e5e7eb'},
-  {name:'슬레이트',     primary:'#374151',mid:'#6b7280',light:'#f3f4f6',border:'#d1d5db',dark:'#1f2937',line:'#e5e7eb'},
+  {name:'로고 와인레드',primary:'#bb1049',mid:'#d44570',light:'#fce7ed',border:'#f0bfd0',dark:'#8e0c37',line:'#e5e7eb'},
+  {name:'수확 앰버',    primary:'#E59410',mid:'#F0AC3A',light:'#FFF1D9',border:'#F5C97A',dark:'#B07209',line:'#e5e7eb'},
+  {name:'생기 그린',    primary:'#009245',mid:'#2DAD6A',light:'#DFF2E5',border:'#99CFB0',dark:'#006B30',line:'#e5e7eb'},
+  {name:'코퍼레이트블루',primary:'#2E5AAC',mid:'#4A7BC9',light:'#E5EDFA',border:'#B8CDED',dark:'#1F4082',line:'#e5e7eb'},
+  {name:'차콜',         primary:'#374151',mid:'#6b7280',light:'#f3f4f6',border:'#d1d5db',dark:'#333333',line:'#e5e7eb'},
 ];
 let currentThemeIdx=0;
 
@@ -1271,6 +1275,19 @@ function renderDocList(){
 }
 function loadDoc(id){const docs=getDocs(),doc=docs[id];if(!doc)return;if(editor.innerHTML.trim()&&currentDocId!==id&&!confirm('현재 편집 내용이 사라집니다. 불러오시겠습니까?'))return;currentDocId=id;docTitleInput.value=doc.title;editor.innerHTML=doc.content;setAutoSave(true);toggleStorageMenu();showToast('📄 불러왔습니다: '+doc.title);syncHtmlPanel();}
 function deleteDoc(e,id){e.stopPropagation();const docs=getDocs(),title=docs[id]?docs[id].title:'문서';if(!confirm(`"${title}"을 삭제하시겠습니까?`))return;delete docs[id];setDocs(docs);if(currentDocId===id){currentDocId=null;editor.innerHTML='';docTitleInput.value='';setAutoSave(false);}renderDocList();showToast('🗑 삭제됐습니다.');}
+// ── 라이브러리 전체 일괄 삭제 ──
+function deleteAllDocs(){
+  const docs=getDocs();
+  const cnt=Object.keys(docs).length;
+  if(cnt===0){showToast('삭제할 문서가 없습니다');return;}
+  if(!confirm(`저장된 모든 문서 ${cnt}개를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`))return;
+  // 한 번 더 확인 (실수 방지)
+  if(!confirm(`정말로 ${cnt}개 문서를 모두 삭제할까요? 마지막 확인입니다.`))return;
+  setDocs({});
+  if(currentDocId){currentDocId=null;editor.innerHTML='';docTitleInput.value='';setAutoSave(false);}
+  renderDocList();
+  showToast(`🗑 ${cnt}개 문서를 모두 삭제했습니다.`);
+}
 function newDocument(){if(editor.innerHTML.trim()&&!confirm('새 문서를 시작하시겠습니까?'))return;currentDocId=null;editor.innerHTML='';docTitleInput.value='';setAutoSave(false);toggleStorageMenu();try{editor.focus({preventScroll:true});}catch{editor.focus();}}
 function exportFile(){const title=docTitleInput.value.trim()||'제목없음',content=editor.innerHTML;if(!content.trim()){showToast('내용이 없습니다.');return;}
   const data={version:'4.0',title,content,exportedAt:new Date().toISOString()};
@@ -1302,19 +1319,20 @@ function importFile(input){const file=input.files[0];if(!file)return;const reade
 // 소식 템플릿 — 매거진 리포트 레이아웃 (Header meta · Serif Title · Section-num · KPI · Pullquote · Divider ※ · Footer)
 // ══════════════════════════════════
 function _sogsikTpl(t){
-  // ── ERP 블루 팔레트 ──
-  const G='#2E5AAC',G2='#4A7BC9',AM='#4A7BC9',CO='#234887';
-  const INK='#1f2937',IM='#374151',IL='#6b7280';
-  const LN='#dfe4ec',LS='#e5e7eb',BC='#FFFFFF',BA='#EAF0F8';
+  // ── 자연드림 와인레드 팔레트 (THEMES[0] 와 동일) ──
+  const G='#bb1049',G2='#d44570',AM='#d44570',CO='#8e0c37';
+  const INK='#333333',IM='#374151',IL='#6b7280';
+  const LN='#e5e7eb',LS='#e5e7eb',BC='#FFFFFF',BA='#fce7ed';
   const SS=`'Malgun Gothic','맑은 고딕',sans-serif`;
   // KPI / row 헬퍼
   const kpi=(n,u,nm,d,last)=>`<div style="padding:24px 18px;${last?'':`border-right:1px solid ${LS};`}background:${BC};text-align:center;"><div style="font-size:12pt;letter-spacing:.15em;text-transform:uppercase;color:${IL};margin:0 0 10px;font-weight:500;">${nm}</div><div style="font-size:16pt;font-weight:700;line-height:1.2;color:${INK};margin:0 0 6px;">${n}<span style="font-size:12pt;color:${IM};margin-left:2px;font-weight:400;">${u}</span></div><div style="font-size:12pt;color:${IL};">${d}</div></div>`;
   const row=(k,v)=>`<tr><th style="text-align:left;padding:12px 16px;background:${BA};border-bottom:1px solid ${LS};font-weight:600;font-size:12pt;letter-spacing:.05em;color:${G};width:160px;vertical-align:top;">${k}</th><td style="padding:12px 16px;border-bottom:1px solid ${LS};font-size:12pt;color:${IM};vertical-align:top;">${v}</td></tr>`;
   // 섹션 헬퍼 (번호 + 타이틀 + 강조 박스)
-  const sectionHead=(num,title)=>`<div style="font-size:12pt;letter-spacing:.25em;color:${G};font-weight:900;margin:0 0 6px;">${num}</div><h2 style="font-size:16pt;font-weight:800;color:${INK};margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">${title}</h2>`;
-  return `<div class="ev-wrap" style="max-width:880px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:${SS};font-size:12pt;line-height:1.7;color:${INK};letter-spacing:-.01em;background:${BC};">`+
+  // 섹션 헬퍼: eyebrow 는 영어 키워드(섹션 제목 요약)
+  const sectionHead=(eyebrow,title)=>`<div style="font-size:12pt;letter-spacing:.25em;color:${G};font-weight:900;margin:0 0 6px;text-transform:uppercase;">${eyebrow}</div><h2 style="font-size:16pt;font-weight:800;color:${INK};margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">${title}</h2>`;
+  return `<div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:${SS};font-size:12pt;line-height:1.7;color:${INK};letter-spacing:-.01em;background:${BC};">`+
   // ── 1) 상단 이미지 placeholder ──
-  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
+  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};border-bottom:0;border-radius:8px 8px 0 0;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
   // ── 2) 타이틀 박스 (짙은 파란색 윗부분) ──
   `<div style="background:${G};padding:48px 32px 36px;text-align:center;">`+
     `<div style="font-size:12pt;letter-spacing:.25em;color:#fff;font-weight:700;margin:0 0 14px;text-transform:uppercase;opacity:.85;">${t.brand||''}</div>`+
@@ -1333,8 +1351,8 @@ function _sogsikTpl(t){
   // ── Section 01 ──
   `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
   `<div style="margin:0 0 36px;">`+
-    sectionHead('01',t.s1)+
-    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;margin:0 0 18px;">`+
+    sectionHead(t.s1k||'OVERVIEW',t.s1)+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0;margin:0 0 18px;">`+
       `<div style="font-size:12pt;color:${IM};line-height:1.85;">핵심 수치 한눈에 정리했습니다.</div>`+
     `</div>`+
     `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid ${LN};background:${BC};">${kpi(t.c1n,t.c1u,t.c1nm,t.c1d)}${kpi(t.c2n,t.c2u,t.c2nm,t.c2d)}${kpi(t.c3n,t.c3u,t.c3nm,t.c3d,true)}</div>`+
@@ -1342,8 +1360,8 @@ function _sogsikTpl(t){
   // ── Section 02 ──
   `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
   `<div style="margin:0 0 36px;">`+
-    sectionHead('02',t.s2)+
-    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;margin:0 0 18px;">`+
+    sectionHead(t.s2k||'DETAIL',t.s2)+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0;margin:0 0 18px;">`+
       `<div style="font-size:12pt;color:${IM};line-height:1.85;">${t.s2p}</div>`+
     `</div>`+
     `<div style="font-style:italic;font-size:12pt;color:${G};margin:0 0 12px;letter-spacing:.03em;">— ${t.side}</div>`+
@@ -1355,8 +1373,8 @@ function _sogsikTpl(t){
   // ── Section 03 (유의사항) ──
   `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
   `<div style="margin:0;">`+
-    sectionHead('03','유의사항')+
-    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;">`+
+    sectionHead('NOTICE','유의사항')+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0;">`+
       `<div style="font-size:12pt;color:${IM};line-height:1.95;">· ${t.n1}<br>· ${t.n2}</div>`+
     `</div>`+
   `</div>`+
@@ -1368,72 +1386,78 @@ function _sogsikTpl(t){
 // 기존 매거진 템플릿과 동일한 ERP 블루 팔레트를 사용하되,
 // 실제 이벤트 콘텐츠를 미리 채워 사용자가 곧바로 편집·교체만 하면 되도록 구성
 const SOGSIK_SALES_EVENT=(function(){
-  const G='#2E5AAC',G2='#4A7BC9',INK='#1f2937',IM='#374151',IL='#6b7280';
-  const LN='#dfe4ec',LS='#e5e7eb',BA='#EAF0F8',BC='#FFFFFF',BG_SOFT='#f8fafc';
+  // 자연드림 와인레드 팔레트
+  const G='#bb1049',G2='#d44570',INK='#333333',IM='#374151',IL='#6b7280';
+  const LN='#e5e7eb',LS='#e5e7eb',BA='#fce7ed',BC='#FFFFFF',BG_SOFT='#f8fafc';
   const SS=`'Malgun Gothic','맑은 고딕',sans-serif`;
-  // 상품 데이터
+  // 상품 데이터 — 4열 × 2행 = 8개 (첫 두 줄만)
   const P=[
     ['22000A3K00','발효녹즙M*8개입*과채가공센터','30,000','40%','18,000','4/26(일)~5/3(일)'],
     ['88085O7700','클린*250ml*18입*해피푸르츠','53,000','40%','31,800','4/26(일)~5/3(일)'],
-    ['20261KMB00','(8개입)생들기름+까망콩낫또*까망발효','19,600','39.8%','11,800','4/26(일)~5/3(일)'],
+    ['20261KMB00','(8개입)생들기름+까망콩낫또*까망발효','19,600','39%','11,800','4/26(일)~5/3(일)'],
     ['10118GYX00','푹자고싶을때1*100ml*7포*자연이정답이다','31,500','40%','18,900','4/26(일)~5/3(일)'],
     ['10119GYX00','푹자고싶을때2*100ml*7포*자연이정답이다','31,500','40%','18,900','4/26(일)~5/3(일)'],
     ['10120GYX00','푹자고싶을때3*100ml*7포*자연이정답이다','31,500','40%','18,900','4/26(일)~5/3(일)'],
     ['10121GYX00','푹자고싶을때4*100ml*7포*자연이정답이다','35,000','40%','21,000','4/26(일)~5/3(일)'],
     ['10092GYX00','엔케이9*200ml*15포*자연이정답이다','37,000','40%','22,200','4/26(일)~5/3(일)'],
-    ['37000A3K00','요요굿바이1*8개입*과채가공센터','40,000','40%','24,000','4/26(일)~5/3(일)'],
-    ['39000A3K00','요요굿바이2*8개입*과채가공센터','44,000','40%','26,400','4/26(일)~5/3(일)'],
-    ['96038CK300','(번들)발효후랑크소시지*120g*6개번들*미토리','21,000','40%','12,600','4/26(일)~5/3(일)'],
-    ['00001CAZ00','본정심본흑염소진액*30포*80ml*대한한방연구소1','148,000','40%','88,800','4/26(일)~5/3(일)'],
-    ['99999GSM00','(번들)김밥세트*1152g*김공방','29,700','39.7%','17,900','4/26(일)~4/28(화)'],
-    ['10100GYX00','발효홍삼*50ml*30포*자연이정답이다','90,000','40%','54,000','4/26(일)~4/28(화)'],
-    ['10101GYX00','발효홍삼*50ml*60포*자연이정답이다','180,000','40%','108,000','4/26(일)~4/28(화)'],
-    ['71000C9C00','눈엔베타카로틴*7.2g*알피바이오','15,500','40%','9,300','4/26(일)~4/28(화)'],
-    ['70000C9C00','멀티비타민스틱젤리*15g*30포*(주)알피바이오','24,000','40%','14,400','4/26(일)~4/28(화)'],
-    ['11111C9C00','알티지오메가-3*37.74g*(주)알피바이오','30,000','40%','18,000','4/26(일)~4/28(화)'],
-    ['35000C9C00','에이치에프(HF)코엔자임Q10*21g*알피바이오','27,000','40%','16,200','4/26(일)~4/28(화)'],
-    ['75000C9C00','초임계식물성알티지오메가3*30g*알피바이오','33,000','40%','19,800','4/26(일)~4/28(화)'],
-    ['11100GUG00','간엔밀크씨슬*60정*엠에스바이오텍(주)','18,500','40%','11,100','4/26(일)~4/28(화)'],
-    ['60000GUG00','메가비타민C2000*63.6g*엠에스바이오텍(주)','22,500','40%','13,500','4/26(일)~4/28(화)'],
-    ['40000GUG00','장엔신바이오틱스플러스*3.5g*100포*엠에스바이오텍','36,000','40%','21,600','4/26(일)~4/28(화)'],
-    ['00001DHN00','과자꾸러미세트*1개*과자공방','16,100','39.8%','9,700','4/26(일)~4/28(화)'],
-    ['12067DHL00','계란과자&미니초코칩쿠키세트*1065g*베이커리공방','27,600','39.9%','16,600','4/26(일)~4/28(화)'],
   ];
-  // 카드 — 모든 텍스트 12pt, 가격 강조 16pt
-  const card=(g)=>`<div style="flex:1 1 calc(25% - 12px);min-width:160px;background:${BC};padding:14px;border-radius:12px;border:1px solid ${G};box-sizing:border-box;"><div style="position:relative;width:100%;padding-bottom:100%;overflow:hidden;border-radius:8px;margin-bottom:10px;background:${LS};"><img src="https://www.icoop.or.kr/coopmall/goodimages/${g[0]}.jpg" alt="${g[1]}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.opacity='0'"><div style="position:absolute;top:0;right:0;background:${G};color:#fff;padding:5px 10px;border-bottom-left-radius:8px;font-size:12pt;font-weight:700;letter-spacing:-.3px;">${g[5]}</div></div><p style="margin:0 0 10px;font-size:12pt;font-weight:700;color:${INK};line-height:1.35;letter-spacing:-.3px;word-break:keep-all;">${g[1]}</p><div style="margin:0 0 10px;"><div style="font-size:12pt;color:${IL};margin-bottom:2px;">기존가: <span style="text-decoration:line-through;">${g[2]}</span> 원</div><div style="font-size:16pt;font-weight:800;letter-spacing:-.5px;"><span style="color:${G};margin-right:4px;">${g[3]}</span><span style="color:${G};">${g[4]}</span><span style="color:${INK};font-size:12pt;font-weight:700;"> 원</span></div></div><div style="display:flex;gap:4px;"><a href="https://www.icoop.or.kr/coopmall/goodsmall.phtm?act=detail&gc=${g[0]}" target="_blank" style="flex:1 1 50%;text-align:center;padding:9px 0;border-radius:6px;text-decoration:none;font-size:12pt;font-weight:700;background:${BC};color:${G};border:1px solid ${G};letter-spacing:-.5px;">PC 구매</a><a href="https://www.icoop.or.kr/mobile/goodsmall.phtm?act=detail&gc=${g[0]}" target="_blank" style="flex:1 1 50%;text-align:center;padding:9px 0;border-radius:6px;text-decoration:none;font-size:12pt;font-weight:700;background:${G};color:#fff;border:1px solid ${G};letter-spacing:-.5px;">모바일 구매</a></div></div>`;
-  // 섹션 헬퍼 — 번호 + 타이틀
-  const sectionHead=(num,title)=>`<div style="font-size:12pt;letter-spacing:.25em;color:${G};font-weight:900;margin:0 0 6px;">${num}</div><h2 style="font-size:16pt;font-weight:800;color:${INK};margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">${title}</h2>`;
-  return `<div class="ev-wrap" style="max-width:880px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:${SS};font-size:12pt;line-height:1.65;color:${INK};letter-spacing:-.01em;background:${BC};">`+
-  // ── 1) 상단 이미지 placeholder ──
-  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
-  // ── 2) 타이틀 박스 (짙은 파란 윗부분 — prelude + 태그 칩) ──
-  `<div style="background:${G};padding:48px 32px 36px;text-align:center;">`+
-    `<p style="margin:0 0 18px;font-weight:700;color:#fff;letter-spacing:-.3px;opacity:.92;"><span style="font-size:16pt;">조합원만의 한정 수량 특가 장바구니</span></p>`+
-    `<span style="display:inline-block;background:${BA};color:${G};padding:7px 18px;font-weight:700;letter-spacing:-.3px;"><span style="font-size:16pt;">#가족에게 전하는 자연드림의 5월 선물</span></span>`+
+  // 카드 — jd-card 레이아웃 (px 사양 그대로)
+  const card=(g)=>`<div style="flex:1 1 calc(25% - 12px);min-width:140px;background:#ffffff;padding:14px;border:1.5px solid ${G};border-radius:16px;text-align:left;display:block;box-sizing:border-box;">`+
+    `<div style="position:relative;width:100%;padding-bottom:100%;overflow:hidden;border-radius:10px;margin-bottom:12px;background:#f3f3f3;">`+
+      `<img src="https://www.icoop.or.kr/coopmall/goodimages/${g[0]}.jpg" alt="${g[1]}" style="position:absolute;top:0;left:0;width:100%;height:100%;display:block;">`+
+      `<div style="position:absolute;top:0;right:0;background:${G};color:#ffffff;padding:7px 10px;border-bottom-left-radius:10px;font:normal normal 800 12px/1.1 ${SS};letter-spacing:-0.5px;z-index:10;">${g[5]}</div>`+
+    `</div>`+
+    `<p style="margin:0 0 12px 0;font:normal normal 800 15px/1.35 ${SS};color:${INK};letter-spacing:-0.5px;">${g[1]}</p>`+
+    `<div style="margin:0 0 12px 0;">`+
+      `<div style="font:normal normal normal 12px/1.5 ${SS};color:#888888;margin-bottom:2px;letter-spacing:-0.5px;text-decoration:line-through;">${g[2]} 원</div>`+
+      `<div style="font:normal normal 800 18px/1.1 ${SS};letter-spacing:-0.5px;">`+
+        `<strong style="color:${G};margin-right:4px;">${g[3]}</strong>`+
+        `<span style="color:${INK};">${g[4]}</span>`+
+        `<em style="color:${INK};font:normal normal 700 13px/1 ${SS};font-style:normal;"> 원</em>`+
+      `</div>`+
+    `</div>`+
+    `<div style="display:flex;gap:6px;">`+
+      `<a href="https://www.icoop.or.kr/coopmall/goodsmall.phtm?act=detail&gc=${g[0]}" target="_blank" style="flex:1 1 50%;display:block;background:#ffffff;color:${G};border:1px solid ${G};text-align:center;padding:10px 0;border-radius:7px;text-decoration:none;font:normal normal 800 12px/1 ${SS};">PC구매</a>`+
+      `<a href="https://www.icoop.or.kr/mobile/goodsmall.phtm?act=detail&gc=${g[0]}" target="_blank" style="flex:1 1 50%;display:block;background:${G};color:#ffffff;border:1px solid ${G};text-align:center;padding:10px 0;border-radius:7px;text-decoration:none;font:normal normal 800 12px/1 ${SS};">모바일구매</a>`+
+    `</div>`+
+  `</div>`;
+  // 섹션 헬퍼 — 영어 키워드 eyebrow + 한글 타이틀
+  const sectionHead=(eyebrow,title)=>`<div style="font-size:12pt;letter-spacing:.25em;color:${G};font-weight:900;margin:0 0 6px;text-transform:uppercase;">${eyebrow}</div><h2 style="font-size:16pt;font-weight:800;color:${INK};margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">${title}</h2>`;
+  return `<div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:${SS};font-size:12pt;line-height:1.65;color:${INK};letter-spacing:-.01em;background:${BC};">`+
+  // ── 1) 상단 이미지 placeholder (4면 모두 둥글게) ──
+  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};border-radius:12px;margin:0 32px 0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
+  // ── 2) 본문 영역 시작 (좌측정렬) ──
+  `<div style="padding:0 32px 64px;">`+
+  // 이미지와 타이틀 사이 한 줄 띄움 (빈 단락) — 캐럿 진입 가능
+  `<p style="margin:28px 0 0;"><br></p>`+
+  // 타이틀 행 — 큰 타이틀(h1) + 우측 태그 칩.
+  //   chip 을 float:right 로 띄워 같은 줄에 표시. h1 은 일반 블록이라 Enter 정상 동작.
+  `<div style="margin:0 0 20px;overflow:hidden;">`+
+    `<span style="float:right;display:inline-block;background:${BA};color:${G};padding:6px 14px;font:normal normal 800 14px/1.4 ${SS};letter-spacing:-.3px;margin-top:8px;">#가족에게 전하는 자연드림의 5월 선물</span>`+
+    `<h1 style="margin:0;font:normal normal 900 26px/1.3 ${SS};color:${INK};letter-spacing:-1px;">조합원만의 한정 수량 특가 장바구니</h1>`+
   `</div>`+
-  // ── 3) 타이틀 박스 (살짝 연한 파란색 — 메인 슬로건) ──
-  `<div style="background:${G2};padding:28px 32px;text-align:center;">`+
-    `<p style="margin:0;font-weight:700;color:#fff;line-height:1.55;letter-spacing:-.3px;"><span style="font-size:16pt;">특별한 날 한 번 잘 먹는 것보다, 매일 조금씩 몸이 달라지는 것.</span><br><span style="border-bottom:3px solid rgba(255,255,255,.45);padding-bottom:2px;"><span style="font-size:18pt;">생활치유 챌린지 필수식품 포함 총 25종의 특가상품으로 만나보세요.</span></span></p>`+
+  // 슬로건 박스 — 안내(notice) 박스 스타일 (라이트핑크 + 좌측 와인 보더, 우측 라운드 없음)
+  `<div style="background:${BA};border-left:4px solid ${G};padding:18px 22px;margin:0 0 28px;border-radius:0;">`+
+    `<p style="margin:0 0 8px;font:normal normal 700 16px/1.55 ${SS};color:${INK};letter-spacing:-.3px;">특별한 날 한 번 잘 먹는 것보다, 매일 조금씩 몸이 달라지는 것.</p>`+
+    `<p style="margin:0;font:normal normal 800 18px/1.55 ${SS};color:${G};letter-spacing:-.3px;">생활치유 챌린지 필수식품 포함 총 25종의 특가상품으로 만나보세요.</p>`+
   `</div>`+
-  // ── 4) 본문 영역 시작 ──
-  `<div style="padding:48px 32px 64px;">`+
   // 본문 도입
   `<p style="margin:0 0 36px;font-size:12pt;line-height:1.95;color:${IM};">부모님을 위한 건강식품부터 아이 간식, 나를 위한 챌린지 아이템까지.<br>최대 40% 특가, 하나의 장바구니에 담아 한 번에 결제하세요.<br><strong style="color:${G};font-weight:800;">생활치유 챌린지 물품을 조합원만의 특가 혜택으로! 지금 바로 확인하세요.</strong></p>`+
-  // ── Section 01 — 특가 상품 ──
+  // ── Section DEAL — 특가 상품 ──
   `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
   `<div style="margin:0 0 36px;">`+
-    sectionHead('01','특가 이벤트 품목 (한정수량)')+
-    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;margin:0 0 18px;">`+
+    sectionHead('DEAL','특가 이벤트 품목 (한정수량)')+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0;margin:0 0 18px;">`+
       `<div style="font-size:12pt;color:${IM};line-height:1.85;">※ 이벤트 기간 중 재고상황에 따라 특가상품이 중단·변경되거나 추가될 수 있습니다.<br><span style="color:${G};font-weight:700;">※ 더 많은 분들이 혜택을 함께 누릴 수 있도록 품목당 1인 3개까지 구매 가능합니다.</span></div>`+
     `</div>`+
-    // 카드 그리드 (4열)
-    `<div style="display:flex;flex-wrap:wrap;gap:12px;">${P.map(card).join('')}${(()=>{const n=(4-P.length%4)%4;let s='';for(let i=0;i<n;i++)s+='<div style="flex:1 1 calc(25% - 12px);min-width:160px;height:0;visibility:hidden;padding:0;margin:0;border:0;"></div>';return s;})()}</div>`+
+    // 카드 그리드 (4열, jd-card 사양)
+    `<div style="display:flex;flex-wrap:wrap;gap:12px;">${P.map(card).join('')}${(()=>{const n=(4-P.length%4)%4;let s='';for(let i=0;i<n;i++)s+='<div style="flex:1 1 calc(25% - 12px);min-width:140px;height:0;visibility:hidden;padding:0;margin:0;border:0;"></div>';return s;})()}</div>`+
   `</div>`+
-  // ── Section 02 — 유의사항 ──
+  // ── Section NOTICE — 유의사항 ──
   `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
   `<div style="margin:0;">`+
-    sectionHead('02','구매 시 유의사항')+
-    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0 8px 8px 0;">`+
+    sectionHead('NOTICE','구매 시 유의사항')+
+    `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0;">`+
       `<div style="display:flex;flex-wrap:wrap;gap:20px;">`+
         `<div style="flex:1 1 240px;"><h4 style="margin:0 0 8px;font-size:12pt;font-weight:700;color:${G};">· 대상 회원</h4><ul style="margin:0;padding-left:18px;font-size:12pt;color:${IM};line-height:1.75;"><li style="margin-bottom:4px;">본 이벤트는 골드 이상 회원만 구매 가능합니다.</li><li>실버 회원은 골드 이상 회원 전환 시 구매 가능합니다.</li></ul></div>`+
         `<div style="flex:1 1 240px;"><h4 style="margin:0 0 8px;font-size:12pt;font-weight:700;color:${G};">· 결제 수단</h4><ul style="margin:0;padding-left:18px;font-size:12pt;color:${IM};line-height:1.75;"><li style="margin-bottom:4px;">특가 혜택 상품은 카드, 가상계좌, 선수금, 자연드림페이로만 결제 가능합니다.</li><li>할인적립(페이백) 및 마일리지 사용은 불가합니다.</li></ul></div>`+
@@ -1452,13 +1476,13 @@ const SOGSIK_EVENT=_sogsikTpl({
   title:'이벤트 제목을 입력하세요',
   hero:'행사의 의미와 핵심 메시지를 한두 문장으로 입력하세요. 누구를 위한 어떤 자리인지 분명히 전달합니다.',
   tagline:'함께 만드는 시간',
-  s1:'행사 개요',
+  s1k:'OVERVIEW',s1:'행사 개요',
   s1p1:'이벤트의 배경과 목적, 주요 내용을 소개하세요. 왜 이 자리를 마련했는지, 어떤 가치를 전하고 싶은지 작성합니다.',
   s1p2:'행사 진행 방식과 주요 볼거리, 참가자가 얻게 될 경험과 기대 효과를 본문 흐름에 맞춰 설명해 주세요.',
   c1n:'00',c1u:'명',c1nm:'Capacity',c1d:'선착순 또는 정원',
   c2n:'00',c2u:'시간',c2nm:'Duration',c2d:'행사 총 소요 시간',
   c3n:'00',c3u:'원',c3nm:'Fee',c3d:'무료 또는 참가 비용',
-  s2:'프로그램 안내',s2p:'프로그램 구성과 주요 세션, 특별 순서 등을 소개하세요. 시간대별 흐름이 한눈에 들어오도록 정리합니다.',
+  s2k:'PROGRAM',s2:'프로그램 안내',s2p:'프로그램 구성과 주요 세션, 특별 순서 등을 소개하세요. 시간대별 흐름이 한눈에 들어오도록 정리합니다.',
   side:'세부 일정',
   r1k:'DATE',r1v:'0000년 00월 00일 (요일) 오전/오후 00:00',
   r2k:'PLACE',r2v:'행사 장소를 입력하세요',
@@ -1475,13 +1499,13 @@ const SOGSIK_PRODUCT=_sogsikTpl({
   title:'상품명을 입력하세요',
   hero:'상품의 핵심 가치와 슬로건을 한 줄로 입력하세요. 누구를 위한 어떤 의미의 제품인지 명확히 전달합니다.',
   tagline:'당신의 일상에',
-  s1:'상품 소개',
+  s1k:'PRODUCT',s1:'상품 소개',
   s1p1:'상품의 특징과 강점을 소개하세요. 고객이 얻을 수 있는 핵심 가치와 사용 경험을 작성합니다.',
   s1p2:'타겟 고객과 사용 시나리오, 경쟁 제품과의 차별점을 본문 흐름에 맞춰 풀어 설명해 주세요.',
   c1n:'00,000',c1u:'원',c1nm:'Price',c1d:'정가 또는 할인가',
   c2n:'00',c2u:'%',c2nm:'Discount',c2d:'프로모션 할인 혜택',
   c3n:'0.0',c3u:'★',c3nm:'Rating',c3d:'고객 리뷰 평균',
-  s2:'상품 상세 정보',s2p:'상품의 구성, 사용 방법, 관리 방법 등 상세 정보를 정리하세요. 구매 결정에 도움이 되는 사실 위주로 작성합니다.',
+  s2k:'SPEC',s2:'상품 상세 정보',s2p:'상품의 구성, 사용 방법, 관리 방법 등 상세 정보를 정리하세요. 구매 결정에 도움이 되는 사실 위주로 작성합니다.',
   side:'주요 스펙',
   r1k:'COMPOSITION',r1v:'본품 / 구성품 / 사은품을 입력하세요',
   r2k:'SPEC',r2v:'크기 / 무게 / 용량을 입력하세요',
@@ -1498,13 +1522,13 @@ const SOGSIK_INFO=_sogsikTpl({
   title:'공지 / 정보 제목을 입력하세요',
   hero:'전달하고자 하는 핵심 메시지를 한두 문장으로 입력하세요. 누가, 언제부터, 무엇이 달라지는지를 분명히 전합니다.',
   tagline:'정확한 안내',
-  s1:'주요 내용',
+  s1k:'SUMMARY',s1:'주요 내용',
   s1p1:'공지의 배경과 목적, 전달하고자 하는 주요 내용을 작성하세요. 왜 이 안내가 필요한지부터 시작합니다.',
   s1p2:'관련 대상자와 시행 범위, 영향과 후속 일정을 본문 흐름에 맞춰 풀어서 설명해 주세요.',
   c1n:'0000',c1u:'.00.00',c1nm:'Effective',c1d:'적용 시작 일자',
   c2n:'00',c2u:'건',c2nm:'Scope',c2d:'대상 인원 또는 건수',
   c3n:'00',c3u:'일',c3nm:'Period',c3d:'공지 유효 기간',
-  s2:'세부 안내',s2p:'세부 사항과 절차, 준수 방법 등을 안내하세요. 단계별로 따라갈 수 있도록 정리합니다.',
+  s2k:'DETAIL',s2:'세부 안내',s2p:'세부 사항과 절차, 준수 방법 등을 안내하세요. 단계별로 따라갈 수 있도록 정리합니다.',
   side:'참고 사항',
   r1k:'TARGET',r1v:'적용 대상 / 수혜자 / 관련자를 입력하세요',
   r2k:'PERIOD',r2v:'시행 / 접수 / 종료 일자를 입력하세요',
@@ -1518,26 +1542,26 @@ const SOGSIK_INFO=_sogsikTpl({
 // ══════════════════════════════════
 // 기안 템플릿
 // ══════════════════════════════════
-const GIAN_BASIC=`<div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:32px 24px 60px !important;box-sizing:border-box !important;font-size:14px;line-height:1.8;color:#1f2937;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> 0000년 00월 00일(요일)</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> 기안 제목을 입력하세요</p></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:1.5rem 0 2rem;"><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① 본 기안의 배경 및 현황을 간략히 설명해 주세요.</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② 기안의 <b>주요 내용</b>과 기대 효과를 아래와 같이 요약해 주세요. 필요한 경우 관련 안내를 함께 작성해 주세요.</p><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">세부 항목별 내용을 아래 표에 정리해 주세요. 구분 · 담당에 따라 처리 경로가 달라질 수 있습니다.</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #dfe4ec;table-layout:fixed;"><thead><tr style="background:#EAF0F8;"><th style="width:45%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">항목</th><th style="width:25%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">구분</th><th style="width:30%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">항목 1</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#EAF0F8;color:#234887;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 A</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#234887;font-weight:500;background:#EAF0F8;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">항목 2</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 B</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#234887;font-weight:500;background:#EAF0F8;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">항목 3</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#EAF0F8;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 C</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#6b7280;font-weight:500;background:#f3f4f6;">담당부서 2</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ 표 하단 유의사항 또는 안내 문구를 작성해 주세요.</p><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#234887;">요청은 <span style="color:#1f2937;font-weight:bold;background:#EAF0F8;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">①</div><div>필요 항목 및 담당 부서 확인</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">②</div><div>하단 댓글란에 <span style="font-weight:600;text-decoration:underline;">[4. 작성 양식]</span>에 맞춰 내용 작성</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">③</div><div>관련 파일 / 첨부 자료 댓글에 업로드</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">④</div><div>담당팀에서 확인 후 영업일 기준 N일 내 처리</div></div><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">아래 항목을 빠짐없이 작성해 주시면 보다 신속하게 처리해 드릴 수 있습니다.</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#1f2937;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #dfe4ec;background:#f5f5f7;table-layout:fixed;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#1f2937;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #dfe4ec;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#1f2937;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
+const GIAN_BASIC=`<div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:32px 24px 60px !important;box-sizing:border-box !important;font-size:14px;line-height:1.8;color:#333333;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> 0000년 00월 00일(요일)</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> 기안 제목을 입력하세요</p></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:1.5rem 0 2rem;"><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① 본 기안의 배경 및 현황을 간략히 설명해 주세요.</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② 기안의 <b>주요 내용</b>과 기대 효과를 아래와 같이 요약해 주세요. 필요한 경우 관련 안내를 함께 작성해 주세요.</p><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">세부 항목별 내용을 아래 표에 정리해 주세요. 구분 · 담당에 따라 처리 경로가 달라질 수 있습니다.</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #e5e7eb;table-layout:fixed;"><thead><tr style="background:#fce7ed;"><th style="width:45%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">항목</th><th style="width:25%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">구분</th><th style="width:30%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">항목 1</td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;"><span style="background:#fce7ed;color:#8e0c37;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 A</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;color:#8e0c37;font-weight:500;background:#fce7ed;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">항목 2</td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;"><span style="background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 B</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;color:#8e0c37;font-weight:500;background:#fce7ed;">담당부서 1</td></tr><tr><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">항목 3</td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;"><span style="background:#fce7ed;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">구분 C</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;color:#6b7280;font-weight:500;background:#f3f4f6;">담당부서 2</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ 표 하단 유의사항 또는 안내 문구를 작성해 주세요.</p><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#8e0c37;">요청은 <span style="color:#333333;font-weight:bold;background:#fce7ed;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">①</div><div>필요 항목 및 담당 부서 확인</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">②</div><div>하단 댓글란에 <span style="font-weight:600;text-decoration:underline;">[4. 작성 양식]</span>에 맞춰 내용 작성</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">③</div><div>관련 파일 / 첨부 자료 댓글에 업로드</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">④</div><div>담당팀에서 확인 후 영업일 기준 N일 내 처리</div></div><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">아래 항목을 빠짐없이 작성해 주시면 보다 신속하게 처리해 드릴 수 있습니다.</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#333333;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e5e7eb;background:#f5f5f7;table-layout:fixed;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#333333;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #e5e7eb;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#333333;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
 1. 요청 기간 : 0000.00.00 ~ 0000.00.00
 2. 요청 항목 :
 3. 첨부 파일 : 첨부파일
 4. 참고 URL :
-5. 비고 <span style="color:#2E5AAC;">(선택 시 작성)</span>
+5. 비고 <span style="color:#bb1049;">(선택 시 작성)</span>
 -
-- </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#234887;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 관련 작업이 완료된 이후 요청을 진행해 주세요.</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 수정 / 종료 요청도 동일하게 <span style="font-weight:600;">본 문서 댓글</span>을 통해 접수 바랍니다.</div></div>`;
+- </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#8e0c37;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 관련 작업이 완료된 이후 요청을 진행해 주세요.</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 수정 / 종료 요청도 동일하게 <span style="font-weight:600;">본 문서 댓글</span>을 통해 접수 바랍니다.</div></div>`;
 
 // AI용 빈 템플릿 (내용 채울 구조만 제공) — 매거진 리포트 레이아웃
-const SOGSIK_AI_TPL=`<!-- 작성 규칙: (1) 아래 [대괄호] 안의 내용만 실제 내용으로 교체. (2) style 속성/색상/구조는 절대 수정 금지. (3) 이모지 사용 금지 - 인트라넷 sanitizer가 4바이트 이모지에서 본문을 잘라내므로 반드시 텍스트·일반 기호(·, ※, ▶, ■, ◆, ●, 1)2)3), -)로만 작성할 것. (4) 본문은 한국어로 작성. (5) 폰트 크기는 본문 12pt / 강조 16pt / 최대 강조 18pt 만 사용. (6) data-banner-upload 영역과 번호 섹션 구조는 절대 변경하지 말 것. --><div class="ev-wrap" style="max-width:880px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:12pt;line-height:1.7;color:#1f2937;letter-spacing:-.01em;background:#FFFFFF;"><div data-banner-upload="1" contenteditable="false" style="background:#EAF0F8;border:2px dashed #2E5AAC;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:#2E5AAC;font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 - 클릭하여 업로드</div><div style="background:#2E5AAC;padding:48px 32px 36px;text-align:center;"><p style="margin:0 0 18px;font-weight:700;color:#fff;letter-spacing:-.3px;opacity:.92;"><span style="font-size:16pt;">[작은 라인 - 카테고리 또는 주최]</span></p><h1 style="margin:0;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.3;"><span style="font-size:18pt;">[소식 제목을 여기에 입력]</span></h1></div><div style="background:#4A7BC9;padding:28px 32px;text-align:center;"><p style="margin:0;font-weight:700;color:#fff;line-height:1.55;letter-spacing:-.3px;"><span style="font-size:16pt;">[부제 슬로건 한 줄]</span><br><span style="border-bottom:3px solid rgba(255,255,255,.45);padding-bottom:2px;"><span style="font-size:18pt;">[강조 슬로건 - 18pt 핵심 메시지]</span></span></p></div><div style="padding:48px 32px 64px;"><p style="margin:0 0 36px;font-size:12pt;line-height:1.95;color:#374151;">[본문 도입 - 한 문단 정도. 마지막 문장은 <strong style="color:#2E5AAC;font-weight:800;">블루 강조</strong> 로 마무리.]</p><hr style="border:0;border-top:1px solid #dfe4ec;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#2E5AAC;font-weight:900;margin:0 0 6px;">01</div><h2 style="font-size:16pt;font-weight:800;color:#1f2937;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[첫 번째 소제목]</h2><div style="border-left:4px solid #2E5AAC;background:#EAF0F8;padding:18px 22px;border-radius:0 8px 8px 0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[강조 박스 안 내용 - 굵게는 <strong>이렇게</strong> 사용]</div></div></div><hr style="border:0;border-top:1px solid #dfe4ec;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#2E5AAC;font-weight:900;margin:0 0 6px;">02</div><h2 style="font-size:16pt;font-weight:800;color:#1f2937;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[두 번째 소제목]</h2><div style="border-left:4px solid #2E5AAC;background:#EAF0F8;padding:18px 22px;border-radius:0 8px 8px 0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[두 번째 섹션 내용]</div></div></div><hr style="border:0;border-top:1px solid #dfe4ec;margin:0 0 28px;"><div style="margin:0;"><div style="font-size:12pt;letter-spacing:.25em;color:#2E5AAC;font-weight:900;margin:0 0 6px;">03</div><h2 style="font-size:16pt;font-weight:800;color:#1f2937;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">유의사항</h2><div style="border-left:4px solid #2E5AAC;background:#EAF0F8;padding:18px 22px;border-radius:0 8px 8px 0;"><div style="font-size:12pt;color:#374151;line-height:1.95;">· [유의사항 1]<br>· [유의사항 2]</div></div></div></div></div>`;
+const SOGSIK_AI_TPL=`<!-- 작성 규칙: (1) 아래 [대괄호] 안의 내용만 실제 내용으로 교체. (2) style 속성/색상/구조는 절대 수정 금지. (3) 이모지 사용 금지 - 인트라넷 sanitizer가 4바이트 이모지에서 본문을 잘라내므로 반드시 텍스트·일반 기호(·, ※, ▶, ■, ◆, ●, 1)2)3), -)로만 작성할 것. (4) 본문은 한국어로 작성. (5) 폰트 크기는 본문 12pt / 강조 16pt / 최대 강조 18pt 만 사용. (6) data-banner-upload 영역과 번호 섹션 구조는 절대 변경하지 말 것. (7) [KEYWORD1] [KEYWORD2] 자리는 그 섹션의 한글 제목(h2)을 함축하는 영어 단어 1개를 대문자로 입력 (예: 행사 개요→OVERVIEW, 상품 소개→PRODUCT, 특가 이벤트 품목→DEAL, 프로그램 안내→PROGRAM, 세부 안내→DETAIL, 신청 방법→APPLY, 일정→SCHEDULE 등). 마지막 섹션의 NOTICE 는 그대로 둘 것. --><div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:12pt;line-height:1.7;color:#333333;letter-spacing:-.01em;background:#FFFFFF;"><div data-banner-upload="1" contenteditable="false" style="background:#fce7ed;border:2px dashed #bb1049;border-bottom:0;border-radius:8px 8px 0 0;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:#bb1049;font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 - 클릭하여 업로드</div><div style="background:#bb1049;padding:48px 32px 36px;text-align:center;"><p style="margin:0 0 18px;font-weight:700;color:#fff;letter-spacing:-.3px;opacity:.92;"><span style="font-size:16pt;">[작은 라인 - 카테고리 또는 주최]</span></p><h1 style="margin:0;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.3;"><span style="font-size:18pt;">[소식 제목을 여기에 입력]</span></h1></div><div style="background:#d44570;padding:28px 32px;text-align:center;"><p style="margin:0;font-weight:700;color:#fff;line-height:1.55;letter-spacing:-.3px;"><span style="font-size:16pt;">[부제 슬로건 한 줄]</span><br><span style="border-bottom:3px solid rgba(255,255,255,.45);padding-bottom:2px;"><span style="font-size:18pt;">[강조 슬로건 - 18pt 핵심 메시지]</span></span></p></div><div style="padding:48px 32px 64px;"><p style="margin:0 0 36px;font-size:12pt;line-height:1.95;color:#374151;">[본문 도입 - 한 문단 정도. 마지막 문장은 <strong style="color:#bb1049;font-weight:800;">블루 강조</strong> 로 마무리.]</p><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">[KEYWORD1]</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[첫 번째 소제목]</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[강조 박스 안 내용 - 굵게는 <strong>이렇게</strong> 사용]</div></div></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">[KEYWORD2]</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[두 번째 소제목]</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[두 번째 섹션 내용]</div></div></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">NOTICE</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">유의사항</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.95;">· [유의사항 1]<br>· [유의사항 2]</div></div></div></div></div>`;
 
 const GIAN_AI_TPL=`<!-- 작성 규칙: (1) 아래 기안문 양식의 [대괄호] 안 텍스트만 실제 내용으로 교체. (2) style/색상/구조는 절대 수정 금지. (3) 이모지(📅 📌 ✅ 📝 🎯 등) 사용 금지 — 인트라넷 게시판 sanitizer가 4바이트 이모지에서 본문을 잘라내므로 반드시 일반 기호(·, ※, ▶, ■, ◆, ●, ①②③, -)와 텍스트로만 작성할 것. (4) 본문은 한국어 기안체로 작성. -->
-<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#1f2937;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> [0000년 00월 00일(요일)]</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> [기안 제목]</p></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:1.5rem 0 2rem;"><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① [기안의 배경 및 현황]</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② [주요 내용 및 기대 효과]</p><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">[세부 내역에 대한 간략한 설명]</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #dfe4ec;table-layout:fixed;"><thead><tr style="background:#EAF0F8;"><th style="width:45%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">항목</th><th style="width:25%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">구분</th><th style="width:30%;padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#234887;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">[항목 1]</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#EAF0F8;color:#234887;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#234887;font-weight:500;background:#EAF0F8;">[담당부서]</td></tr><tr><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;">[항목 2]</td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;"><span style="background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #dfe4ec;text-align:center;color:#6b7280;font-weight:500;background:#f3f4f6;">[담당부서]</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ [표 하단 안내]</p><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#234887;">요청은 <span style="color:#1f2937;font-weight:bold;background:#EAF0F8;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">①</div><div>[1단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">②</div><div>[2단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">③</div><div>[3단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#234887;min-width:25px;">④</div><div>[4단계]</div></div><div style="background:#EAF0F8;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#234887;border:1px solid #C7D5EA;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">[양식 안내 문구]</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#1f2937;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #dfe4ec;background:#f5f5f7;table-layout:fixed;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px;border:1px solid #dfe4ec;text-align:center;font-weight:600;color:#1f2937;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #dfe4ec;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#1f2937;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
+<div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#333333;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> [0000년 00월 00일(요일)]</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> [기안 제목]</p></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:1.5rem 0 2rem;"><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① [기안의 배경 및 현황]</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② [주요 내용 및 기대 효과]</p><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">[세부 내역에 대한 간략한 설명]</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #e5e7eb;table-layout:fixed;"><thead><tr style="background:#fce7ed;"><th style="width:45%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">항목</th><th style="width:25%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">구분</th><th style="width:30%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">[항목 1]</td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;"><span style="background:#fce7ed;color:#8e0c37;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;color:#8e0c37;font-weight:500;background:#fce7ed;">[담당부서]</td></tr><tr><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">[항목 2]</td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;"><span style="background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;color:#6b7280;font-weight:500;background:#f3f4f6;">[담당부서]</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ [표 하단 안내]</p><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#8e0c37;">요청은 <span style="color:#333333;font-weight:bold;background:#fce7ed;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">①</div><div>[1단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">②</div><div>[2단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">③</div><div>[3단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">④</div><div>[4단계]</div></div><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">[양식 안내 문구]</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#333333;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e5e7eb;background:#f5f5f7;table-layout:fixed;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#333333;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #e5e7eb;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#333333;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
 1. 요청 기간 : [날짜]
 2. 요청 항목 : [항목]
 3. 첨부 파일 : [파일명]
 4. 참고 URL : [URL]
-5. 비고 <span style="color:#2E5AAC;">(선택 시 작성)</span>
-- [추가 정보] </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#234887;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 1]</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 2]</div></div>`;
+5. 비고 <span style="color:#bb1049;">(선택 시 작성)</span>
+- [추가 정보] </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#8e0c37;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 1]</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• [유의사항 2]</div></div>`;
 
 // 템플릿 데이터 맵
 const TPLS={
@@ -1942,7 +1966,7 @@ function selectElem(el, type){
   clearMultiSelect();
   if(selectedElem&&selectedElem!==el)selectedElem.style.outline='';
   selectedElem=el;selectedType=type;
-  if(type!=='table')el.style.outline='2px solid #2E5AAC';
+  if(type!=='table')el.style.outline='2px solid #bb1049';
   positionOverlay();
   resizeOverlay.classList.add('visible');
   // 속성 패널 열기
@@ -2131,22 +2155,26 @@ function showPropsPanel(el, type){
     const gradDirEl=document.getElementById('pp-block-grad-dir');
     const bgInput=document.getElementById('pp-block-bg');
     if(grad){
-      bgInput.value=rgbToHex(grad.c1)||grad.c1;
-      if(bg2El)bg2El.value=rgbToHex(grad.c2)||grad.c2;
+      // 그라데이션 스톱 모델로 로드
+      blockGradStops=(grad.stops||[]).map(s=>({color:rgbToHex(s.color)||s.color,pos:s.pos}));
+      if(blockGradStops.length<2)blockGradStops=[{color:rgbToHex(grad.c1)||grad.c1,pos:0},{color:rgbToHex(grad.c2)||grad.c2,pos:100}];
+      blockGradActive=0;
+      bgInput.value=blockGradStops[0].color;
       if(gradDirEl)gradDirEl.value=grad.dir;
       if(gradOnEl)gradOnEl.checked=true;
-      if(bg2El)bg2El.style.display='';
       if(gradDirEl)gradDirEl.style.display='';
+      const wrap=document.getElementById('pp-block-grad-wrap');if(wrap)wrap.style.display='';
+      renderBlockGradBar();
     } else {
-      const bgC=_toHex(cs.backgroundColor,'#EAF0F8');
+      const bgC=_toHex(cs.backgroundColor,'#fce7ed');
       bgInput.value=bgC;
-      if(bg2El)bg2El.value=bgC;  // 그라데이션 켤 때 두 번째 색이 검정 안 되도록 같은 색으로 시드
+      blockGradStops=[{color:bgC,pos:0},{color:bgC,pos:100}];blockGradActive=0;
       if(gradOnEl)gradOnEl.checked=false;
-      if(bg2El)bg2El.style.display='none';
       if(gradDirEl)gradDirEl.style.display='none';
+      const wrap=document.getElementById('pp-block-grad-wrap');if(wrap)wrap.style.display='none';
     }
-    document.getElementById('pp-block-line').value=_toHex(cs.borderLeftColor,'#2E5AAC');
-    document.getElementById('pp-block-color').value=_toHex(cs.color,'#1f2937');
+    document.getElementById('pp-block-line').value=_toHex(cs.borderLeftColor,'#bb1049');
+    document.getElementById('pp-block-color').value=_toHex(cs.color,'#333333');
     const bgNone=_isTransp(cs.backgroundColor);
     const lineWidth=parseInt(cs.borderLeftWidth)||0;
     const lineStyle=cs.borderLeftStyle;
@@ -2260,7 +2288,7 @@ function toggleBlockNone(prop, isNone){
   if(!selectedElem)return;
   if(prop==='bg'){
     if(isNone){selectedElem.style.background='transparent';selectedElem.style.backgroundColor='transparent';}
-    else{applyBlockProp('bg',document.getElementById('pp-block-bg').value||'#EAF0F8');return;}
+    else{applyBlockProp('bg',document.getElementById('pp-block-bg').value||'#fce7ed');return;}
   }
   else if(prop==='line'){
     if(isNone){selectedElem.style.borderLeftStyle='none';}
@@ -2351,6 +2379,102 @@ function applyTableProp(prop, value){
   syncHtmlPanel();scheduleAutoSave();
 }
 
+// ── Adobe-style 그라데이션 스톱 모델 ──
+let blockGradStops=[{color:'#bb1049',pos:0},{color:'#fce7ed',pos:100}];
+let blockGradActive=0;
+function renderBlockGradBar(){
+  const bar=document.getElementById('pp-block-grad-bar');if(!bar)return;
+  // 정렬된 스톱 기반으로 시각적 그라데이션 (가로 미리보기)
+  const sorted=[...blockGradStops].map((s,i)=>({...s,_i:i})).sort((a,b)=>a.pos-b.pos);
+  bar.style.background=`linear-gradient(to right,${sorted.map(s=>`${s.color} ${s.pos}%`).join(',')})`;
+  // 스톱 마커
+  bar.innerHTML=blockGradStops.map((s,i)=>{
+    const active=i===blockGradActive;
+    return `<div class="grad-stop" data-idx="${i}" style="position:absolute;top:50%;left:${s.pos}%;width:14px;height:14px;border-radius:50%;background:${s.color};border:2px solid #fff;box-shadow:0 0 0 ${active?'2px #bb1049':'1px #888'};transform:translate(-50%,-50%) ${active?'scale(1.25)':'scale(1)'};cursor:grab;z-index:${active?2:1};" onmousedown="startBlockGradDrag(event,${i})"></div>`;
+  }).join('');
+  // 활성 스톱 정보를 컨트롤에 반영
+  const active=blockGradStops[blockGradActive];
+  if(active){
+    document.getElementById('pp-block-grad-pos').value=active.pos;
+    document.getElementById('pp-block-bg').value=active.color;
+  }
+}
+function toggleBlockGrad(on){
+  document.getElementById('pp-block-grad-wrap').style.display=on?'':'none';
+  document.getElementById('pp-block-grad-dir').style.display=on?'':'none';
+  if(on){
+    // 현재 단색 bg 를 첫 스톱으로, 살짝 다른 명도를 두 번째 스톱으로 시드
+    if(selectedElem){
+      const cs=getComputedStyle(selectedElem);
+      const cur=rgbToHex(cs.backgroundColor)||document.getElementById('pp-block-bg').value||'#bb1049';
+      blockGradStops=[{color:cur,pos:0},{color:cur,pos:100}];
+      blockGradActive=0;
+    }
+    renderBlockGradBar();
+  }
+  updateBlockGrad();
+}
+function updateBlockGrad(){
+  if(!selectedElem)return;
+  const on=document.getElementById('pp-block-grad-on').checked;
+  const el=selectedElem;
+  if(on){
+    const dir=document.getElementById('pp-block-grad-dir').value||'to bottom';
+    const sorted=[...blockGradStops].sort((a,b)=>a.pos-b.pos);
+    el.style.backgroundColor='';
+    el.style.background=`linear-gradient(${dir},${sorted.map(s=>`${s.color} ${s.pos}%`).join(',')})`;
+    renderBlockGradBar();
+  } else {
+    el.style.background='';
+    el.style.backgroundColor=document.getElementById('pp-block-bg').value;
+  }
+  syncHtmlPanel();scheduleAutoSave();
+}
+function startBlockGradDrag(e,idx){
+  e.preventDefault();e.stopPropagation();
+  blockGradActive=idx;
+  const bar=document.getElementById('pp-block-grad-bar');
+  const rect=bar.getBoundingClientRect();
+  const move=(ev)=>{
+    const x=Math.max(0,Math.min(rect.width,ev.clientX-rect.left));
+    const pct=Math.round((x/rect.width)*100);
+    blockGradStops[idx].pos=pct;
+    renderBlockGradBar();updateBlockGrad();
+  };
+  const up=()=>{document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',up);};
+  document.addEventListener('mousemove',move);document.addEventListener('mouseup',up);
+  renderBlockGradBar();
+}
+function setBlockGradPos(v){
+  const p=Math.max(0,Math.min(100,parseInt(v)||0));
+  blockGradStops[blockGradActive].pos=p;
+  renderBlockGradBar();updateBlockGrad();
+}
+function addBlockGradStop(e){
+  // 이미 마커를 클릭한 경우엔 동작하지 않게 (이벤트는 grad-stop 의 mousedown 에서 stopPropagation)
+  if(e.target.classList&&e.target.classList.contains('grad-stop'))return;
+  const bar=document.getElementById('pp-block-grad-bar');
+  const rect=bar.getBoundingClientRect();
+  const pct=Math.round(((e.clientX-rect.left)/rect.width)*100);
+  // 보간된 색상으로 새 스톱 추가
+  const sorted=[...blockGradStops].sort((a,b)=>a.pos-b.pos);
+  let newColor=sorted[0].color;
+  for(let i=0;i<sorted.length-1;i++){
+    if(pct>=sorted[i].pos&&pct<=sorted[i+1].pos){
+      newColor=sorted[i].color;break;
+    }
+  }
+  blockGradStops.push({color:newColor,pos:pct});
+  blockGradActive=blockGradStops.length-1;
+  renderBlockGradBar();updateBlockGrad();
+}
+function removeBlockGradStop(){
+  if(blockGradStops.length<=2){showToast&&showToast('최소 2개 정지점이 필요합니다');return;}
+  blockGradStops.splice(blockGradActive,1);
+  blockGradActive=Math.max(0,blockGradActive-1);
+  renderBlockGradBar();updateBlockGrad();
+}
+
 // ── 속성 적용: 블록(blockquote 등) ──
 function applyBlockProp(prop, value){
   if(!selectedElem)return;
@@ -2358,21 +2482,17 @@ function applyBlockProp(prop, value){
   switch(prop){
     case 'bg':{
       const gradOn=document.getElementById('pp-block-grad-on')?.checked;
-      const c2=document.getElementById('pp-block-bg2')?.value||'#ffffff';
-      const dir=document.getElementById('pp-block-grad-dir')?.value||'to bottom';
-      if(gradOn){el.style.backgroundColor='';el.style.background=_buildBg(value,true,c2,dir);}
-      else{el.style.background='';el.style.backgroundColor=value;}
+      if(gradOn){
+        // 그라데이션 모드: 활성 스톱의 색을 변경
+        if(blockGradStops[blockGradActive]){
+          blockGradStops[blockGradActive].color=value;
+          renderBlockGradBar();updateBlockGrad();
+        }
+      } else {
+        el.style.background='';el.style.backgroundColor=value;
+      }
       break;}
-    case 'grad':{
-      const on=!!value;
-      document.getElementById('pp-block-bg2').style.display=on?'':'none';
-      document.getElementById('pp-block-grad-dir').style.display=on?'':'none';
-      const c1=document.getElementById('pp-block-bg').value;
-      const c2=document.getElementById('pp-block-bg2').value;
-      const dir=document.getElementById('pp-block-grad-dir').value;
-      if(on){el.style.backgroundColor='';el.style.background=_buildBg(c1,true,c2,dir);}
-      else{el.style.background='';el.style.backgroundColor=c1;}
-      break;}
+    case 'grad': toggleBlockGrad(!!value); return;  // Adobe-style 바로 위임
     case 'line':   el.style.borderLeftColor=value;if(!el.style.borderLeftWidth||el.style.borderLeftWidth==='0px'){el.style.borderLeftWidth='4px';}if(!el.style.borderLeftStyle||el.style.borderLeftStyle==='none')el.style.borderLeftStyle='solid';break;
     case 'lineWidth': el.style.borderLeftWidth=(parseInt(value)||0)+'px';break;
     case 'lineStyle': el.style.borderLeftStyle=value;break;
@@ -2793,12 +2913,7 @@ function alignElem(align){
     const cs=getComputedStyle(el);
     if(cs.display==='inline'||cs.display==='inline-block'||el.tagName==='IMG')el.style.display='block';
     if(cs.float&&cs.float!=='none')el.style.float='none';
-    const cw=parentCW(el);
-    const rw=el.getBoundingClientRect().width;
-    // full-width(≥95%)이면 margin:auto 효과가 없으므로 width를 살짝 줄여 정렬이 보이도록
-    if(cw>0&&rw>=cw*0.95&&!el.style.width){
-      el.style.width=Math.round(cw*0.9)+'px';
-    }
+    // ★ 정렬은 margin 만 조정 — 폭은 절대 건드리지 않음. (이전엔 full-width 요소를 90% 로 축소하던 버그)
     if(align==='center'){el.style.marginLeft='auto';el.style.marginRight='auto';}
     else if(align==='right'){el.style.marginLeft='auto';el.style.marginRight='0';}
     else{el.style.marginLeft='0';el.style.marginRight='auto';}
@@ -2904,21 +3019,38 @@ function resizeElem(axis, val){
   else selectedElem.style.height=v+'px';
   positionOverlay();syncHtmlPanel();scheduleAutoSave();
 }
+// 같은 폭이던 인접 형제(앞·뒤)에 새 폭을 동시에 적용 — 매거진 타이틀 박스처럼 묶음으로 정렬되어 있던
+// 개체들이 한 개를 줄여도 다 같이 줄어들어 "간섭" 없이 떨어지지 않게 함.
+function _propagateWidthToSiblings(el,newWidth,oldWidth){
+  if(!el||!el.parentElement)return;
+  const TOL=2;
+  const same=(s)=>{if(!s||s.nodeType!==1)return false;const r=s.getBoundingClientRect();return Math.abs(r.width-oldWidth)<TOL;};
+  // forward
+  let s=el.nextElementSibling;
+  while(same(s)){s.style.width=newWidth+'px';s=s.nextElementSibling;}
+  // backward
+  s=el.previousElementSibling;
+  while(same(s)){s.style.width=newWidth+'px';s=s.previousElementSibling;}
+}
 function resizeElemPanel(axis, val){
   if(!selectedElem)return;
   const v=parseInt(val);if(!v||v<1)return;
   const lockChk=document.querySelector('#props-panel .pp-group.active .pp-lock-chk');
   const locked=lockChk&&lockChk.checked;
   const ratio=lockedAspectRatio||1;
+  const oldWidth=selectedElem.getBoundingClientRect().width;
   selectedElem.style.minWidth='';selectedElem.style.minHeight='';
   const MAX_W=900;
+  let newW=null;
   if(locked&&ratio>0){
-    if(axis==='w'){const vw=Math.min(MAX_W,v);selectedElem.style.width=vw+'px';selectedElem.style.height=Math.round(vw*ratio)+'px';}
-    else{selectedElem.style.height=v+'px';const vw2=Math.min(MAX_W,Math.round(v/ratio));selectedElem.style.width=vw2+'px';}
+    if(axis==='w'){const vw=Math.min(MAX_W,v);selectedElem.style.width=vw+'px';selectedElem.style.height=Math.round(vw*ratio)+'px';newW=vw;}
+    else{selectedElem.style.height=v+'px';const vw2=Math.min(MAX_W,Math.round(v/ratio));selectedElem.style.width=vw2+'px';newW=vw2;}
   } else {
-    if(axis==='w')selectedElem.style.width=Math.min(MAX_W,v)+'px';
+    if(axis==='w'){newW=Math.min(MAX_W,v);selectedElem.style.width=newW+'px';}
     else selectedElem.style.height=v+'px';
   }
+  // ★ 같은 폭이던 인접 형제 묶음에 새 폭 동시 적용
+  if(newW!==null&&Math.abs(newW-oldWidth)>1)_propagateWidthToSiblings(selectedElem,newW,oldWidth);
   // 패널 값 업데이트
   const r2=selectedElem.getBoundingClientRect();
   const wEl=document.getElementById('pp-shape-w')||document.getElementById('pp-img-w')||document.getElementById('pp-tbl-w')||document.getElementById('pp-block-w');
@@ -2937,6 +3069,13 @@ resizeOverlay.querySelectorAll('.rh').forEach(handle=>{
     resizeStartX=e.clientX;resizeStartY=e.clientY;
     const rect=selectedElem.getBoundingClientRect();
     resizeStartW=rect.width;resizeStartH=rect.height;
+    window._resizeOrigWidth=rect.width;  // 시작 폭 저장 → 종료 시 형제 그룹 전파에 사용
+    // ★ 콘텐츠가 필요로 하는 최소 높이 측정 — 이 이하로 줄지 못하게 캡
+    //   현재 height 를 잠깐 풀어 scrollHeight 측정 후 원복 (텍스트 영역의 자연 높이)
+    const _origH=selectedElem.style.height;
+    selectedElem.style.height='';
+    window._resizeMinH=selectedElem.scrollHeight||selectedElem.offsetHeight||4;
+    selectedElem.style.height=_origH;
     const _cs=getComputedStyle(selectedElem);
     window._resizeStartMarginTop=parseFloat(selectedElem.style.marginTop)||parseFloat(_cs.marginTop)||0;
     // N(북쪽) 핸들 상한용: 요소 하단과 에디터 상단 경계 저장
@@ -2954,13 +3093,15 @@ function onResizeMove(e){
   let nw=resizeStartW,nh=resizeStartH;
   if(resizeDir.includes('e'))nw=Math.min(900,Math.max(4,resizeStartW+dx));
   if(resizeDir.includes('w'))nw=Math.min(900,Math.max(4,resizeStartW-dx));
-  if(resizeDir.includes('s'))nh=Math.max(4,resizeStartH+dy);
+  // ★ 최소 높이: 콘텐츠가 필요로 하는 자연 높이 (이 이하로는 줄어들지 못하게)
+  const minContentH=window._resizeMinH||4;
+  if(resizeDir.includes('s'))nh=Math.max(minContentH,resizeStartH+dy);
   if(resizeDir.includes('n')){
-    nh=Math.max(4,resizeStartH-dy);
+    nh=Math.max(minContentH,resizeStartH-dy);
     // 에디터 상단을 넘어가지 못하도록 상한 제한
     const bottomY=window._resizeStartBottomY||0;
     const edTopY=window._resizeEditorTopY||0;
-    const maxH=Math.max(4,bottomY-edTopY);
+    const maxH=Math.max(minContentH,bottomY-edTopY);
     if(nh>maxH)nh=maxH;
   }
   // Shift 또는 비율고정 체크박스 → 비율 유지
@@ -2970,11 +3111,13 @@ function onResizeMove(e){
     const ratio=resizeStartH/resizeStartW;
     if(resizeDir.includes('e')||resizeDir.includes('w'))nh=Math.round(nw*ratio);
     else nw=Math.round(nh/ratio);
+    // ★ 비율고정 상태에서도 콘텐츠 최소 높이 보호
+    if(nh<minContentH){nh=minContentH;nw=Math.round(nh/ratio);}
     // 비율고정 상태에서도 N방향 상한 재적용
     if(resizeDir.includes('n')){
       const bottomY=window._resizeStartBottomY||0;
       const edTopY=window._resizeEditorTopY||0;
-      const maxH=Math.max(4,bottomY-edTopY);
+      const maxH=Math.max(minContentH,bottomY-edTopY);
       if(nh>maxH){nh=maxH;nw=Math.round(nh/ratio);}
     }
   }
@@ -3000,6 +3143,13 @@ function onResizeMove(e){
   if(hEl)hEl.value=Math.round(r2.height);
 }
 function onResizeEnd(){
+  // ★ 같은 폭이던 인접 형제 묶음에 새 폭 동시 적용 (핸들 드래그 종료)
+  if(selectedElem&&window._resizeOrigWidth){
+    const newW=selectedElem.getBoundingClientRect().width;
+    const oldW=window._resizeOrigWidth;
+    if(Math.abs(newW-oldW)>1)_propagateWidthToSiblings(selectedElem,Math.round(newW),oldW);
+    window._resizeOrigWidth=null;
+  }
   resizeDir=null;
   document.removeEventListener('mousemove',onResizeMove);
   document.removeEventListener('mouseup',onResizeEnd);
@@ -4029,7 +4179,14 @@ editor.addEventListener('click',(e)=>{
   e.preventDefault();e.stopPropagation();
   const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
   inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();
-    r.onload=(ev)=>{const img=document.createElement('img');img.src=ev.target.result;img.alt='소식 본문 상단 이미지';img.style.cssText='width:100%;display:block;border-radius:8px;margin-bottom:24px;';if(ph.parentNode)ph.parentNode.replaceChild(img,ph);try{syncHtmlPanel();}catch{}};
+    r.onload=(ev)=>{
+      const img=document.createElement('img');
+      img.src=ev.target.result;img.alt='소식 본문 상단 이미지';
+      // 상단 모서리만 둥글게 → 아래 타이틀 박스와 연결되어 보이도록. 타이틀 박스와 사이 여백 0.
+      img.style.cssText='width:100%;display:block;border-radius:8px 8px 0 0;margin:0;';
+      if(ph.parentNode)ph.parentNode.replaceChild(img,ph);
+      try{syncHtmlPanel();}catch{}
+    };
     r.readAsDataURL(f);};
   inp.click();
 },true);
@@ -4042,7 +4199,7 @@ function insertImageHtml(src){
   syncHtmlPanel();
 }
 const dropZone=document.getElementById('img-drop-zone');
-dropZone.addEventListener('dragover',(e)=>{e.preventDefault();dropZone.style.borderColor='#2E5AAC';});
+dropZone.addEventListener('dragover',(e)=>{e.preventDefault();dropZone.style.borderColor='#bb1049';});
 dropZone.addEventListener('dragleave',()=>{dropZone.style.borderColor='#ddd';});
 dropZone.addEventListener('drop',(e)=>{e.preventDefault();dropZone.style.borderColor='#ddd';const file=e.dataTransfer.files[0];if(file&&file.type.startsWith('image/')){const r=new FileReader();r.onload=(ev)=>{insertImageHtml(ev.target.result);closeModal('img-modal');};r.readAsDataURL(file);}});
 
@@ -4106,7 +4263,7 @@ dropZone.addEventListener('drop',(e)=>{e.preventDefault();dropZone.style.borderC
     const ph=e.target.closest('div,img,.in-shape');
     if(!ph||ph===editor)return;
     e.preventDefault();
-    if(_dragTarget!==ph){clearHL();_dragTarget=ph;ph.style.outline='2px dashed #2E5AAC';}
+    if(_dragTarget!==ph){clearHL();_dragTarget=ph;ph.style.outline='2px dashed #bb1049';}
   });
   editor.addEventListener('dragleave',(e)=>{
     if(e.target===_dragTarget)clearHL();
@@ -4157,7 +4314,7 @@ function insertVideoEmbed(){
     `allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" `+
     `referrerpolicy="strict-origin-when-cross-origin" `+
     `allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"></iframe></div>`+
-    `<p style="font-size:12px;color:#999;margin:4px 0 14px;">▶ <a href="${watchUrl}" target="_blank" style="color:#2E5AAC;">YouTube에서 직접 보기</a> (임베드 오류 시)</p>`
+    `<p style="font-size:12px;color:#999;margin:4px 0 14px;">▶ <a href="${watchUrl}" target="_blank" style="color:#bb1049;">YouTube에서 직접 보기</a> (임베드 오류 시)</p>`
   );
   closeModal('video-modal');syncHtmlPanel();
 }
@@ -4166,7 +4323,7 @@ function insertVideoEmbed(){
 // 파일
 // ══════════════════════════════════
 function openFileModal(){saveRange();openModal('file-modal');}
-function handleAttachFile(input){const file=input.files[0];if(!file)return;try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();document.execCommand('insertHTML',false,`<p>📎 <a href="#" style="color:#2E5AAC;">${file.name}</a> (${(file.size/1024).toFixed(1)}KB)</p>`);closeModal('file-modal');syncHtmlPanel();input.value='';}
+function handleAttachFile(input){const file=input.files[0];if(!file)return;try{editor.focus({preventScroll:true});}catch{editor.focus();}restoreRange();document.execCommand('insertHTML',false,`<p>📎 <a href="#" style="color:#bb1049;">${file.name}</a> (${(file.size/1024).toFixed(1)}KB)</p>`);closeModal('file-modal');syncHtmlPanel();input.value='';}
 
 // ══════════════════════════════════
 // 표 삽입
@@ -4230,7 +4387,7 @@ function exitShapeEditMode(){
   resizeOverlay.style.pointerEvents='';
   resizeOverlay.querySelectorAll('.rh').forEach(h=>h.style.display='');
   document.getElementById('ro-move').style.display='';
-  resizeOverlay.style.boxShadow='0 0 0 2px #2E5AAC';
+  resizeOverlay.style.boxShadow='0 0 0 2px #bb1049';
   resizeOverlay.style.background='transparent';
   if(selectedElem)positionOverlay();
 }
@@ -4256,13 +4413,11 @@ function _buildBg(c1,gradOn,c2,dir){
 }
 function _parseLinearGradient(bg){
   if(!bg||!/linear-gradient/i.test(bg))return null;
-  // linear-gradient( ... ) 내부만 추출
   const idx=bg.indexOf('linear-gradient(');if(idx<0)return null;
   let depth=0,start=idx+'linear-gradient('.length,end=-1;
   for(let i=start;i<bg.length;i++){const ch=bg[i];if(ch==='(')depth++;else if(ch===')'){if(depth===0){end=i;break;}depth--;}}
   if(end<0)return null;
   const inner=bg.slice(start,end);
-  // 최상위 콤마 기준으로 쪼개기 (괄호 내 콤마 무시)
   const parts=[];let buf='',d=0;
   for(const ch of inner){
     if(ch==='(')d++;
@@ -4272,7 +4427,16 @@ function _parseLinearGradient(bg){
   }
   if(buf)parts.push(buf.trim());
   if(parts.length<3)return null;
-  return{dir:parts[0],c1:parts[1],c2:parts[parts.length-1]};
+  // ── stops 추출 (Adobe-style) — "color X%" 또는 단순 "color" 형태 모두 대응 ──
+  const stopParts=parts.slice(1);
+  const stops=stopParts.map((p,i)=>{
+    // 마지막 토큰이 "X%" 형태면 분리
+    const m=p.match(/^(.*?)\s+([\d.]+%)\s*$/);
+    if(m){return{color:m[1].trim(),pos:parseFloat(m[2])};}
+    // 위치 없으면 균등 배치
+    return{color:p.trim(),pos:Math.round((i/(stopParts.length-1))*100)};
+  });
+  return{dir:parts[0],c1:stops[0].color,c2:stops[stops.length-1].color,stops};
 }
 function toggleShGrad(){
   const on=document.getElementById('sh-grad-on').checked;
@@ -4317,7 +4481,7 @@ function insertShape(){
 // ══════════════════════════════════
 // 색상 팔레트
 // ══════════════════════════════════
-const COLORS=['#000000','#1f2937','#374151','#4b5563','#6b7280','#9ca3af','#d1d5db','#e5e7eb','#f5f5f7','#ffffff','#2E5AAC','#234887','#4A7BC9','#7BA0D5','#C7D5EA','#EAF0F8','#D4A017','#B8860B','#F5CF5C','#FFF9E6','#991B1B','#854D0E','#166534','#2c3e50','transparent'];
+const COLORS=['#000000','#333333','#374151','#4b5563','#6b7280','#9ca3af','#d1d5db','#e5e7eb','#f5f5f7','#ffffff','#bb1049','#8e0c37','#d44570','#7BA0D5','#f0bfd0','#fce7ed','#D4A017','#B8860B','#F5CF5C','#FFF9E6','#991B1B','#854D0E','#166534','#2c3e50','transparent'];
 function buildPalette(pid,cmd){
   const el=document.getElementById(pid);
   if(!el)return;
@@ -4343,12 +4507,13 @@ function closePalettes(){document.querySelectorAll('.color-palette').forEach(p=>
 // 색상 테마
 // ══════════════════════════════════
 // 기본 브랜드 컬러 (템플릿 기준색)
-const DEFAULT_PRIMARY='#2E5AAC';
-const DEFAULT_MID='#4A7BC9';
-const DEFAULT_LIGHT='#EAF0F8';
-const DEFAULT_BORDER='#C7D5EA';
-const DEFAULT_DARK='#234887';
-const DEFAULT_LINE='#dfe4ec';
+// 자연드림 와인레드(#bb1049) — THEMES[0] 와 동일. 템플릿 하드코딩값과 일치시켜 테마 교체 시 정확히 매칭됨.
+const DEFAULT_PRIMARY='#bb1049';
+const DEFAULT_MID='#d44570';
+const DEFAULT_LIGHT='#fce7ed';
+const DEFAULT_BORDER='#f0bfd0';
+const DEFAULT_DARK='#8e0c37';
+const DEFAULT_LINE='#e5e7eb';
 function reEsc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
 // ── 색상 유틸 ──
 function _hex2(rgb){
@@ -4378,7 +4543,7 @@ function fixThemeContrast(rootEl){
     if(!bg||!fg)return;
     if(_ratio(bg,fg)<4.0){
       // 가독성 낮음 — bg 의 luminance 에 따라 text 색을 어둡게 또는 밝게 설정
-      el.style.color=_lum(bg)>0.55?'#1f2937':'#FFFFFF';
+      el.style.color=_lum(bg)>0.55?'#333333':'#FFFFFF';
     }
   });
 }
