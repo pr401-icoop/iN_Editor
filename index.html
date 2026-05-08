@@ -167,7 +167,7 @@ body.props-open { padding-bottom:62px; }
 .in-shape:focus { outline: none; }
 
 /* ── 리사이즈 오버레이 ── */
-#resize-overlay { display:none; position:fixed; z-index:750; pointer-events:none; box-shadow:0 0 0 2px var(--accent); }
+#resize-overlay { display:none; position:fixed; z-index:9000; pointer-events:none; box-shadow:0 0 0 2px var(--accent); }
 #resize-overlay.visible { display:block; }
 #ro-move { position:absolute; inset:0; cursor:move; pointer-events:all; background:transparent; }
 .rh { position:absolute; width:9px; height:9px; background:#fff; border:2px solid var(--accent); border-radius:2px; pointer-events:all; z-index:2; }
@@ -202,6 +202,10 @@ body.props-open { padding-bottom:62px; }
 .pp-row { display:flex; flex-wrap:wrap; align-items:center; gap:6px 8px; width:100%; }
 .pp-row > .pp-label:first-child { min-width:54px; }
 .pp-color { width:26px; height:26px; border-radius:6px; border:1px solid var(--border-mid); cursor:pointer; padding:0; flex-shrink:0; }
+/* native color input 의 swatch 가 .value 만으로 안 보이는 케이스 대응 — inline background 를 강제로 보여줌 */
+.pp-color::-webkit-color-swatch-wrapper { padding:0; }
+.pp-color::-webkit-color-swatch { border:0; border-radius:5px; }
+.pp-color::-moz-color-swatch { border:0; border-radius:5px; }
 .pp-num { border:1px solid var(--border-soft); border-radius:6px; padding:5px 7px; font-size:12px; font-family:inherit; width:54px; outline:none; background:var(--bg-surface); color:var(--text-main); }
 .pp-num:focus { border-color:var(--accent); }
 .pp-num-sm { border:1px solid var(--border-soft); border-radius:6px; padding:5px 6px; font-size:12px; font-family:inherit; width:42px; outline:none; background:var(--bg-surface); color:var(--text-main); }
@@ -564,6 +568,9 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
   </div>
 </div>
 
+<!-- ── 스마트 가이드 (드래그 중 정렬 표시) ── -->
+<div id="smart-guides" style="position:fixed;top:0;left:0;width:0;height:0;pointer-events:none;z-index:8950;"></div>
+
 <!-- ── 리사이즈 오버레이 ── -->
 <div id="resize-overlay">
   <div id="ro-move" title="드래그하여 이동"></div>
@@ -670,14 +677,18 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
     </div>
     <div class="pp-sep"></div>
-    <span class="pp-section-title">배치 (글과의 관계)</span>
+    <span class="pp-section-title">배치</span>
     <div class="pp-row">
-      <button class="pp-btn" id="pp-shape-layer-flow"  onmousedown="event.preventDefault()" onclick="applyLayer('flow')"  title="본문 흐름에 맞춰 자연스럽게 배치">글과 조화</button>
-      <button class="pp-btn" id="pp-shape-layer-front" onmousedown="event.preventDefault()" onclick="applyLayer('front')" title="글보다 위 레이어">글 앞으로</button>
-      <button class="pp-btn" id="pp-shape-layer-back"  onmousedown="event.preventDefault()" onclick="applyLayer('back')"  title="글보다 아래 레이어 (배경처럼)">글 뒤로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('front-most')">⇥ 맨앞으로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('front')">→ 앞으로</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('back')">← 뒤로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('back-most')">⇤ 맨뒤로</button>
     </div>
     <div class="pp-sep"></div>
     <div class="pp-row">
+      <button class="pp-btn" id="pp-lock-btn" onmousedown="event.preventDefault()" onclick="toggleElemLock()" title="잠금 시 이동/크기변경/편집 차단" style="flex:1;">🔒 잠금</button>
       <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
     </div>
   </div>
@@ -753,7 +764,18 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
     </div>
     <div class="pp-sep"></div>
+    <span class="pp-section-title">배치</span>
     <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('front-most')">⇥ 맨앞으로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('front')">→ 앞으로</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('back')">← 뒤로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('back-most')">⇤ 맨뒤로</button>
+    </div>
+    <div class="pp-sep"></div>
+    <div class="pp-row">
+      <button class="pp-btn" id="pp-lock-btn" onmousedown="event.preventDefault()" onclick="toggleElemLock()" title="잠금 시 이동/크기변경/편집 차단" style="flex:1;">🔒 잠금</button>
       <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
     </div>
   </div>
@@ -897,7 +919,18 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <span id="pp-img-op-v" class="pp-small">100%</span>
     </div>
     <div class="pp-sep"></div>
+    <span class="pp-section-title">배치</span>
     <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('front-most')">⇥ 맨앞으로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('front')">→ 앞으로</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('back')">← 뒤로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('back-most')">⇤ 맨뒤로</button>
+    </div>
+    <div class="pp-sep"></div>
+    <div class="pp-row">
+      <button class="pp-btn" id="pp-lock-btn" onmousedown="event.preventDefault()" onclick="toggleElemLock()" title="잠금 시 이동/크기변경/편집 차단" style="flex:1;">🔒 잠금</button>
       <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
     </div>
   </div>
@@ -987,14 +1020,18 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
     </div>
     <div class="pp-sep"></div>
-    <span class="pp-section-title">배치 (글과의 관계)</span>
+    <span class="pp-section-title">배치</span>
     <div class="pp-row">
-      <button class="pp-btn" id="pp-block-layer-flow"  onmousedown="event.preventDefault()" onclick="applyLayer('flow')"  title="본문 흐름에 맞춰 자연스럽게 배치">글과 조화</button>
-      <button class="pp-btn" id="pp-block-layer-front" onmousedown="event.preventDefault()" onclick="applyLayer('front')" title="글보다 위 레이어">글 앞으로</button>
-      <button class="pp-btn" id="pp-block-layer-back"  onmousedown="event.preventDefault()" onclick="applyLayer('back')"  title="글보다 아래 레이어 (배경처럼)">글 뒤로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('front-most')">⇥ 맨앞으로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('front')">→ 앞으로</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('back')">← 뒤로</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="zOrder('back-most')">⇤ 맨뒤로</button>
     </div>
     <div class="pp-sep"></div>
     <div class="pp-row">
+      <button class="pp-btn" id="pp-lock-btn" onmousedown="event.preventDefault()" onclick="toggleElemLock()" title="잠금 시 이동/크기변경/편집 차단" style="flex:1;">🔒 잠금</button>
       <button class="pp-del-btn" onclick="deleteElem()">🗑 삭제</button>
     </div>
   </div>
@@ -1006,18 +1043,35 @@ input[type=checkbox].pp-check { width:14px; height:14px; cursor:pointer; flex-sh
       <span id="pp-multi-count" style="font-size:11px;color:#888;flex-shrink:0;white-space:nowrap;"></span>
     </div>
     <div class="pp-sep"></div>
-    <span class="pp-section-title">페이지 정렬</span>
+    <span class="pp-section-title">개체 정렬</span>
     <div class="pp-row">
-      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('left')">◄ 왼쪽</button>
-      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('center')">가운데</button>
-      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignElem('right')">오른쪽 ►</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignObjs('left')" title="왼쪽 가장자리 맞춤">⊟ 왼쪽</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignObjs('center-h')" title="가로 가운데">⊞ 가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignObjs('right')" title="오른쪽 가장자리 맞춤">⊟ 오른쪽</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignObjs('top')" title="위쪽 가장자리 맞춤">⊤ 위</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignObjs('center-v')" title="세로 가운데">⊞ 세로 가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignObjs('bottom')" title="아래쪽 가장자리 맞춤">⊥ 아래</button>
     </div>
     <div class="pp-sep"></div>
-    <span class="pp-section-title">상대 정렬</span>
+    <span class="pp-section-title">개체 분포</span>
     <div class="pp-row">
-      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('left')">왼쪽 끝 맞춤</button>
-      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('center')">가로 가운데</button>
-      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="alignEdge('right')">오른쪽 끝 맞춤</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="distributeObjs('h-left')" title="가로 - 왼쪽 가장자리 균등">↔ 왼쪽</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="distributeObjs('h-center')" title="가로 - 가운데 균등">↔ 가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="distributeObjs('h-right')" title="가로 - 오른쪽 가장자리 균등">↔ 오른쪽</button>
+    </div>
+    <div class="pp-row">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="distributeObjs('v-top')" title="세로 - 위쪽 가장자리 균등">↕ 위</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="distributeObjs('v-center')" title="세로 - 가운데 균등">↕ 가운데</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="distributeObjs('v-bottom')" title="세로 - 아래쪽 가장자리 균등">↕ 아래</button>
+    </div>
+    <div class="pp-sep"></div>
+    <span class="pp-section-title">분포 간격</span>
+    <div class="pp-row">
+      <input type="number" id="pp-multi-gap" class="pp-num" min="0" placeholder="px" style="width:60px;">
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="distributeObjs('gap-h',parseInt(document.getElementById('pp-multi-gap').value)||0)" title="가로 간격 균등">↔ 가로 간격</button>
+      <button class="pp-btn" onmousedown="event.preventDefault()" onclick="distributeObjs('gap-v',parseInt(document.getElementById('pp-multi-gap').value)||0)" title="세로 간격 균등">↕ 세로 간격</button>
     </div>
     <div class="pp-sep"></div>
     <span class="pp-section-title">크기 통일</span>
@@ -1332,7 +1386,7 @@ function _sogsikTpl(t){
   const sectionHead=(eyebrow,title)=>`<div style="font-size:12pt;letter-spacing:.25em;color:${G};font-weight:900;margin:0 0 6px;text-transform:uppercase;">${eyebrow}</div><h2 style="font-size:16pt;font-weight:800;color:${INK};margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">${title}</h2>`;
   return `<div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:${SS};font-size:12pt;line-height:1.7;color:${INK};letter-spacing:-.01em;background:${BC};">`+
   // ── 1) 상단 이미지 placeholder ──
-  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};border-bottom:0;border-radius:8px 8px 0 0;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
+  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};border-radius:12px;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
   // ── 2) 타이틀 박스 (짙은 파란색 윗부분) ──
   `<div style="background:${G};padding:48px 32px 36px;text-align:center;">`+
     `<div style="font-size:12pt;letter-spacing:.25em;color:#fff;font-weight:700;margin:0 0 14px;text-transform:uppercase;opacity:.85;">${t.brand||''}</div>`+
@@ -1424,28 +1478,27 @@ const SOGSIK_SALES_EVENT=(function(){
   // 섹션 헬퍼 — 영어 키워드 eyebrow + 한글 타이틀
   const sectionHead=(eyebrow,title)=>`<div style="font-size:12pt;letter-spacing:.25em;color:${G};font-weight:900;margin:0 0 6px;text-transform:uppercase;">${eyebrow}</div><h2 style="font-size:16pt;font-weight:800;color:${INK};margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">${title}</h2>`;
   return `<div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:${SS};font-size:12pt;line-height:1.65;color:${INK};letter-spacing:-.01em;background:${BC};">`+
-  // ── 1) 상단 이미지 placeholder (4면 모두 둥글게) ──
-  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};border-radius:12px;margin:0 32px 0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
-  // ── 2) 본문 영역 시작 (좌측정렬) ──
-  `<div style="padding:0 32px 64px;">`+
+  // ── 1) 상단 이미지 placeholder — 가로 900px 풀폭 (좌우 마진 0) ──
+  `<div data-banner-upload="1" contenteditable="false" style="background:${BA};border:2px dashed ${G};border-radius:12px;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:${G};font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 — 클릭하여 업로드</div>`+
+  // ── 2) 본문 영역 시작 — 좌우 padding 0 (진짜 900px 활용). 텍스트 요소엔 개별 padding 부여 ──
+  `<div style="padding:0 0 64px;">`+
   // 이미지와 타이틀 사이 한 줄 띄움 (빈 단락) — 캐럿 진입 가능
   `<p style="margin:28px 0 0;"><br></p>`+
-  // 타이틀 행 — 큰 타이틀(h1) + 우측 태그 칩.
-  //   chip 을 float:right 로 띄워 같은 줄에 표시. h1 은 일반 블록이라 Enter 정상 동작.
-  `<div style="margin:0 0 20px;overflow:hidden;">`+
+  // 타이틀 행 — 큰 타이틀(h1) + 우측 태그 칩 (텍스트 자체 padding 부여)
+  `<div style="margin:0 0 20px;padding:0 32px;overflow:hidden;">`+
     `<span style="float:right;display:inline-block;background:${BA};color:${G};padding:6px 14px;font:normal normal 800 14px/1.4 ${SS};letter-spacing:-.3px;margin-top:8px;">#가족에게 전하는 자연드림의 5월 선물</span>`+
     `<h1 style="margin:0;font:normal normal 900 26px/1.3 ${SS};color:${INK};letter-spacing:-1px;">조합원만의 한정 수량 특가 장바구니</h1>`+
   `</div>`+
-  // 슬로건 박스 — 안내(notice) 박스 스타일 (라이트핑크 + 좌측 와인 보더, 우측 라운드 없음)
-  `<div style="background:${BA};border-left:4px solid ${G};padding:18px 22px;margin:0 0 28px;border-radius:0;">`+
+  // 슬로건 박스 — 좌우 32px 외측 margin 으로 가장자리 띄움
+  `<div style="background:${BA};border-left:4px solid ${G};padding:18px 22px;margin:0 32px 28px;border-radius:0;">`+
     `<p style="margin:0 0 8px;font:normal normal 700 16px/1.55 ${SS};color:${INK};letter-spacing:-.3px;">특별한 날 한 번 잘 먹는 것보다, 매일 조금씩 몸이 달라지는 것.</p>`+
     `<p style="margin:0;font:normal normal 800 18px/1.55 ${SS};color:${G};letter-spacing:-.3px;">생활치유 챌린지 필수식품 포함 총 25종의 특가상품으로 만나보세요.</p>`+
   `</div>`+
-  // 본문 도입
-  `<p style="margin:0 0 36px;font-size:12pt;line-height:1.95;color:${IM};">부모님을 위한 건강식품부터 아이 간식, 나를 위한 챌린지 아이템까지.<br>최대 40% 특가, 하나의 장바구니에 담아 한 번에 결제하세요.<br><strong style="color:${G};font-weight:800;">생활치유 챌린지 물품을 조합원만의 특가 혜택으로! 지금 바로 확인하세요.</strong></p>`+
-  // ── Section DEAL — 특가 상품 ──
-  `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
-  `<div style="margin:0 0 36px;">`+
+  // 본문 도입 — 좌우 padding 부여
+  `<p style="margin:0 0 36px;padding:0 32px;font-size:12pt;line-height:1.95;color:${IM};">부모님을 위한 건강식품부터 아이 간식, 나를 위한 챌린지 아이템까지.<br>최대 40% 특가, 하나의 장바구니에 담아 한 번에 결제하세요.<br><strong style="color:${G};font-weight:800;">생활치유 챌린지 물품을 조합원만의 특가 혜택으로! 지금 바로 확인하세요.</strong></p>`+
+  // ── Section DEAL — 특가 상품 (좌우 32px padding 으로 섹션 정렬) ──
+  `<hr style="border:0;border-top:1px solid ${LN};margin:0 32px 28px;">`+
+  `<div style="margin:0 0 36px;padding:0 32px;">`+
     sectionHead('DEAL','특가 이벤트 품목 (한정수량)')+
     `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0;margin:0 0 18px;">`+
       `<div style="font-size:12pt;color:${IM};line-height:1.85;">※ 이벤트 기간 중 재고상황에 따라 특가상품이 중단·변경되거나 추가될 수 있습니다.<br><span style="color:${G};font-weight:700;">※ 더 많은 분들이 혜택을 함께 누릴 수 있도록 품목당 1인 3개까지 구매 가능합니다.</span></div>`+
@@ -1453,9 +1506,9 @@ const SOGSIK_SALES_EVENT=(function(){
     // 카드 그리드 (4열, jd-card 사양)
     `<div style="display:flex;flex-wrap:wrap;gap:12px;">${P.map(card).join('')}${(()=>{const n=(4-P.length%4)%4;let s='';for(let i=0;i<n;i++)s+='<div style="flex:1 1 calc(25% - 12px);min-width:140px;height:0;visibility:hidden;padding:0;margin:0;border:0;"></div>';return s;})()}</div>`+
   `</div>`+
-  // ── Section NOTICE — 유의사항 ──
-  `<hr style="border:0;border-top:1px solid ${LN};margin:0 0 28px;">`+
-  `<div style="margin:0;">`+
+  // ── Section NOTICE — 유의사항 (좌우 32px padding) ──
+  `<hr style="border:0;border-top:1px solid ${LN};margin:0 32px 28px;">`+
+  `<div style="margin:0;padding:0 32px;">`+
     sectionHead('NOTICE','구매 시 유의사항')+
     `<div style="border-left:4px solid ${G};background:${BA};padding:18px 22px;border-radius:0;">`+
       `<div style="display:flex;flex-wrap:wrap;gap:20px;">`+
@@ -1552,7 +1605,7 @@ const GIAN_BASIC=`<div class="ev-wrap" style="max-width:900px !important;width:1
 - </pre></td></tr></tbody></table><p>&nbsp;</p><p><b style="color:#8e0c37;font-size:15px;">5. 유의 사항</b></p><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 관련 작업이 완료된 이후 요청을 진행해 주세요.</div><div style="margin:0.8rem 0;font-size:13.5px;text-indent:-1.2em;padding-left:1.2em;">• 수정 / 종료 요청도 동일하게 <span style="font-weight:600;">본 문서 댓글</span>을 통해 접수 바랍니다.</div></div>`;
 
 // AI용 빈 템플릿 (내용 채울 구조만 제공) — 매거진 리포트 레이아웃
-const SOGSIK_AI_TPL=`<!-- 작성 규칙: (1) 아래 [대괄호] 안의 내용만 실제 내용으로 교체. (2) style 속성/색상/구조는 절대 수정 금지. (3) 이모지 사용 금지 - 인트라넷 sanitizer가 4바이트 이모지에서 본문을 잘라내므로 반드시 텍스트·일반 기호(·, ※, ▶, ■, ◆, ●, 1)2)3), -)로만 작성할 것. (4) 본문은 한국어로 작성. (5) 폰트 크기는 본문 12pt / 강조 16pt / 최대 강조 18pt 만 사용. (6) data-banner-upload 영역과 번호 섹션 구조는 절대 변경하지 말 것. (7) [KEYWORD1] [KEYWORD2] 자리는 그 섹션의 한글 제목(h2)을 함축하는 영어 단어 1개를 대문자로 입력 (예: 행사 개요→OVERVIEW, 상품 소개→PRODUCT, 특가 이벤트 품목→DEAL, 프로그램 안내→PROGRAM, 세부 안내→DETAIL, 신청 방법→APPLY, 일정→SCHEDULE 등). 마지막 섹션의 NOTICE 는 그대로 둘 것. --><div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:12pt;line-height:1.7;color:#333333;letter-spacing:-.01em;background:#FFFFFF;"><div data-banner-upload="1" contenteditable="false" style="background:#fce7ed;border:2px dashed #bb1049;border-bottom:0;border-radius:8px 8px 0 0;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:#bb1049;font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 - 클릭하여 업로드</div><div style="background:#bb1049;padding:48px 32px 36px;text-align:center;"><p style="margin:0 0 18px;font-weight:700;color:#fff;letter-spacing:-.3px;opacity:.92;"><span style="font-size:16pt;">[작은 라인 - 카테고리 또는 주최]</span></p><h1 style="margin:0;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.3;"><span style="font-size:18pt;">[소식 제목을 여기에 입력]</span></h1></div><div style="background:#d44570;padding:28px 32px;text-align:center;"><p style="margin:0;font-weight:700;color:#fff;line-height:1.55;letter-spacing:-.3px;"><span style="font-size:16pt;">[부제 슬로건 한 줄]</span><br><span style="border-bottom:3px solid rgba(255,255,255,.45);padding-bottom:2px;"><span style="font-size:18pt;">[강조 슬로건 - 18pt 핵심 메시지]</span></span></p></div><div style="padding:48px 32px 64px;"><p style="margin:0 0 36px;font-size:12pt;line-height:1.95;color:#374151;">[본문 도입 - 한 문단 정도. 마지막 문장은 <strong style="color:#bb1049;font-weight:800;">블루 강조</strong> 로 마무리.]</p><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">[KEYWORD1]</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[첫 번째 소제목]</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[강조 박스 안 내용 - 굵게는 <strong>이렇게</strong> 사용]</div></div></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">[KEYWORD2]</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[두 번째 소제목]</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[두 번째 섹션 내용]</div></div></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">NOTICE</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">유의사항</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.95;">· [유의사항 1]<br>· [유의사항 2]</div></div></div></div></div>`;
+const SOGSIK_AI_TPL=`<!-- 작성 규칙: (1) 아래 [대괄호] 안의 내용만 실제 내용으로 교체. (2) style 속성/색상/구조는 절대 수정 금지. (3) 이모지 사용 금지 - 인트라넷 sanitizer가 4바이트 이모지에서 본문을 잘라내므로 반드시 텍스트·일반 기호(·, ※, ▶, ■, ◆, ●, 1)2)3), -)로만 작성할 것. (4) 본문은 한국어로 작성. (5) 폰트 크기는 본문 12pt / 강조 16pt / 최대 강조 18pt 만 사용. (6) data-banner-upload 영역과 번호 섹션 구조는 절대 변경하지 말 것. (7) [KEYWORD1] [KEYWORD2] 자리는 그 섹션의 한글 제목(h2)을 함축하는 영어 단어 1개를 대문자로 입력 (예: 행사 개요→OVERVIEW, 상품 소개→PRODUCT, 특가 이벤트 품목→DEAL, 프로그램 안내→PROGRAM, 세부 안내→DETAIL, 신청 방법→APPLY, 일정→SCHEDULE 등). 마지막 섹션의 NOTICE 는 그대로 둘 것. --><div class="ev-wrap" style="max-width:900px !important;width:100% !important;margin:0 auto !important;padding:0 !important;box-sizing:border-box !important;font-family:'Malgun Gothic','맑은 고딕',sans-serif;font-size:12pt;line-height:1.7;color:#333333;letter-spacing:-.01em;background:#FFFFFF;"><div data-banner-upload="1" contenteditable="false" style="background:#fce7ed;border:2px dashed #bb1049;border-radius:12px;margin:0;padding:80px 20px;text-align:center;cursor:pointer;color:#bb1049;font-weight:700;font-size:12pt;letter-spacing:-.3px;"><div style="font-size:32px;margin-bottom:10px;">⬆</div>소식 본문 상단 이미지 삽입 - 클릭하여 업로드</div><div style="background:#bb1049;padding:48px 32px 36px;text-align:center;"><p style="margin:0 0 18px;font-weight:700;color:#fff;letter-spacing:-.3px;opacity:.92;"><span style="font-size:16pt;">[작은 라인 - 카테고리 또는 주최]</span></p><h1 style="margin:0;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.3;"><span style="font-size:18pt;">[소식 제목을 여기에 입력]</span></h1></div><div style="background:#d44570;padding:28px 32px;text-align:center;"><p style="margin:0;font-weight:700;color:#fff;line-height:1.55;letter-spacing:-.3px;"><span style="font-size:16pt;">[부제 슬로건 한 줄]</span><br><span style="border-bottom:3px solid rgba(255,255,255,.45);padding-bottom:2px;"><span style="font-size:18pt;">[강조 슬로건 - 18pt 핵심 메시지]</span></span></p></div><div style="padding:48px 32px 64px;"><p style="margin:0 0 36px;font-size:12pt;line-height:1.95;color:#374151;">[본문 도입 - 한 문단 정도. 마지막 문장은 <strong style="color:#bb1049;font-weight:800;">블루 강조</strong> 로 마무리.]</p><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">[KEYWORD1]</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[첫 번째 소제목]</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[강조 박스 안 내용 - 굵게는 <strong>이렇게</strong> 사용]</div></div></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0 0 36px;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">[KEYWORD2]</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">[두 번째 소제목]</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.85;">[두 번째 섹션 내용]</div></div></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:0 0 28px;"><div style="margin:0;"><div style="font-size:12pt;letter-spacing:.25em;color:#bb1049;font-weight:900;margin:0 0 6px;text-transform:uppercase;">NOTICE</div><h2 style="font-size:16pt;font-weight:800;color:#333333;margin:0 0 14px;line-height:1.4;letter-spacing:-.3px;">유의사항</h2><div style="border-left:4px solid #bb1049;background:#fce7ed;padding:18px 22px;border-radius:0;"><div style="font-size:12pt;color:#374151;line-height:1.95;">· [유의사항 1]<br>· [유의사항 2]</div></div></div></div></div>`;
 
 const GIAN_AI_TPL=`<!-- 작성 규칙: (1) 아래 기안문 양식의 [대괄호] 안 텍스트만 실제 내용으로 교체. (2) style/색상/구조는 절대 수정 금지. (3) 이모지(📅 📌 ✅ 📝 🎯 등) 사용 금지 — 인트라넷 게시판 sanitizer가 4바이트 이모지에서 본문을 잘라내므로 반드시 일반 기호(·, ※, ▶, ■, ◆, ●, ①②③, -)와 텍스트로만 작성할 것. (4) 본문은 한국어 기안체로 작성. -->
 <div style="max-width:900px;margin:0 auto;padding:32px 24px 60px;font-size:14px;line-height:1.8;color:#333333;font-family:'Malgun Gothic','맑은 고딕',sans-serif;"><div style="margin-bottom:2rem;"><p style="margin:3px 0;"><span style="font-weight:600;">작성자:</span> [부서명] [이름]</p><p style="margin:3px 0;"><span style="font-weight:600;">작성일:</span> [0000년 00월 00일(요일)]</p><p style="margin:3px 0;"><span style="font-weight:600;">내&nbsp;&nbsp;&nbsp;용:</span> [기안 제목]</p></div><hr style="border:0;border-top:1px solid #e5e7eb;margin:1.5rem 0 2rem;"><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">1. 개요</div><p style="margin:0.2rem 0 0.5rem;text-indent:-1.5em;padding-left:1.5em;">① [기안의 배경 및 현황]</p><p style="margin:0.5rem 0 0.2rem;text-indent:-1.5em;padding-left:1.5em;">② [주요 내용 및 기대 효과]</p><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">2. 세부 내역</div><p style="margin:0.2rem 0 1rem;">[세부 내역에 대한 간략한 설명]</p><table style="width:100%;border-collapse:collapse;font-size:13px;margin:1rem 0 1.5rem;border:1px solid #e5e7eb;table-layout:fixed;"><thead><tr style="background:#fce7ed;"><th style="width:45%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">항목</th><th style="width:25%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">구분</th><th style="width:30%;padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#8e0c37;">담당</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">[항목 1]</td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;"><span style="background:#fce7ed;color:#8e0c37;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;color:#8e0c37;font-weight:500;background:#fce7ed;">[담당부서]</td></tr><tr><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;">[항목 2]</td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;"><span style="background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500;">[구분]</span></td><td style="padding:10px;border:1px solid #e5e7eb;text-align:center;color:#6b7280;font-weight:500;background:#f3f4f6;">[담당부서]</td></tr></tbody></table><p style="margin:0 0 1rem;font-size:13.5px;color:#555;">※ [표 하단 안내]</p><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">3. 진행 방법</div><p style="margin:0.2rem 0 1rem;font-weight:600;color:#8e0c37;">요청은 <span style="color:#333333;font-weight:bold;background:#fce7ed;padding:2px 6px;border-radius:4px;">본 문서의 댓글</span>을 통해 접수해 주세요.</p><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">①</div><div>[1단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">②</div><div>[2단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">③</div><div>[3단계]</div></div><div style="display:flex;margin:0.8rem 0;font-size:13.5px;"><div style="font-weight:bold;color:#8e0c37;min-width:25px;">④</div><div>[4단계]</div></div><div style="background:#fce7ed;padding:10px 16px;border-radius:6px;font-size:15px;font-weight:600;margin:2.5rem 0 1rem;color:#8e0c37;border:1px solid #f0bfd0;">4. 작성 양식</div><p style="margin:0.2rem 0 0.5rem;font-size:13.5px;">[양식 안내 문구]</p><div style="margin:1.5rem 0 0.5rem;font-size:13px;font-weight:600;color:#333333;">■ 요청 양식</div><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e5e7eb;background:#f5f5f7;table-layout:fixed;"><thead><tr style="background:#f3f4f6;"><th style="padding:10px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:#333333;">작성 예시</th></tr></thead><tbody><tr><td style="padding:15px;border:1px solid #e5e7eb;"><pre style="margin:0;line-height:2;white-space:pre-wrap;font-family:inherit;color:#333333;"><b>[요청] [담당팀]&gt; [요청 제목]</b>
@@ -2076,6 +2129,8 @@ function showPropsPanel(el, type){
       const i=document.getElementById(id);if(i)i.value=_link;
     });
   }
+  // 잠금 버튼 상태 동기화 (일부 패널만 활성화되므로 다음 frame 에 실행)
+  requestAnimationFrame(()=>_syncLockButton());
 
   if(type==='shape'){
     const g=document.getElementById('pp-shape');g.classList.add('active');
@@ -2137,16 +2192,18 @@ function showPropsPanel(el, type){
     const bdrColor=_v(el.style.borderColor,cs.borderColor);
     const bdrWidth=parseInt(_v(el.style.borderWidth,cs.borderWidth))||0;
     const bdrStyle=_v(el.style.borderStyle,cs.borderStyle);
-    const imgBc=document.getElementById('pp-img-border-color');if(imgBc)imgBc.value=rgbToHex(bdrColor)||'#cccccc';
+    const _setColorImg=(id,hex)=>{const inp=document.getElementById(id);if(!inp)return;inp.value=hex;try{inp.setAttribute('value',hex);}catch{}inp.style.background=hex;};
+    _setColorImg('pp-img-border-color',rgbToHex(bdrColor)||'#cccccc');
     const imgBw=document.getElementById('pp-img-border-w');if(imgBw)imgBw.value=bdrWidth;
     const imgBs=document.getElementById('pp-img-border-style');if(imgBs)imgBs.value=(bdrStyle&&bdrStyle!=='none')?bdrStyle:'solid';
     const imgBnEl=document.getElementById('pp-img-border-none');if(imgBnEl)imgBnEl.checked=!bdrStyle||bdrStyle==='none'||bdrWidth===0;
   } else if(type==='block'){
     const g=document.getElementById('pp-block');g.classList.add('active');
-    // ★ getComputedStyle 을 주 소스로 — 어떤 형태(shorthand/longhand)로 inline 이 적혀도 실제 렌더링 값 반환
     const cs=getComputedStyle(el);
     const _isTransp=(c)=>!c||c==='transparent'||/rgba\(0,\s*0,\s*0,\s*0\)/i.test(c);
     const _toHex=(c,fb)=>{if(_isTransp(c))return fb;const h=rgbToHex(c);return h||fb;};
+    // ★ <input type=color> swatch 가 .value 만으로 안 보이는 케이스 대응 — 모든 입력 채널 사용
+    const _setColor=(id,hex)=>{const inp=document.getElementById(id);if(!inp)return;inp.value=hex;try{inp.setAttribute('value',hex);}catch{}inp.style.background=hex;};
     // 배경: 그라데이션이면 분해, 아니면 단색
     const bgImg=el.style.backgroundImage||cs.backgroundImage||'';
     const grad=_parseLinearGradient(bgImg);
@@ -2167,14 +2224,14 @@ function showPropsPanel(el, type){
       renderBlockGradBar();
     } else {
       const bgC=_toHex(cs.backgroundColor,'#fce7ed');
-      bgInput.value=bgC;
+      _setColor('pp-block-bg',bgC);
       blockGradStops=[{color:bgC,pos:0},{color:bgC,pos:100}];blockGradActive=0;
       if(gradOnEl)gradOnEl.checked=false;
       if(gradDirEl)gradDirEl.style.display='none';
       const wrap=document.getElementById('pp-block-grad-wrap');if(wrap)wrap.style.display='none';
     }
-    document.getElementById('pp-block-line').value=_toHex(cs.borderLeftColor,'#bb1049');
-    document.getElementById('pp-block-color').value=_toHex(cs.color,'#333333');
+    _setColor('pp-block-line',_toHex(cs.borderLeftColor,'#bb1049'));
+    _setColor('pp-block-color',_toHex(cs.color,'#333333'));
     const bgNone=_isTransp(cs.backgroundColor);
     const lineWidth=parseInt(cs.borderLeftWidth)||0;
     const lineStyle=cs.borderLeftStyle;
@@ -2216,8 +2273,22 @@ function rgbToHex(rgb){
 }
 
 // ── 페이지 배경색 ──
+//   "글이 올라가는 안쪽 영역(.ev-wrap)" 의 배경만 변경.
+//   외곽 #editor-wrap (110px 패딩 영역) 은 그대로 둠.
 function setEditorBg(color){
-  document.getElementById('editor-wrap').style.backgroundColor=color;
+  // 템플릿 최상위 .ev-wrap 의 배경만 갱신
+  const wraps=editor.querySelectorAll('.ev-wrap');
+  if(wraps.length){
+    wraps.forEach(evw=>{
+      evw.style.background=color;
+      evw.style.backgroundColor=color;
+    });
+  } else {
+    // .ev-wrap 가 없으면(템플릿 미사용 상태) 에디터 자체에 적용
+    editor.style.backgroundColor=color;
+  }
+  // 미리보기용 버튼 색 동기화
+  const btn=document.getElementById('editor-bg-btn');if(btn)btn.style.background=color;
   scheduleAutoSave();
 }
 
@@ -2975,6 +3046,107 @@ function alignEdge(mode){
   syncHtmlPanel();scheduleAutoSave();
 }
 
+// ── 다중 선택: 정렬·분포 (Illustrator 스타일) ──
+//   각 선택된 개체의 left/top 을 position:relative 로 조정해 정렬·분포.
+//   align 기준: 모든 선택 개체의 bounding box (selection bounds)
+function _ensureRel(el){const cs=getComputedStyle(el);if(cs.position!=='relative'&&cs.position!=='absolute')el.style.position='relative';}
+function _multiBounds(els){
+  const data=els.map(el=>({el,r:el.getBoundingClientRect()}));
+  const left=Math.min(...data.map(d=>d.r.left));
+  const right=Math.max(...data.map(d=>d.r.right));
+  const top=Math.min(...data.map(d=>d.r.top));
+  const bottom=Math.max(...data.map(d=>d.r.bottom));
+  return {data,left,right,top,bottom,cx:(left+right)/2,cy:(top+bottom)/2};
+}
+function alignObjs(mode){
+  const els=selectedElems.length>1?selectedElems:[];
+  if(!els.length){showToast&&showToast('2개 이상 선택해 주세요');return;}
+  saveUndo&&saveUndo();
+  els.forEach(_ensureRel);
+  const b=_multiBounds(els);
+  els.forEach(el=>{
+    const r=el.getBoundingClientRect();
+    const curL=parseFloat(el.style.left)||0;
+    const curT=parseFloat(el.style.top)||0;
+    let dx=0,dy=0;
+    switch(mode){
+      case 'left':     dx=b.left-r.left;break;
+      case 'center-h': dx=b.cx-(r.left+r.right)/2;break;
+      case 'right':    dx=b.right-r.right;break;
+      case 'top':      dy=b.top-r.top;break;
+      case 'center-v': dy=b.cy-(r.top+r.bottom)/2;break;
+      case 'bottom':   dy=b.bottom-r.bottom;break;
+    }
+    if(dx)el.style.left=(curL+dx)+'px';
+    if(dy)el.style.top=(curT+dy)+'px';
+  });
+  if(typeof positionOverlay==='function')positionOverlay();
+  syncHtmlPanel();scheduleAutoSave();
+  showToast&&showToast('정렬됨');
+}
+function distributeObjs(mode,gap){
+  const els=selectedElems.length>2?selectedElems:[];
+  if(!els.length){showToast&&showToast('3개 이상 선택해 주세요');return;}
+  saveUndo&&saveUndo();
+  els.forEach(_ensureRel);
+  // 가로/세로 별로 정렬 후 균등 배분
+  const isH=mode.startsWith('h-')||mode==='gap-h';
+  const isV=mode.startsWith('v-')||mode==='gap-v';
+  // 각 요소의 측정 keypoint
+  const data=els.map(el=>({el,r:el.getBoundingClientRect(),curL:parseFloat(el.style.left)||0,curT:parseFloat(el.style.top)||0}));
+  if(isH){
+    // 가로 분포 — keypoint 기준으로 정렬
+    const key=mode==='h-left'?(d=>d.r.left):mode==='h-right'?(d=>d.r.right):(d=>(d.r.left+d.r.right)/2);
+    if(mode==='gap-h'){
+      // x 좌측 기준 정렬
+      data.sort((a,b)=>a.r.left-b.r.left);
+      const startX=data[0].r.left;
+      let cursor=startX;
+      data.forEach((d,i)=>{
+        if(i===0){cursor=d.r.right+gap;return;}
+        const dx=cursor-d.r.left;
+        d.el.style.left=(d.curL+dx)+'px';
+        cursor+=d.r.width+gap;
+      });
+    } else {
+      data.sort((a,b)=>key(a)-key(b));
+      const first=key(data[0]),last=key(data[data.length-1]);
+      const step=(last-first)/(data.length-1);
+      data.forEach((d,i)=>{
+        const target=first+step*i;
+        const dx=target-key(d);
+        d.el.style.left=(d.curL+dx)+'px';
+      });
+    }
+  }
+  if(isV){
+    const key=mode==='v-top'?(d=>d.r.top):mode==='v-bottom'?(d=>d.r.bottom):(d=>(d.r.top+d.r.bottom)/2);
+    if(mode==='gap-v'){
+      data.sort((a,b)=>a.r.top-b.r.top);
+      const startY=data[0].r.top;
+      let cursor=startY;
+      data.forEach((d,i)=>{
+        if(i===0){cursor=d.r.bottom+gap;return;}
+        const dy=cursor-d.r.top;
+        d.el.style.top=(d.curT+dy)+'px';
+        cursor+=d.r.height+gap;
+      });
+    } else {
+      data.sort((a,b)=>key(a)-key(b));
+      const first=key(data[0]),last=key(data[data.length-1]);
+      const step=(last-first)/(data.length-1);
+      data.forEach((d,i)=>{
+        const target=first+step*i;
+        const dy=target-key(d);
+        d.el.style.top=(d.curT+dy)+'px';
+      });
+    }
+  }
+  if(typeof positionOverlay==='function')positionOverlay();
+  syncHtmlPanel();scheduleAutoSave();
+  showToast&&showToast('분포됨');
+}
+
 // ── 다중 선택: 크기 통일 ──
 function equalizeSize(axis){
   if(selectedElems.length<2)return;
@@ -3061,10 +3233,60 @@ function resizeElemPanel(axis, val){
 }
 function deleteElem(){if(!selectedElem)return;selectedElem.remove();deselectAll();syncHtmlPanel();scheduleAutoSave();}
 
+// ── Z-order (배치) ──
+//   position:relative 자동 적용. 모든 개체의 z-index 는 0 이상으로 클램프.
+//   배경(.ev-wrap / #editor-wrap)은 z-index:auto(=0) 이고 항상 가장 뒤. 어떤 개체도 그 뒤로 못 감.
+function zOrder(direction){
+  if(!selectedElem)return;
+  if(_isElemLocked(selectedElem)){showToast&&showToast('🔒 잠긴 개체입니다');return;}
+  const cs=getComputedStyle(selectedElem);
+  if(cs.position==='static')selectedElem.style.position='relative';
+  const cur=parseInt(selectedElem.style.zIndex)||0;
+  let z=cur;
+  switch(direction){
+    case 'front-most': z=100;break;   // 콘텐츠 최대치 (선택 오버레이 9000 보다 훨씬 아래)
+    case 'front':      z=cur+1;break;
+    case 'back':       z=cur-1;break;
+    case 'back-most':  z=0;break;     // 배경(0) 뒤로 못 감 — 가장 뒤에 도달
+  }
+  // 모든 z-index 는 [0, 100] 범위로 클램프 — 배경(뒤) 보호 + 선택 오버레이(앞) 보호
+  if(z<0)z=0;
+  if(z>100)z=100;
+  selectedElem.style.zIndex=z;
+  try{syncHtmlPanel();}catch{}try{scheduleAutoSave();}catch{}
+  showToast&&showToast(direction==='front-most'?'⇥ 맨 앞으로 가져왔습니다':direction==='back-most'?'⇤ 맨 뒤로 보냈습니다':direction==='front'?'→ 한 단계 앞으로':'← 한 단계 뒤로');
+}
+
+// ── 잠금 — 잠긴 개체는 이동/리사이즈/편집/방향키 모두 차단 ──
+function _isElemLocked(el){return!!el&&el.dataset&&el.dataset.locked==='1';}
+function toggleElemLock(){
+  if(!selectedElem)return;
+  const locked=_isElemLocked(selectedElem);
+  if(locked){
+    delete selectedElem.dataset.locked;
+    selectedElem.removeAttribute('data-locked');
+    showToast&&showToast('🔓 잠금 해제');
+  } else {
+    selectedElem.dataset.locked='1';
+    showToast&&showToast('🔒 잠금');
+  }
+  _syncLockButton();
+  try{syncHtmlPanel();}catch{}try{scheduleAutoSave();}catch{}
+}
+function _syncLockButton(){
+  const btn=document.getElementById('pp-lock-btn');if(!btn||!selectedElem)return;
+  if(_isElemLocked(selectedElem)){btn.textContent='🔓 잠금 해제';btn.style.background='var(--accent)';btn.style.color='#fff';btn.style.borderColor='var(--accent)';}
+  else{btn.textContent='🔒 잠금';btn.style.background='';btn.style.color='';btn.style.borderColor='';}
+}
+
 // ── 리사이즈 핸들 ──
 resizeOverlay.querySelectorAll('.rh').forEach(handle=>{
   handle.addEventListener('mousedown',(e)=>{
     e.preventDefault();e.stopPropagation();
+    // 잠긴 개체는 핸들 드래그 차단
+    if(selectedElem&&_isElemLocked(selectedElem)){showToast&&showToast('🔒 잠긴 개체입니다');return;}
+    // 리사이즈 시작 직전 스냅샷 — Ctrl+Z 로 이 시점으로 복원
+    try{if(typeof saveUndo==='function')saveUndo();}catch{}
     resizeDir=handle.dataset.dir;
     resizeStartX=e.clientX;resizeStartY=e.clientY;
     const rect=selectedElem.getBoundingClientRect();
@@ -3221,10 +3443,7 @@ new MutationObserver(()=>{clearTimeout(window._rulT);window._rulT=setTimeout(ren
   const findObj=(target)=>{
     let obj=target.closest('.in-shape, img, table, blockquote, hr, iframe');
     if(obj)return obj;
-    // 내부 텍스트(P/H/LI/SPAN/A/... 또는 텍스트 노드)를 직접 클릭한 경우엔
-    // 캐럿 배치·텍스트 선택이 우선되어야 하므로 드래그 시작을 허용하지 않음
-    const _textTag=/^(P|H1|H2|H3|H4|H5|H6|LI|UL|OL|SPAN|A|STRONG|EM|B|I|U|S|CODE|SMALL|SUB|SUP|MARK|LABEL|FONT|PRE|DT|DD|FIGCAPTION)$/;
-    if(target&&(target.nodeType===3||(target.nodeType===1&&_textTag.test(target.tagName))))return null;
+    // 텍스트 자식 클릭이어도 위로 walk-up — 스타일 블록 부모를 찾아 드래그 대상으로
     let n=target;const ew=editor.clientWidth;
     while(n&&n!==editor){
       if(n.nodeType===1){
@@ -3249,7 +3468,14 @@ new MutationObserver(()=>{clearTimeout(window._rulT);window._rulT=setTimeout(ren
     if(e.button!==0||e.shiftKey||e.ctrlKey||e.altKey)return;
     if(e.target.closest('.rh,#ro-move,.pp-color-btn,#resize-overlay'))return;
     if(moveMode||tblColResizeCell||tblRowResizeRow)return;
-    const obj=findObj(e.target);
+    let obj=findObj(e.target);
+    // ★ findObj 가 못 잡는 텍스트 자식을 클릭한 경우라도, 이미 선택된 개체 안쪽이면 그 개체를 드래그 대상으로
+    //   → 첫 클릭으로 개체 선택 → 다시 누르고 드래그하면 자유 이동
+    if(!obj&&selectedElem&&!selectedElem._textEditMode){
+      if(selectedElem===e.target||selectedElem.contains(e.target)){
+        obj=selectedElem;
+      }
+    }
     if(!obj||!editor.contains(obj)||obj===editor)return;
     if(obj._textEditMode)return;
     // 표 셀의 열/행 리사이즈 영역(오른쪽/아래 7px)에서는 표 이동을 시작하지 않음
@@ -3258,15 +3484,146 @@ new MutationObserver(()=>{clearTimeout(window._rulT);window._rulT=setTimeout(ren
       const cr=_tblCell.getBoundingClientRect();
       if(Math.abs(e.clientX-cr.right)<7||Math.abs(e.clientY-cr.bottom)<7)return;
     }
-    // 개체 테두리 상/하 6px 는 인접 단락 삽입용이므로 드래그 시작 제외
-    // 단, HR 처럼 높이가 매우 작은 개체는 edge 판정에서 제외
-    const r=obj.getBoundingClientRect();
-    if(r.height>16){
-      const E=6;
-      if(e.clientY<r.top+E||e.clientY>r.bottom-E)return;
-    }
+    // (이전 _edgeInsert 가 비활성화됐으므로 상/하 6px 제외 로직도 제거 — 어디서든 드래그 시작 가능)
     md={obj,x:e.clientX,y:e.clientY,started:false};
   },true);
+  // ── 자유 이동(free translate) — 같은 부모 안에서 position:relative + left/top 으로 이동 ──
+  //   가동범위: 부모 콘텐츠 박스 안. 드래그 중에는 그 안에서만 움직임이 허용됨.
+  let _ft=null;  // {el, startLeft, startTop, mouseX, mouseY, parentRect, elW, elH, origMargin}
+  const _startFreeTranslate=(obj,e)=>{
+    if(_isElemLocked(obj)){showToast&&showToast('🔒 잠긴 개체입니다');return;}
+    // 드래그 시작 직전 스냅샷 — Ctrl+Z 로 이 시점으로 복원
+    try{if(typeof saveUndo==='function')saveUndo();}catch{}
+    const cs=getComputedStyle(obj);
+    if(cs.position!=='relative'&&cs.position!=='absolute')obj.style.position='relative';
+    _ft={
+      el:obj,
+      startLeft:parseFloat(obj.style.left)||0,
+      startTop:parseFloat(obj.style.top)||0,
+      mouseX:e.clientX,
+      mouseY:e.clientY,
+    };
+    obj.style.opacity='0.85';obj.style.cursor='grabbing';
+    document.body.style.cursor='grabbing';document.body.style.userSelect='none';
+    document.addEventListener('mousemove',_ftMove);
+    document.addEventListener('mouseup',_ftEnd);
+  };
+  const _ftMove=(e)=>{
+    if(!_ft)return;
+    const dx=e.clientX-_ft.mouseX;
+    const dy=e.clientY-_ft.mouseY;
+    let nx=_ft.startLeft+dx;
+    let ny=_ft.startTop+dy;
+    _ft.el.style.left=nx+'px';_ft.el.style.top=ny+'px';
+    const parent=_ft.el.parentElement;
+    // 가로 클램프 (부모 폭 안)
+    if(parent){
+      const pr=parent.getBoundingClientRect();
+      const er=_ft.el.getBoundingClientRect();
+      if(er.left<pr.left){nx-=(er.left-pr.left);_ft.el.style.left=nx+'px';}
+      else if(er.right>pr.right){nx-=(er.right-pr.right);_ft.el.style.left=nx+'px';}
+    }
+    // ★ 스마트 가이드 — 다른 개체와 면이 맞으면 M100 magenta 선 표시 + 스냅
+    _checkSmartGuides();
+    if(typeof positionOverlay==='function')positionOverlay();
+  };
+  // 스마트 가이드 계산
+  const _SNAP=4;  // 4px 이내면 스냅
+  const _GUIDE_COLOR='#FF0066';  // M100 magenta
+  const _checkSmartGuides=()=>{
+    const guidesWrap=document.getElementById('smart-guides');if(!guidesWrap||!_ft)return;
+    guidesWrap.innerHTML='';
+    const er=_ft.el.getBoundingClientRect();
+    const myL=er.left,myR=er.right,myCX=(er.left+er.right)/2;
+    const myT=er.top,myB=er.bottom,myCY=(er.top+er.bottom)/2;
+    // 다른 개체 후보 — 같은 부모의 형제 + ev-wrap 의 후손 styled 개체들
+    const candidates=[];
+    const root=editor;
+    root.querySelectorAll('.ev-wrap, .ev-wrap *').forEach(el=>{
+      if(el===_ft.el||el.contains(_ft.el)||_ft.el.contains(el))return;
+      if(el.nodeType!==1)return;
+      // 너무 작거나 텍스트만인 요소 스킵 — bg/border/shadow 가진 박스만
+      const cs=getComputedStyle(el);
+      const hasBg=cs.backgroundImage!=='none'||(cs.backgroundColor&&cs.backgroundColor!=='rgba(0, 0, 0, 0)'&&cs.backgroundColor!=='transparent');
+      const hasBdr=['Top','Right','Bottom','Left'].some(s=>(parseFloat(cs['border'+s+'Width'])||0)>0&&cs['border'+s+'Style']!=='none');
+      if(!hasBg&&!hasBdr)return;
+      candidates.push(el);
+    });
+    // 가장 가까운 정렬 찾기
+    let snapDX=0,snapDY=0,snappedX=false,snappedY=false;
+    let bestDX=Infinity,bestDY=Infinity;
+    const guides=[];  // {type:'v'|'h', pos: viewport coord, length: optional}
+    candidates.forEach(c=>{
+      const cr=c.getBoundingClientRect();
+      const cL=cr.left,cR=cr.right,cCX=(cr.left+cr.right)/2;
+      const cT=cr.top,cB=cr.bottom,cCY=(cr.top+cr.bottom)/2;
+      // 세로 가이드 (X-축 정렬) — left/right/center 각 조합
+      [[myL,'L'],[myR,'R'],[myCX,'C']].forEach(([m,mn])=>{
+        [[cL,'L'],[cR,'R'],[cCX,'C']].forEach(([t,tn])=>{
+          const d=Math.abs(m-t);
+          if(d<_SNAP){
+            // 스냅 후보 — 가장 가까운 것 채택
+            if(d<bestDX){bestDX=d;snapDX=t-m;snappedX=true;}
+            guides.push({type:'v',pos:t,top:Math.min(myT,cT)-10,bottom:Math.max(myB,cB)+10});
+          }
+        });
+      });
+      // 가로 가이드 (Y-축 정렬)
+      [[myT,'T'],[myB,'B'],[myCY,'C']].forEach(([m,mn])=>{
+        [[cT,'T'],[cB,'B'],[cCY,'C']].forEach(([t,tn])=>{
+          const d=Math.abs(m-t);
+          if(d<_SNAP){
+            if(d<bestDY){bestDY=d;snapDY=t-m;snappedY=true;}
+            guides.push({type:'h',pos:t,left:Math.min(myL,cL)-10,right:Math.max(myR,cR)+10});
+          }
+        });
+      });
+    });
+    // 스냅 적용
+    if(snappedX){
+      const cur=parseFloat(_ft.el.style.left)||0;
+      _ft.el.style.left=(cur+snapDX)+'px';
+    }
+    if(snappedY){
+      const cur=parseFloat(_ft.el.style.top)||0;
+      _ft.el.style.top=(cur+snapDY)+'px';
+    }
+    // 가이드 그리기 (스냅 발생한 정렬만 그리도록 거리 < 1px 인 것만)
+    const er2=_ft.el.getBoundingClientRect();
+    const myL2=er2.left,myR2=er2.right,myCX2=(er2.left+er2.right)/2;
+    const myT2=er2.top,myB2=er2.bottom,myCY2=(er2.top+er2.bottom)/2;
+    const drawn=new Set();
+    guides.forEach(g=>{
+      const key=g.type+':'+Math.round(g.pos);if(drawn.has(key))return;
+      // 스냅 후 실제 정렬됐는지 검증
+      let ok=false;
+      if(g.type==='v'){
+        if(Math.abs(myL2-g.pos)<1||Math.abs(myR2-g.pos)<1||Math.abs(myCX2-g.pos)<1)ok=true;
+      } else {
+        if(Math.abs(myT2-g.pos)<1||Math.abs(myB2-g.pos)<1||Math.abs(myCY2-g.pos)<1)ok=true;
+      }
+      if(!ok)return;
+      drawn.add(key);
+      const line=document.createElement('div');
+      if(g.type==='v'){
+        line.style.cssText=`position:fixed;left:${g.pos}px;top:${g.top}px;width:1px;height:${g.bottom-g.top}px;background:${_GUIDE_COLOR};pointer-events:none;`;
+      } else {
+        line.style.cssText=`position:fixed;left:${g.left}px;top:${g.pos}px;width:${g.right-g.left}px;height:1px;background:${_GUIDE_COLOR};pointer-events:none;`;
+      }
+      guidesWrap.appendChild(line);
+    });
+  };
+  const _hideGuides=()=>{const g=document.getElementById('smart-guides');if(g)g.innerHTML='';};
+  const _ftEnd=()=>{
+    if(!_ft)return;
+    _ft.el.style.opacity='';_ft.el.style.cursor='';
+    document.body.style.cursor='';document.body.style.userSelect='';
+    _hideGuides();
+    _ft=null;
+    document.removeEventListener('mousemove',_ftMove);
+    document.removeEventListener('mouseup',_ftEnd);
+    try{if(typeof syncHtmlPanel==='function')syncHtmlPanel();}catch{}
+  };
   document.addEventListener('mousemove',(e)=>{
     if(!md||md.started)return;
     if(Math.abs(e.clientX-md.x)<5&&Math.abs(e.clientY-md.y)<5)return;
@@ -3277,14 +3634,47 @@ new MutationObserver(()=>{clearTimeout(window._rulT);window._rulT=setTimeout(ren
     }
     // 브라우저가 만든 텍스트 선택 제거
     const s=window.getSelection();if(s)s.removeAllRanges();
-    // ro-move 의 이동 로직 재사용
-    moveMode=true;selectedElem.style.opacity='0.4';
-    document.addEventListener('mousemove',onMoveMove);
-    document.addEventListener('mouseup',onMoveEnd);
+    // ★ 자유 이동 모드 시작 — 부모 가동범위 안에서 자유롭게 translate
+    _startFreeTranslate(md.obj,e);
     // 드래그 직후 발생하는 click 은 무시(deselect 방지)
     window._moveSwallowClick=true;setTimeout(()=>{window._moveSwallowClick=false;},0);
   });
   document.addEventListener('mouseup',()=>{md=null;});
+
+  // ── 키보드 방향키 — 선택된 개체를 1px (Shift+10px) 이동 ──
+  document.addEventListener('keydown',(e)=>{
+    if(!selectedElem)return;
+    if(!/^Arrow/.test(e.key))return;
+    // 텍스트 편집 모드면 일반 캐럿 이동
+    if(selectedElem._textEditMode)return;
+    // 잠긴 개체는 방향키 이동 차단
+    if(_isElemLocked(selectedElem))return;
+    // 입력 컨트롤 포커스되어 있으면 그쪽 동작 양보
+    const ae=document.activeElement;
+    if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA'||ae.tagName==='SELECT'||ae.isContentEditable)&&ae!==editor)return;
+    e.preventDefault();
+    const cs=getComputedStyle(selectedElem);
+    if(cs.position!=='relative'&&cs.position!=='absolute')selectedElem.style.position='relative';
+    const step=e.shiftKey?10:1;
+    let dx=0,dy=0;
+    if(e.key==='ArrowUp')dy=-step;
+    else if(e.key==='ArrowDown')dy=step;
+    else if(e.key==='ArrowLeft')dx=-step;
+    else if(e.key==='ArrowRight')dx=step;
+    let nx=(parseFloat(selectedElem.style.left)||0)+dx;
+    let ny=(parseFloat(selectedElem.style.top)||0)+dy;
+    selectedElem.style.left=nx+'px';selectedElem.style.top=ny+'px';
+    // 가로만 부모 폭 안으로 클램프 — 세로는 자유
+    const parent=selectedElem.parentElement;
+    if(parent){
+      const pr=parent.getBoundingClientRect();
+      const er=selectedElem.getBoundingClientRect();
+      if(er.left<pr.left)selectedElem.style.left=(nx-(er.left-pr.left))+'px';
+      else if(er.right>pr.right)selectedElem.style.left=(nx-(er.right-pr.right))+'px';
+    }
+    if(typeof positionOverlay==='function')positionOverlay();
+    try{if(typeof scheduleAutoSave==='function')scheduleAutoSave();}catch{}
+  });
   window.addEventListener('click',(e)=>{
     if(window._moveSwallowClick){e.stopPropagation();e.preventDefault();window._moveSwallowClick=false;}
   },true);
@@ -5088,26 +5478,39 @@ editor.addEventListener('drop',(e)=>{
 // Undo / Redo 스택
 // ══════════════════════════════════
 const undoStack=[],redoStack=[];let isUndoing=false;
+// 마지막으로 "정착된" 에디터 상태 — 다음 변화가 일어나기 전 시점
+let _prevState=null;
+function _initPrevState(){if(_prevState===null)_prevState=editor.innerHTML;}
+// saveUndo: 변경 직전에 호출. 현재 상태(=곧 이전 상태가 될)를 스택에 푸시.
 function saveUndo(){
   if(isUndoing)return;
-  undoStack.push(editor.innerHTML);
+  _initPrevState();
+  const cur=editor.innerHTML;
+  if(undoStack[undoStack.length-1]===cur)return;
+  undoStack.push(cur);
   if(undoStack.length>60)undoStack.shift();
   redoStack.length=0;
+  _prevState=cur;
 }
 function doUndo(){
+  _initPrevState();
   if(!undoStack.length)return;
   isUndoing=true;
   redoStack.push(editor.innerHTML);
-  editor.innerHTML=undoStack.pop();
+  const prev=undoStack.pop();
+  editor.innerHTML=prev;
+  _prevState=prev;
   deselectAll();syncHtmlPanel();
-  // MutationObserver가 비동기로 발화하므로 충분히 지난 뒤 플래그 해제
   setTimeout(()=>{isUndoing=false;_pendingUndo=false;clearTimeout(undoInputTimer);},50);
 }
 function doRedo(){
+  _initPrevState();
   if(!redoStack.length)return;
   isUndoing=true;
   undoStack.push(editor.innerHTML);
-  editor.innerHTML=redoStack.pop();
+  const next=redoStack.pop();
+  editor.innerHTML=next;
+  _prevState=next;
   deselectAll();syncHtmlPanel();
   setTimeout(()=>{isUndoing=false;_pendingUndo=false;clearTimeout(undoInputTimer);},50);
 }
@@ -5142,19 +5545,33 @@ if(typeof applyHtml==='function'){const _o=applyHtml;applyHtml=function(){saveUn
 // 모든 변경(입력/DOM 조작/스타일 변경)을 포착해 스냅샷 — MutationObserver 기반
 let undoInputTimer=null;
 let _pendingUndo=false;
+// MutationObserver 용: 변경이 "정착됐을 때" _prevState 를 스택에 넣고 _prev 를 새 현재로 갱신
+function _captureChangeSnapshot(){
+  if(isUndoing)return;
+  _initPrevState();
+  const cur=editor.innerHTML;
+  if(cur===_prevState)return;
+  // 이전 상태를 undoStack 에 저장 (Ctrl+Z 시 그 상태로 돌아감)
+  if(undoStack[undoStack.length-1]!==_prevState){
+    undoStack.push(_prevState);
+    if(undoStack.length>60)undoStack.shift();
+    redoStack.length=0;
+  }
+  _prevState=cur;
+}
 function _scheduleUndoSnapshot(delay){
   if(isUndoing)return;
   _pendingUndo=true;
   clearTimeout(undoInputTimer);
   undoInputTimer=setTimeout(()=>{
-    if(!isUndoing&&_pendingUndo){saveUndo();_pendingUndo=false;}
+    if(!isUndoing&&_pendingUndo){_captureChangeSnapshot();_pendingUndo=false;}
   }, delay==null?400:delay);
 }
 // 대기 중인 스냅샷을 즉시 저장 (Ctrl+Z 직전 호출)
 function flushPendingUndo(){
   if(_pendingUndo&&!isUndoing){
     clearTimeout(undoInputTimer);
-    saveUndo();_pendingUndo=false;
+    _captureChangeSnapshot();_pendingUndo=false;
   }
 }
 try{
